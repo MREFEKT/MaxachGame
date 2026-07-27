@@ -17,7 +17,7 @@
 
         /* Шапка Профиля */
         .banner {
-            width: 100%; height: 135px;
+            width: 100%; height: 130px;
             background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop');
             background-size: cover; background-position: center;
             border-bottom: 2px solid #3e5035; position: relative;
@@ -26,39 +26,39 @@
         .profile-header {
             position: absolute; bottom: 0; left: 0; right: 0;
             background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
-            padding: 8px 12px; display: flex;
+            padding: 6px 10px; display: flex;
             justify-content: space-between; align-items: flex-end;
         }
 
-        .user-info h2 { margin: 0; font-size: 16px; color: #fff; text-shadow: 1px 1px 2px black; }
-        .user-info span { font-size: 11px; color: #7cb342; font-weight: bold; cursor: pointer; }
+        .user-info h2 { margin: 0; font-size: 15px; color: #fff; text-shadow: 1px 1px 2px black; }
+        .user-info span { font-size: 10px; color: #7cb342; font-weight: bold; cursor: pointer; }
 
-        .main-stats { text-align: right; font-size: 11px; text-shadow: 1px 1px 2px black; line-height: 1.3; }
+        .main-stats { text-align: right; font-size: 10px; text-shadow: 1px 1px 2px black; line-height: 1.2; }
         .money { color: #ffd700; font-weight: bold; }
         .samogon { color: #81d4fa; font-weight: bold; }
         .authority { color: #ffb74d; font-weight: bold; }
         .teeth-stat { color: #e0e0e0; font-weight: bold; }
         .streak-stat { color: #ff7043; font-weight: bold; }
 
-        .content { padding: 12px; }
+        .content { padding: 10px; }
 
-        /* Прогресс-бары */
-        .bar-container { margin-bottom: 8px; }
-        .bar-label { font-size: 11px; margin-bottom: 2px; display: flex; justify-content: space-between; }
+        /* Компактные прогресс-бары */
+        .bar-container { margin-bottom: 5px; }
+        .bar-label { font-size: 10px; margin-bottom: 1px; display: flex; justify-content: space-between; color: #ccc; }
         
         .bar-bg {
-            width: 100%; height: 9px;
-            background-color: #222; border-radius: 4px; overflow: hidden;
+            width: 100%; height: 6px;
+            background-color: #222; border-radius: 3px; overflow: hidden;
             border: 1px solid #333;
         }
 
-        .bar-fill { height: 100%; border-radius: 3px; transition: width 0.3s ease; }
+        .bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s ease; }
         .hp-bar { background: linear-gradient(to right, #8b3a3a, #ff4d4d); width: 100%; }
         .fatigue-bar { background: linear-gradient(to right, #f57c00, #ffb74d); width: 0%; }
         .xp-bar { background: linear-gradient(to right, #afb42b, #d4e157); width: 0%; }
 
         /* Кнопки и Сетка */
-        .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+        .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
 
         .menu-btn {
             background: linear-gradient(to bottom, #2e3d28, #222e1e);
@@ -79,11 +79,11 @@
         .back-btn {
             background: #2a3327; border: 1px solid #435a3a; color: white;
             padding: 8px 14px; border-radius: 6px; font-weight: bold; font-size: 12px;
-            margin-bottom: 12px; cursor: pointer; display: inline-block;
+            margin-bottom: 10px; cursor: pointer; display: inline-block;
         }
 
         /* Вкладки */
-        .tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+        .tabs { display: flex; gap: 4px; margin-bottom: 10px; }
         .tab-btn {
             flex: 1; background: #222; border: 1px solid #444; color: #aaa;
             padding: 8px 2px; font-size: 11px; font-weight: bold;
@@ -218,9 +218,9 @@
         </div>
 
         <div class="content">
-            <!-- Полоски Статуса -->
+            <!-- Компактные Полоски Статуса -->
             <div class="bar-container">
-                <div class="bar-label"><span>⭐ Опыт (Уровень)</span><span id="xp-text">0 / 3</span></div>
+                <div class="bar-label"><span>⭐ Опыт</span><span id="xp-text">0 / 3</span></div>
                 <div class="bar-bg"><div class="bar-fill xp-bar" id="xp-bar"></div></div>
             </div>
 
@@ -229,8 +229,8 @@
                 <div class="bar-bg"><div class="bar-fill hp-bar" id="hp-bar"></div></div>
             </div>
             
-            <div class="bar-container" style="margin-bottom: 12px;">
-                <div class="bar-label"><span>💤 Усталость (Лимит работы)</span><span id="fatigue-text">0 / 100</span></div>
+            <div class="bar-container" style="margin-bottom: 8px;">
+                <div class="bar-label"><span>💤 Усталость</span><span id="fatigue-text">0 / 100</span></div>
                 <div class="bar-bg"><div class="bar-fill fatigue-bar" id="fatigue-bar"></div></div>
             </div>
 
@@ -424,7 +424,7 @@
             fatigue: 0,
             maxFatigue: 100,
             money: 100,
-            samogon: 350, // Выдано с запасом для теста смены села
+            samogon: 350,
             teeth: 0,
             authority: 0,
             winStreak: 0,
@@ -473,7 +473,6 @@
 
         let foodCooldowns = { cheburek: 0, borsch: 0, salo: 0, buter: 0 };
 
-        // Инициализация при загрузке: показываем экран создания персонажа
         window.onload = function() {
             if (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) {
                 document.getElementById('custom-name-input').value = tg.initDataUnsafe.user.first_name;
@@ -515,7 +514,6 @@
             player.avatar = selectedAvatar;
             player.village = document.getElementById('start-village-select').value;
 
-            // Скрываем экран создания, открываем игру
             document.getElementById('create-char-page').style.display = 'none';
             document.getElementById('game-main-wrap').style.display = 'block';
 
@@ -659,7 +657,6 @@
             event.target.classList.add('active');
         }
 
-        // РЕНДЕР СМЕНЫ СЕЛА ЗА 300 САМОГОНА
         function renderChangeVillageList() {
             const container = document.getElementById('change-village-list');
             container.innerHTML = '';
@@ -724,7 +721,6 @@
         }
 
         function renderCatalogs() {
-            // Секонд
             const secondContainer = document.getElementById('second-items-list');
             secondContainer.innerHTML = '';
             secondCatalog.forEach(item => {
@@ -751,7 +747,6 @@
                 `;
             });
 
-            // Цыганка
             const gypsyContainer = document.getElementById('gypsy-items-list');
             gypsyContainer.innerHTML = '';
             gypsyCatalog.forEach(item => {
@@ -815,7 +810,6 @@
             tg.showAlert(`🛍️ Куплен расходник: "${name}"!`);
         }
 
-        // --- ИНВЕНТАРЬ В ДОМЕ ---
         function renderInventory() {
             const container = document.getElementById('inventory-list');
             let html = '';
@@ -908,7 +902,6 @@
             updateUI();
         }
 
-        // --- ДЕД ФИЛИППОВИЧ ---
         function renderFilipShop() {
             const container = document.getElementById('filip-list');
             if (player.inventory.length === 0) {
@@ -989,7 +982,6 @@
             tg.showAlert(`👴 Дед Филиппович принял "${item.name}" в работу!\n\n⏱️ Время заточки: ${minutesRequired} мин.`);
         }
 
-        // --- КОЛХОЗ И УЛИЦА ---
         function doWork(workType) {
             const stats = getStats();
             if (workType === 'barn') {
@@ -1009,7 +1001,6 @@
             updateUI();
         }
 
-        // БОТЫ И ИГРОКИ НА УЛИЦЕ
         const botNames = ["Васька Алкаш", "Коля Лысый", "Петька Тракторист", "Серега Злой", "Толя Качок", "Витёк Дзюдоист"];
         const realPlayerNames = ["Максим_777", "Саша_Ведильцы", "Димон_Киев", "Олег_Торпедо", "Паша_Село"];
 
