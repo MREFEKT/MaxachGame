@@ -17,7 +17,7 @@
 
         /* Шапка Профиля */
         .banner {
-            width: 100%; height: 125px;
+            width: 100%; height: 135px;
             background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop');
             background-size: cover; background-position: center;
             border-bottom: 2px solid #3e5035; position: relative;
@@ -38,6 +38,7 @@
         .samogon { color: #81d4fa; font-weight: bold; }
         .authority { color: #ffb74d; font-weight: bold; }
         .teeth-stat { color: #e0e0e0; font-weight: bold; }
+        .streak-stat { color: #ff7043; font-weight: bold; }
 
         .content { padding: 12px; }
 
@@ -120,6 +121,10 @@
             padding: 10px; margin-bottom: 8px;
             display: flex; align-items: center; justify-content: space-between;
         }
+        .enemy-card.player-enemy {
+            background: linear-gradient(to right, #1c2424, #151a1a);
+            border-color: #2d4a4a;
+        }
 
         .enemy-left { display: flex; align-items: center; gap: 10px; }
         .enemy-avatar {
@@ -129,6 +134,7 @@
         }
         .enemy-details h4 { margin: 0; font-size: 14px; color: #ffb3b3; }
         .enemy-details span { font-size: 11px; color: #aaa; }
+        .player-tag { font-size: 9px; background: #00838f; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold; margin-left: 4px; }
 
         .hit-btn {
             background: linear-gradient(to bottom, #a83232, #782222);
@@ -170,6 +176,7 @@
             </div>
             <div class="main-stats">
                 <div>⭐ Уровень: <b id="user-level" style="color:#d4e157;">1</b></div>
+                <div class="streak-stat">🔥 Серия побед: <b id="user-win-streak">0</b></div>
                 <div class="teeth-stat">🦷 Выбито зубов: <b id="user-teeth">0</b></div>
                 <div class="authority">🏆 Авторитет: <b id="user-authority">0</b></div>
                 <div><span class="money">💰 <span id="user-money">100</span> грн</span> | <span class="samogon">🍾 <span id="user-samogon">1</span> сэма</span></div>
@@ -243,9 +250,9 @@
         <div id="street-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
             <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #ffb3b3;">🥊 Поиск пацанов на Улице:</h3>
-            <p style="margin: 0 0 10px 0; font-size: 11px; color: #aaa;">Дрись сколько есть ХП! Чем выше Ловкость, тем меньше урона получаешь.</p>
+            <p style="margin: 0 0 10px 0; font-size: 11px; color: #aaa;">⚠️ Без Одежды или Оружия победить невозможно! При проигрыше серия побед сбрасывается!</p>
             <div id="enemies-list"></div>
-            <button class="refresh-btn" onclick="generateEnemies()">🔍 ИСКАТЬ ЕЩЁ ПРОТИВНИКОВ</button>
+            <button class="refresh-btn" onclick="generateEnemies()">🔍 ИСКАТЬ ЕЩЁ ПРОТИВНИКОВ (Ботов или Игроков)</button>
             <div id="fight-log" class="fight-log"><div class="log-title">📜 Ход махача:</div><div id="log-text"></div></div>
         </div>
 
@@ -257,7 +264,6 @@
                 <div class="tab-btn active" onclick="switchBazarTab('stolovka', event)">🥗 Столовка</div>
                 <div class="tab-btn" onclick="switchBazarTab('second', event)">👕 Секонд</div>
                 <div class="tab-btn" onclick="switchBazarTab('gypsy', event)">🔨 Цыганка</div>
-                <div class="tab-btn" onclick="switchBazarTab('authority', event)">🏆 Авторитет</div>
                 <div class="tab-btn" onclick="switchBazarTab('larec', event)">🏪 Ларек</div>
             </div>
 
@@ -289,21 +295,6 @@
             <!-- ЦЫГАНКА -->
             <div id="tab-gypsy" class="tab-content" style="display:none;">
                 <div id="gypsy-items-list"></div>
-            </div>
-
-            <!-- ВКЛАДКА АВТОРИТЕТА СЕЛА (Обмен зубов) -->
-            <div id="tab-authority" class="tab-content" style="display:none;">
-                <div class="item-card" style="border-color: #ffb74d;">
-                    <div class="item-info">
-                        <div>🏆 Сдать Зубы в Сельсовет</div>
-                        <span>Курс: <b>5 Зубов 🦷 = +1 Авторитета Села</b></span>
-                    </div>
-                    <button class="buy-btn star-btn" onclick="convertTeethToAuthority()">Сдать 5 Зубов</button>
-                </div>
-                <div style="font-size: 12px; color: #aaa; margin-top: 10px; line-height: 1.4;">
-                    💡 <b>Зачем нужен Авторитет Села?</b><br>
-                    Чем выше Авторитет твоего села, тем выше ты поднимаешься в рейтинге лучших игроков!
-                </div>
             </div>
 
             <!-- ЛАРЕК -->
@@ -376,6 +367,7 @@
             samogon: 1,
             teeth: 0,
             authority: 0,
+            winStreak: 0, // 🔥 Серия побед подряд
             baseStr: 10,
             baseAgi: 10,
             inventory: [],
@@ -390,8 +382,6 @@
             6: [3, 6, 9], 7: [4, 7, 10], 8: [4, 8, 12], 9: [5, 9, 14], 10: [5, 10, 15]
         };
 
-        // Базовое время заточки в минутах для каждого уровня звёзд [1 звезда, 2 звезда, 3 звезда]
-        // 1⭐ = 30 мин | 2⭐ = 120 мин (2 часа) | 3⭐ = 360 мин (6 часов)
         const starTimeTable = [30, 120, 360];
 
         const secondCatalog = [
@@ -426,10 +416,9 @@
             document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
         }
 
-        // Автоматический проверочный цикл таймеров (раз в секунду проверяет готовность заточки)
         setInterval(() => {
-            if (player.hp < player.maxHp) player.hp += 0.027; // Регенерация ХП
-            if (player.fatigue > 0) player.fatigue -= 0.027;   // Снижение усталости
+            if (player.hp < player.maxHp) player.hp += 0.027;
+            if (player.fatigue > 0) player.fatigue -= 0.027;
             
             checkUpgradingItems();
             updateBars();
@@ -445,7 +434,7 @@
                     delete item.upgradeEndTime;
                     delete item.targetStar;
                     needsUIUpdate = true;
-                    tg.showAlert(`🎉 Дед Филиппович закончил заточку! Предмет "${item.name}" получит ${item.stars} ⭐!`);
+                    tg.showAlert(`🎉 Дед Филиппович закончил заточку! Предмет "${item.name}" получил ${item.stars} ⭐!`);
                 }
             });
 
@@ -472,16 +461,26 @@
 
         function getStats() {
             let bonusStr = 0, bonusAgi = 0;
+            let hasEquippedWeapon = false;
+            let hasEquippedArmor = false;
+
             player.inventory.forEach(item => {
                 if (item.equipped) {
                     const starBonus = Math.floor(item.baseValue * 0.30 * (item.stars || 0));
                     const totalVal = item.baseValue + starBonus;
 
-                    if (item.type === 'str') bonusStr += totalVal;
-                    if (item.type === 'agi') bonusAgi += totalVal;
+                    if (item.type === 'str') { bonusStr += totalVal; hasEquippedWeapon = true; }
+                    if (item.type === 'agi') { bonusAgi += totalVal; hasEquippedArmor = true; }
                 }
             });
-            return { totalStr: player.baseStr + bonusStr, totalAgi: player.baseAgi + bonusAgi, bonusStr, bonusAgi };
+            return { 
+                totalStr: player.baseStr + bonusStr, 
+                totalAgi: player.baseAgi + bonusAgi, 
+                bonusStr, 
+                bonusAgi,
+                hasEquippedWeapon,
+                hasEquippedArmor
+            };
         }
 
         function updateUI() {
@@ -490,6 +489,7 @@
             document.getElementById('user-samogon').innerText = player.samogon;
             document.getElementById('user-teeth').innerText = player.teeth;
             document.getElementById('user-authority').innerText = player.authority;
+            document.getElementById('user-win-streak').innerText = player.winStreak;
 
             const stats = getStats();
             document.getElementById('stat-str').innerText = stats.totalStr;
@@ -663,17 +663,6 @@
             tg.showAlert(`🛍️ Куплен расходник: "${name}"!`);
         }
 
-        function convertTeethToAuthority() {
-            if (player.teeth < 5) {
-                tg.showAlert('⚠️ Недостаточно Зубов! Для получения +1 Авторитета нужно минимум 5 Зубов.');
-                return;
-            }
-            player.teeth -= 5;
-            player.authority += 1;
-            updateUI();
-            tg.showAlert('🏆 Ты сдал 5 Выбитых Зубов в Сельсовет и поднял Авторитет Села на +1!');
-        }
-
         // --- ИНВЕНТАРЬ В ДОМЕ ---
         function renderInventory() {
             const container = document.getElementById('inventory-list');
@@ -767,7 +756,7 @@
             updateUI();
         }
 
-        // --- ДЕД ФИЛИППОВИЧ (С Таймером времени) ---
+        // --- ДЕД ФИЛИППОВИЧ ---
         function renderFilipShop() {
             const container = document.getElementById('filip-list');
             if (player.inventory.length === 0) {
@@ -799,7 +788,7 @@
                     const priceList = starPriceTable[item.reqLevel] || [1, 2, 3];
                     const nextPrice = priceList[currentStars];
                     const nextStarNum = currentStars + 1;
-                    const minutesRequired = starTimeTable[currentStars] + (item.reqLevel * 5); // Небольшая прибавка от уровня веши
+                    const minutesRequired = starTimeTable[currentStars] + (item.reqLevel * 5);
                     
                     let timeText = `${minutesRequired} мин`;
                     if (minutesRequired >= 60) timeText = `${(minutesRequired / 60).toFixed(1)} ч`;
@@ -868,28 +857,56 @@
             updateUI();
         }
 
-        const enemyData = [
-            { name: "Васька Алкаш", avatar: "🧢", str: 5, agi: 5 },
-            { name: "Коля Лысый", avatar: "👨‍🌾", str: 8, agi: 12 },
-            { name: "Петька Тракторист", avatar: "🧔", str: 15, agi: 6 },
-            { name: "Серега Злой", avatar: "🕶️", str: 18, agi: 14 }
-        ];
+        // БОТЫ И ИГРОКИ НА УЛИЦЕ
+        const botNames = ["Васька Алкаш", "Коля Лысый", "Петька Тракторист", "Серега Злой", "Толя Качок", "Витёк Дзюдоист"];
+        const realPlayerNames = ["Максим_777", "Саша_Ведильцы", "Димон_Киев", "Олег_Торпедо", "Паша_Село"];
 
         let currentEnemies = [];
+
         function generateEnemies() {
             const container = document.getElementById('enemies-list');
             container.innerHTML = '';
             currentEnemies = [];
+
             for (let i = 0; i < 3; i++) {
-                const randomEnemy = enemyData[Math.floor(Math.random() * enemyData.length)];
-                currentEnemies.push(randomEnemy);
+                const isRealPlayer = Math.random() < 0.35; // 35% шанс встретить живого игрока
+                let enemy = {};
+
+                // Масштабирование характеристик под уровень игрока
+                const baseStat = player.level * 8 + Math.floor(Math.random() * 6);
+
+                if (isRealPlayer) {
+                    const pName = realPlayerNames[Math.floor(Math.random() * realPlayerNames.length)];
+                    enemy = {
+                        name: pName,
+                        avatar: "🧔‍♂️",
+                        isPlayer: true,
+                        str: Math.floor(baseStat * 1.1),
+                        agi: Math.floor(baseStat * 0.9)
+                    };
+                } else {
+                    const bName = botNames[Math.floor(Math.random() * botNames.length)];
+                    enemy = {
+                        name: bName,
+                        avatar: "🧢",
+                        isPlayer: false,
+                        str: baseStat,
+                        agi: baseStat
+                    };
+                }
+
+                currentEnemies.push(enemy);
+
+                const cardClass = enemy.isPlayer ? "enemy-card player-enemy" : "enemy-card";
+                const playerTag = enemy.isPlayer ? `<span class="player-tag">ИГРОК</span>` : ``;
+
                 container.innerHTML += `
-                    <div class="enemy-card">
+                    <div class="${cardClass}">
                         <div class="enemy-left">
-                            <div class="enemy-avatar">${randomEnemy.avatar}</div>
+                            <div class="enemy-avatar">${enemy.avatar}</div>
                             <div class="enemy-details">
-                                <h4>${randomEnemy.name}</h4>
-                                <span>Сила: ${randomEnemy.str} | Ловкость: ${randomEnemy.agi}</span>
+                                <h4>${enemy.name} ${playerTag}</h4>
+                                <span>Сила: ${enemy.str} | Ловкость: ${enemy.agi}</span>
                             </div>
                         </div>
                         <button class="hit-btn" onclick="attackEnemy(${i})">👊 УДАРИТЬ</button>
@@ -904,6 +921,26 @@
             const enemy = currentEnemies[index];
             const stats = getStats();
 
+            // ЧЕК СНАРЯЖЕНИЯ: Если нет одежды ИЛИ нет оружия -> Автоматический проигрыш!
+            if (!stats.hasEquippedWeapon || !stats.hasEquippedArmor) {
+                player.hp -= 25;
+                player.winStreak = 0; // СБРОС СЕРИИ ПОБЕД!
+                updateUI();
+
+                const fightLog = document.getElementById('fight-log');
+                const logText = document.getElementById('log-text');
+                logText.innerHTML = `
+                    <div class="log-lose">
+                        ❌ ТЫ ПРОИГРАЛ! Враг вырубил тебя!<br>
+                        ⚠️ <b>Без одетой Одежды и Оружия победить невозможно!</b> Сходи на Базар в Секонд и к Цыганке.<br>
+                        💔 Серия побед обнулилась! (-25 ХП)
+                    </div>
+                `;
+                fightLog.style.display = 'block';
+                return;
+            }
+
+            // РАСЧЕТ БОЯ, ЕСЛИ ЕСТЬ СНАРЯЖЕНИЕ
             let userDamage = Math.floor(stats.totalStr * 2.8 + Math.random() * 10);
             let rawEnemyDamage = Math.floor(enemy.str * 1.8 + Math.random() * 6);
             let defenseMultiplier = Math.max(0.2, 1 - (stats.totalAgi * 0.035));
@@ -919,18 +956,22 @@
 
             if (isWin) {
                 player.teeth++; 
+                player.authority += 1; 
+                player.winStreak++; // 🔥 Увеличиваем серию побед!
                 player.money += 15; 
                 player.fightsWon++;
+
                 const now = Date.now();
                 if (now - player.lastXpTime >= 3000000) {
                     player.lastXpTime = now; addXp(1);
-                    logHTML += `<div class="log-win">🏆 Победа! +15 грн, 🦷 +1 выбитый зуб, ⭐ +1 XP!</div>`;
+                    logHTML += `<div class="log-win">🏆 Победа над ${enemy.name}! +15 грн, 🦷 +1 зуб, 🏆 +1 Авторитет, 🔥 Серия: ${player.winStreak}! ⭐ +1 XP!</div>`;
                 } else {
-                    logHTML += `<div class="log-win">🏆 Победа! +15 грн, 🦷 +1 выбитый зуб.</div>`;
+                    logHTML += `<div class="log-win">🏆 Победа над ${enemy.name}! +15 грн, 🦷 +1 зуб, 🏆 +1 Авторитет, 🔥 Серия: ${player.winStreak}!</div>`;
                 }
             } else {
                 player.hp -= 10;
-                logHTML += `<div class="log-lose">❌ Ты проиграл и отступил (-10 ХП)</div>`;
+                player.winStreak = 0; // ❌ СБРОС СЕРИИ ПОБЕД ПРИ ПРОИГРЫШЕ
+                logHTML += `<div class="log-lose">❌ Ты проиграл и отступил (-10 ХП). 🔥 Серия побед обнулилась!</div>`;
             }
 
             updateUI();
