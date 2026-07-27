@@ -71,6 +71,7 @@
         .full-btn { grid-column: span 2; }
         .danger-btn { background: linear-gradient(to bottom, #8b2d2d, #5c1d1d); border-color: #a33e3e; }
         .donate-btn { background: linear-gradient(to bottom, #2d588b, #1d395c); border-color: #3e73a3; }
+        .board-btn { background: linear-gradient(to bottom, #8b732d, #5c4b1d); border-color: #a38c3e; }
 
         /* Экран и Навигация */
         .page { display: none; }
@@ -171,6 +172,15 @@
             padding: 10px; margin-bottom: 12px; font-size: 13px;
         }
         .stats-panel h3 { margin: 0 0 8px 0; color: #7cb342; font-size: 15px; }
+
+        /* Таблица лидеров */
+        .leader-row {
+            background: #1c241a; border: 1px solid #33442d; border-radius: 8px;
+            padding: 8px 12px; margin-bottom: 6px; display: flex;
+            justify-content: space-between; align-items: center; font-size: 13px;
+        }
+        .leader-row.is-me { background: #243320; border-color: #628252; }
+        .leader-place { font-weight: bold; width: 30px; color: #ffd700; }
     </style>
 </head>
 <body>
@@ -242,11 +252,27 @@
                     <button class="menu-btn" onclick="showPage('bazar-page')">🏪 БАЗАР</button>
                     <button class="menu-btn" onclick="showPage('home-page')">🏠 ДОМ</button>
                     <button class="menu-btn" onclick="showPage('kolhoz-page')">🌾 КОЛХОЗ</button>
-                    <button class="menu-btn danger-btn" onclick="tg.showAlert('Режим «Район на Район» находится в разработке!')">⚔️ РАЙОН НА РАЙОН</button>
+                    <button class="menu-btn board-btn" onclick="showPage('leaderboard-page')">🏆 ДОШКА ПОЧЁТА</button>
+                    <button class="menu-btn danger-btn full-btn" onclick="tg.showAlert('Режим «Район на Район» находится в разработке!')">⚔️ РАЙОН НА РАЙОН</button>
                 </div>
             </div>
 
-            <!-- ================= 2. ЭКРАН СМЕНЫ СЕЛА ЗА САМОГОН ================= -->
+            <!-- ================= 2. ЭКРАН ЛИДЕРБОРДА ================= -->
+            <div id="leaderboard-page" class="page">
+                <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
+                <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #ffb3b3;">🏆 Дошка Почёта Района:</h3>
+                <p style="margin: 0 0 10px 0; font-size: 11px; color: #aaa;">Лучшие бойцы Черниговского района по версии сельсовета.</p>
+
+                <div class="tabs">
+                    <div class="tab-btn active" onclick="switchLeaderTab('auth', event)">🏆 Авторитет</div>
+                    <div class="tab-btn" onclick="switchLeaderTab('teeth', event)">🦷 Зубы</div>
+                    <div class="tab-btn" onclick="switchLeaderTab('streak', event)">🔥 Серия</div>
+                </div>
+
+                <div id="leaderboard-list"></div>
+            </div>
+
+            <!-- ================= 3. ЭКРАН СМЕНЫ СЕЛА ЗА САМОГОН ================= -->
             <div id="change-village-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
                 <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #81d4fa;">🗺️ Переезд в другое Село:</h3>
@@ -254,7 +280,7 @@
                 <div id="change-village-list"></div>
             </div>
 
-            <!-- ================= 3. ЭКРАН ЗАДАНИЙ И ДОНАТА ================= -->
+            <!-- ================= 4. ЭКРАН ЗАДАНИЙ И ДОНАТА ================= -->
             <div id="quests-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
@@ -287,7 +313,7 @@
                 </div>
             </div>
 
-            <!-- ================= 4. ЭКРАН УЛИЦЫ ================= -->
+            <!-- ================= 5. ЭКРАН УЛИЦЫ ================= -->
             <div id="street-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
                 <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #ffb3b3;">🥊 Поиск пацанов на Улице:</h3>
@@ -297,7 +323,7 @@
                 <div id="fight-log" class="fight-log"><div class="log-title">📜 Ход махача:</div><div id="log-text"></div></div>
             </div>
 
-            <!-- ================= 5. ЭКРАН БАЗАРА ================= -->
+            <!-- ================= 6. ЭКРАН БАЗАРА ================= -->
             <div id="bazar-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
@@ -351,7 +377,7 @@
                 </div>
             </div>
 
-            <!-- ================= 6. ЭКРАН ДОМА ================= -->
+            <!-- ================= 7. ЭКРАН ДОМА ================= -->
             <div id="home-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
@@ -377,7 +403,7 @@
                 </div>
             </div>
 
-            <!-- ================= 7. ЭКРАН КОЛХОЗА ================= -->
+            <!-- ================= 8. ЭКРАН КОЛХОЗА ================= -->
             <div id="kolhoz-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
                 <h3 style="margin: 0 0 10px 0; font-size: 14px; color: #7cb342;">🌾 Работа в Колхозе «Заря»:</h3>
@@ -472,6 +498,7 @@
         ];
 
         let foodCooldowns = { cheburek: 0, borsch: 0, salo: 0, buter: 0 };
+        let currentLeaderTab = 'auth';
 
         window.onload = function() {
             if (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) {
@@ -611,6 +638,7 @@
             renderInventory();
             renderFilipShop();
             renderChangeVillageList();
+            renderLeaderboard();
             updateQuestsUI();
         }
 
@@ -633,6 +661,7 @@
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.getElementById(pageId).classList.add('active-page');
             if (pageId === 'street-page') generateEnemies();
+            if (pageId === 'leaderboard-page') renderLeaderboard();
             updateUI();
         }
 
@@ -655,6 +684,53 @@
             document.querySelectorAll('#quests-page .tab-btn').forEach(tb => tb.classList.remove('active'));
             document.getElementById('tab-' + tabName).style.display = 'block';
             event.target.classList.add('active');
+        }
+
+        function switchLeaderTab(tabName, event) {
+            currentLeaderTab = tabName;
+            document.querySelectorAll('#leaderboard-page .tab-btn').forEach(tb => tb.classList.remove('active'));
+            event.target.classList.add('active');
+            renderLeaderboard();
+        }
+
+        function renderLeaderboard() {
+            const container = document.getElementById('leaderboard-list');
+            if (!container) return;
+
+            let list = [
+                { name: player.name, avatar: player.avatar, authority: player.authority, teeth: player.teeth, streak: player.winStreak, isMe: true },
+                { name: "Толя Качок", avatar: "🧔‍♂️", authority: 35, teeth: 28, streak: 5, isMe: false },
+                { name: "Васька Алкаш", avatar: "🧢", authority: 22, teeth: 19, streak: 2, isMe: false },
+                { name: "Максим_777", avatar: "😎", authority: 18, teeth: 15, streak: 1, isMe: false },
+                { name: "Серега Злой", avatar: "🥷", authority: 12, teeth: 10, streak: 0, isMe: false }
+            ];
+
+            if (currentLeaderTab === 'auth') list.sort((a, b) => b.authority - a.authority);
+            if (currentLeaderTab === 'teeth') list.sort((a, b) => b.teeth - a.teeth);
+            if (currentLeaderTab === 'streak') list.sort((a, b) => b.streak - a.streak);
+
+            let html = '';
+            list.forEach((item, index) => {
+                let statVal = '';
+                if (currentLeaderTab === 'auth') statVal = `🏆 ${item.authority} авторитета`;
+                if (currentLeaderTab === 'teeth') statVal = `🦷 ${item.teeth} зубов`;
+                if (currentLeaderTab === 'streak') statVal = `🔥 ${item.streak} серия`;
+
+                html += `
+                    <div class="leader-row ${item.isMe ? 'is-me' : ''}">
+                        <div style="display:flex; align-items:center; gap:8px;">
+                            <span class="leader-place">#${index + 1}</span>
+                            <span style="font-size:18px;">${item.avatar}</span>
+                            <div>
+                                <b>${item.name}</b> ${item.isMe ? '<span style="color:#7cb342; font-size:10px;">(ТЫ)</span>' : ''}
+                            </div>
+                        </div>
+                        <div style="font-weight:bold; color:#ffd700; font-size:12px;">${statVal}</div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
         }
 
         function renderChangeVillageList() {
@@ -807,7 +883,7 @@
             player.samogon -= priceSamogon;
             player.consumables.push({ id, name, bonusPercent });
             updateUI();
-            tg.showAlert(`🛍️ Куплен расходник: "${name}"!`);
+            tg.showAlert(`🛍️ Куплен расходник для Махача Сел: "${name}"!`);
         }
 
         function renderInventory() {
