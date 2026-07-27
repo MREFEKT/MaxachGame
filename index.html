@@ -114,6 +114,14 @@
             padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
         }
 
+        /* Выбор персонажа на старте */
+        .char-choice-card {
+            background: #1c241a; border: 2px solid #435a3a; border-radius: 8px;
+            padding: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; cursor: pointer;
+        }
+        .char-choice-card.selected { border-color: #81d4fa; background: #1a2a2e; }
+        .char-avatar-big { font-size: 32px; width: 50px; text-align: center; }
+
         /* Карточка соперника */
         .enemy-card {
             background: linear-gradient(to right, #241c1c, #1a1515);
@@ -167,190 +175,216 @@
 </head>
 <body>
 
-    <!-- Шапка Профиля -->
-    <div class="banner">
-        <div class="profile-header">
-            <div class="user-info">
-                <h2 id="username">Миша</h2>
-                <span id="user-village-display" onclick="showPage('village-page')">🏡 Село: Ведильцы ✏️</span>
-            </div>
-            <div class="main-stats">
-                <div>⭐ Уровень: <b id="user-level" style="color:#d4e157;">1</b></div>
-                <div class="streak-stat">🔥 Серия побед: <b id="user-win-streak">0</b></div>
-                <div class="teeth-stat">🦷 Выбито зубов: <b id="user-teeth">0</b></div>
-                <div class="authority">🏆 Авторитет: <b id="user-authority">0</b></div>
-                <div><span class="money">💰 <span id="user-money">100</span> грн</span> | <span class="samogon">🍾 <span id="user-samogon">1</span> сэма</span></div>
-            </div>
+    <!-- ================= ЭКРАН СОЗДАНИЯ ПЕРСОНАЖА (СТАРТ) ================= -->
+    <div id="create-char-page" class="page" style="padding: 16px;">
+        <h2 style="color: #7cb342; text-align: center; margin-top: 10px;">👤 Создание Персонажа</h2>
+        <p style="font-size: 12px; color: #aaa; text-align: center; margin-bottom: 15px;">Выбери своего бойца и родное село. Обрати внимание: **выбор персонажа изменить нельзя**!</p>
+
+        <div style="margin-bottom: 12px;">
+            <label style="font-size:12px; color:#ffd700; font-weight:bold;">Твое Кличка / Имя:</label>
+            <input type="text" id="custom-name-input" value="Миша" maxlength="15" style="width: 100%; padding: 10px; margin-top: 5px; background: #1c241a; border: 1px solid #435a3a; color: white; border-radius: 6px; box-sizing: border-box; font-size: 14px;">
         </div>
+
+        <label style="font-size:12px; color:#ffd700; font-weight:bold;">Внешность пацана:</label>
+        <div id="char-variants-list" style="margin-top: 5px; margin-bottom: 15px;"></div>
+
+        <label style="font-size:12px; color:#ffd700; font-weight:bold;">Родное Село:</label>
+        <select id="start-village-select" style="width: 100%; padding: 10px; margin-top: 5px; margin-bottom: 20px; background: #1c241a; border: 1px solid #435a3a; color: white; border-radius: 6px; font-size: 14px;">
+            <option value="vediltsi">🌾 Ведильцы (Центр района)</option>
+            <option value="pakul">🌲 Пакуль (Лесной край)</option>
+            <option value="kovpyta">🚌 Ковпыта (Транспортный узел)</option>
+            <option value="karhovka">🛠️ Карховка (Рабочий хутор)</option>
+        </select>
+
+        <button class="menu-btn full-btn" style="background: linear-gradient(to bottom, #4a633d, #2e3d28); padding: 14px; font-size: 15px;" onclick="finishCharacterCreation()">🚀 ВОРВАТЬСЯ В РАЙОН</button>
     </div>
 
-    <div class="content">
-        <!-- Полоски Статуса -->
-        <div class="bar-container">
-            <div class="bar-label"><span>⭐ Опыт (Уровень)</span><span id="xp-text">0 / 3</span></div>
-            <div class="bar-bg"><div class="bar-fill xp-bar" id="xp-bar"></div></div>
-        </div>
-
-        <div class="bar-container">
-            <div class="bar-label"><span>❤️ Здоровье</span><span id="hp-text">100 / 100</span></div>
-            <div class="bar-bg"><div class="bar-fill hp-bar" id="hp-bar"></div></div>
-        </div>
-        
-        <div class="bar-container" style="margin-bottom: 12px;">
-            <div class="bar-label"><span>💤 Усталость (Лимит работы)</span><span id="fatigue-text">0 / 100</span></div>
-            <div class="bar-bg"><div class="bar-fill fatigue-bar" id="fatigue-bar"></div></div>
-        </div>
-
-        <!-- ================= 1. ГЛАВНОЕ МЕНЮ ================= -->
-        <div id="main-page" class="page active-page">
-            <div class="grid-menu">
-                <button class="menu-btn full-btn" onclick="showPage('street-page')">🥊 УЛИЦА (Поиск Махача)</button>
-                <button class="menu-btn full-btn donate-btn" onclick="showPage('quests-page')">📜 ЗАДАНИЯ И 💎 ДОНАТ</button>
-                <button class="menu-btn" onclick="showPage('bazar-page')">🏪 БАЗАР</button>
-                <button class="menu-btn" onclick="showPage('home-page')">🏠 ДОМ</button>
-                <button class="menu-btn" onclick="showPage('kolhoz-page')">🌾 КОЛХОЗ</button>
-                <button class="menu-btn danger-btn" onclick="tg.showAlert('Режим «Район на Район» находится в разработке!')">⚔️ РАЙОН НА РАЙОН</button>
+    <!-- Шапка Профиля (Основная игра) -->
+    <div id="game-main-wrap" style="display: none;">
+        <div class="banner">
+            <div class="profile-header">
+                <div class="user-info">
+                    <h2><span id="char-avatar-icon">🧢</span> <span id="username">Миша</span></h2>
+                    <span id="user-village-display" onclick="showPage('change-village-page')">🏡 Село: Ведильцы (Сменить за 300 🍾)</span>
+                </div>
+                <div class="main-stats">
+                    <div>⭐ Уровень: <b id="user-level" style="color:#d4e157;">1</b></div>
+                    <div class="streak-stat">🔥 Серия побед: <b id="user-win-streak">0</b></div>
+                    <div class="teeth-stat">🦷 Выбито зубов: <b id="user-teeth">0</b></div>
+                    <div class="authority">🏆 Авторитет: <b id="user-authority">0</b></div>
+                    <div><span class="money">💰 <span id="user-money">100</span> грн</span> | <span class="samogon">🍾 <span id="user-samogon">350</span> сэма</span></div>
+                </div>
             </div>
         </div>
 
-        <!-- ================= 2. ЭКРАН ВЫБОРА СЕЛА ================= -->
-        <div id="village-page" class="page">
-            <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
-            <h3 style="margin: 0 0 10px 0; font-size: 15px; color: #7cb342;">🏡 Выбери свое родное Село:</h3>
+        <div class="content">
+            <!-- Полоски Статуса -->
+            <div class="bar-container">
+                <div class="bar-label"><span>⭐ Опыт (Уровень)</span><span id="xp-text">0 / 3</span></div>
+                <div class="bar-bg"><div class="bar-fill xp-bar" id="xp-bar"></div></div>
+            </div>
+
+            <div class="bar-container">
+                <div class="bar-label"><span>❤️ Здоровье</span><span id="hp-text">100 / 100</span></div>
+                <div class="bar-bg"><div class="bar-fill hp-bar" id="hp-bar"></div></div>
+            </div>
             
-            <div id="villages-list"></div>
-        </div>
-
-        <!-- ================= 3. ЭКРАН ЗАДАНИЙ И ДОНАТА ================= -->
-        <div id="quests-page" class="page">
-            <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
-
-            <div class="tabs">
-                <div class="tab-btn active" onclick="switchQuestTab('tasks', event)">📜 Задания</div>
-                <div class="tab-btn" onclick="switchQuestTab('donate', event)">💎 Донат (Stars)</div>
+            <div class="bar-container" style="margin-bottom: 12px;">
+                <div class="bar-label"><span>💤 Усталость (Лимит работы)</span><span id="fatigue-text">0 / 100</span></div>
+                <div class="bar-bg"><div class="bar-fill fatigue-bar" id="fatigue-bar"></div></div>
             </div>
 
-            <div id="tab-tasks" class="quest-tab-content">
-                <h4 style="margin: 0 0 10px 0; color: #81d4fa; font-size: 13px;">Выполняй дела и получай премиум-ресурс:</h4>
-                <div class="item-card">
-                    <div class="item-info"><div>🥊 Гроза Улицы</div><span>Выиграть 3 боя на Улице (<b id="q1-progress">0/3</b>)</span></div>
-                    <button id="q1-btn" class="quest-btn" onclick="claimQuest('q1', 1)">+1 🍾 Сэм</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info"><div>🌾 Трудяга Колхоза</div><span>Отработать 5 смен в Колхозе (<b id="q2-progress">0/5</b>)</span></div>
-                    <button id="q2-btn" class="quest-btn" onclick="claimQuest('q2', 1)">+1 🍾 Сэм</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info"><div>📢 Сельский Сельсовет</div><span>Подписаться на канал</span></div>
-                    <button id="q3-btn" class="quest-btn" onclick="claimQuest('q3', 2)">+2 🍾 Сэма</button>
+            <!-- ================= 1. ГЛАВНОЕ МЕНЮ ================= -->
+            <div id="main-page" class="page active-page">
+                <div class="grid-menu">
+                    <button class="menu-btn full-btn" onclick="showPage('street-page')">🥊 УЛИЦА (Поиск Махача)</button>
+                    <button class="menu-btn full-btn donate-btn" onclick="showPage('quests-page')">📜 ЗАДАНИЯ И 💎 ДОНАТ</button>
+                    <button class="menu-btn" onclick="showPage('bazar-page')">🏪 БАЗАР</button>
+                    <button class="menu-btn" onclick="showPage('home-page')">🏠 ДОМ</button>
+                    <button class="menu-btn" onclick="showPage('kolhoz-page')">🌾 КОЛХОЗ</button>
+                    <button class="menu-btn danger-btn" onclick="tg.showAlert('Режим «Район на Район» находится в разработке!')">⚔️ РАЙОН НА РАЙОН</button>
                 </div>
             </div>
 
-            <div id="tab-donate" class="quest-tab-content" style="display:none;">
-                <h4 style="margin: 0 0 10px 0; color: #ffd700; font-size: 13px;">Запасы Самогона за Telegram Stars:</h4>
-                <div class="item-card"><div class="item-info"><div>🍾 Чекушка Сэма</div><span>+5 Самогона</span></div><button class="buy-btn star-btn" onclick="buyStars(5, 50)">⭐ 50 Stars</button></div>
-                <div class="item-card"><div class="item-info"><div>🍾🍾 Бутыль Сэма</div><span>+15 Самогона</span></div><button class="buy-btn star-btn" onclick="buyStars(15, 120)">⭐ 120 Stars</button></div>
-                <div class="item-card"><div class="item-info"><div>🛢️ Ящик Сэма</div><span>+50 Самогона</span></div><button class="buy-btn star-btn" onclick="buyStars(50, 350)">⭐ 350 Stars</button></div>
-            </div>
-        </div>
-
-        <!-- ================= 4. ЭКРАН УЛИЦЫ ================= -->
-        <div id="street-page" class="page">
-            <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
-            <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #ffb3b3;">🥊 Поиск пацанов на Улице:</h3>
-            <p style="margin: 0 0 10px 0; font-size: 11px; color: #aaa;">⚠️ Без Одежды или Оружия победить невозможно! При проигрыше серия побед сбрасывается!</p>
-            <div id="enemies-list"></div>
-            <button class="refresh-btn" onclick="generateEnemies()">🔍 ИСКАТЬ ЕЩЁ ПРОТИВНИКОВ (Ботов или Игроков)</button>
-            <div id="fight-log" class="fight-log"><div class="log-title">📜 Ход махача:</div><div id="log-text"></div></div>
-        </div>
-
-        <!-- ================= 5. ЭКРАН БАЗАРА ================= -->
-        <div id="bazar-page" class="page">
-            <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
-
-            <div class="tabs">
-                <div class="tab-btn active" onclick="switchBazarTab('stolovka', event)">🥗 Столовка</div>
-                <div class="tab-btn" onclick="switchBazarTab('second', event)">👕 Секонд</div>
-                <div class="tab-btn" onclick="switchBazarTab('gypsy', event)">🔨 Цыганка</div>
-                <div class="tab-btn" onclick="switchBazarTab('larec', event)">🏪 Ларек</div>
+            <!-- ================= 2. ЭКРАН СМЕНЫ СЕЛА ЗА САМОГОН ================= -->
+            <div id="change-village-page" class="page">
+                <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
+                <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #81d4fa;">🗺️ Переезд в другое Село:</h3>
+                <p style="margin: 0 0 12px 0; font-size: 11px; color: #aaa;">Стоимость официального переезда и прописки в новой местности составляет **300 бутылок Самогона** 🍾.</p>
+                <div id="change-village-list"></div>
             </div>
 
-            <!-- СТОЛОВКА -->
-            <div id="tab-stolovka" class="tab-content">
-                <div class="item-card">
-                    <div class="item-info"><div>🥟 Чебурек с мясом</div><span>+30 ХП (Только Улица) | ⏳ КД: 30 мин</span></div>
-                    <button class="buy-btn" onclick="eatFood('cheburek', 30, 10, 'money', 1800, '🥊 Улица')">10 грн</button>
+            <!-- ================= 3. ЭКРАН ЗАДАНИЙ И ДОНАТА ================= -->
+            <div id="quests-page" class="page">
+                <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
+
+                <div class="tabs">
+                    <div class="tab-btn active" onclick="switchQuestTab('tasks', event)">📜 Задания</div>
+                    <div class="tab-btn" onclick="switchQuestTab('donate', event)">💎 Донат (Stars)</div>
                 </div>
-                <div class="item-card">
-                    <div class="item-info"><div>🥣 Горячий Борщ</div><span>+50 ХП (Только Улица) | ⏳ КД: 1 час</span></div>
-                    <button class="buy-btn" onclick="eatFood('borsch', 50, 15, 'money', 3600, '🥊 Улица')">15 грн</button>
+
+                <div id="tab-tasks" class="quest-tab-content">
+                    <h4 style="margin: 0 0 10px 0; color: #81d4fa; font-size: 13px;">Выполняй дела и получай премиум-ресурс:</h4>
+                    <div class="item-card">
+                        <div class="item-info"><div>🥊 Гроза Улицы</div><span>Выиграть 3 боя на Улице (<b id="q1-progress">0/3</b>)</span></div>
+                        <button id="q1-btn" class="quest-btn" onclick="claimQuest('q1', 1)">+1 🍾 Сэм</button>
+                    </div>
+                    <div class="item-card">
+                        <div class="item-info"><div>🌾 Трудяга Колхоза</div><span>Отработать 5 смен в Колхозе (<b id="q2-progress">0/5</b>)</span></div>
+                        <button id="q2-btn" class="quest-btn" onclick="claimQuest('q2', 1)">+1 🍾 Сэм</button>
+                    </div>
+                    <div class="item-card">
+                        <div class="item-info"><div>📢 Сельский Сельсовет</div><span>Подписаться на канал</span></div>
+                        <button id="q3-btn" class="quest-btn" onclick="claimQuest('q3', 2)">+2 🍾 Сэма</button>
+                    </div>
                 </div>
-                <div class="item-card">
-                    <div class="item-info"><div>🥓 Сало с чесноком</div><span>+50 ХП (Только Махач) | ⏳ КД: 2 мин</span></div>
-                    <button class="buy-btn" onclick="eatFood('salo', 50, 1, 'samogon', 120, '⚔️ Махач')">1 сэм</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info"><div>🥪 Сытный Бутерброд</div><span>+100 ХП (Только Махач) | ⏳ КД: 4 мин</span></div>
-                    <button class="buy-btn" onclick="eatFood('buter', 100, 2, 'samogon', 240, '⚔️ Махач')">2 сэма</button>
+
+                <div id="tab-donate" class="quest-tab-content" style="display:none;">
+                    <h4 style="margin: 0 0 10px 0; color: #ffd700; font-size: 13px;">Запасы Самогона за Telegram Stars:</h4>
+                    <div class="item-card"><div class="item-info"><div>🍾 Чекушка Сэма</div><span>+5 Самогона</span></div><button class="buy-btn star-btn" onclick="buyStars(5, 50)">⭐ 50 Stars</button></div>
+                    <div class="item-card"><div class="item-info"><div>🍾🍾 Бутыль Сэма</div><span>+15 Самогона</span></div><button class="buy-btn star-btn" onclick="buyStars(15, 120)">⭐ 120 Stars</button></div>
+                    <div class="item-card"><div class="item-info"><div>🛢️ Ящик Сэма</div><span>+50 Самогона</span></div><button class="buy-btn star-btn" onclick="buyStars(50, 350)">⭐ 350 Stars</button></div>
                 </div>
             </div>
 
-            <!-- СЕКОНД -->
-            <div id="tab-second" class="tab-content" style="display:none;">
-                <div id="second-items-list"></div>
+            <!-- ================= 4. ЭКРАН УЛИЦЫ ================= -->
+            <div id="street-page" class="page">
+                <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
+                <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #ffb3b3;">🥊 Поиск пацанов на Улице:</h3>
+                <p style="margin: 0 0 10px 0; font-size: 11px; color: #aaa;">⚠️ Без Одежды или Оружия победить невозможно! При проигрыше серия побед сбрасывается!</p>
+                <div id="enemies-list"></div>
+                <button class="refresh-btn" onclick="generateEnemies()">🔍 ИСКАТЬ ЕЩЁ ПРОТИВНИКОВ (Ботов или Игроков)</button>
+                <div id="fight-log" class="fight-log"><div class="log-title">📜 Ход махача:</div><div id="log-text"></div></div>
             </div>
 
-            <!-- ЦЫГАНКА -->
-            <div id="tab-gypsy" class="tab-content" style="display:none;">
-                <div id="gypsy-items-list"></div>
-            </div>
+            <!-- ================= 5. ЭКРАН БАЗАРА ================= -->
+            <div id="bazar-page" class="page">
+                <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
-            <!-- ЛАРЕК -->
-            <div id="tab-larec" class="tab-content" style="display:none;">
-                <div class="item-card">
-                    <div class="item-info"><div>🪵 Дубовая Доска</div><span>💥 +80% урона в Махаче Сёла на Село (Одноразовый)</span></div>
-                    <button class="buy-btn" onclick="buyConsumable('doska', '🪵 Дубовая Доска', 0.8, 5)">5 сэма</button>
+                <div class="tabs">
+                    <div class="tab-btn active" onclick="switchBazarTab('stolovka', event)">🥗 Столовка</div>
+                    <div class="tab-btn" onclick="switchBazarTab('second', event)">👕 Секонд</div>
+                    <div class="tab-btn" onclick="switchBazarTab('gypsy', event)">🔨 Цыганка</div>
+                    <div class="tab-btn" onclick="switchBazarTab('larec', event)">🏪 Ларек</div>
                 </div>
-                <div class="item-card">
-                    <div class="item-info"><div>🌵 Кактус</div><span>💥 +120% урона в Махаче Сёла на Село (Одноразовый)</span></div>
-                    <button class="buy-btn" onclick="buyConsumable('kaktus', '🌵 Кактус', 1.2, 10)">10 сэма</button>
+
+                <!-- СТОЛОВКА -->
+                <div id="tab-stolovka" class="tab-content">
+                    <div class="item-card">
+                        <div class="item-info"><div>🥟 Чебурек с мясом</div><span>+30 ХП (Только Улица) | ⏳ КД: 30 мин</span></div>
+                        <button class="buy-btn" onclick="eatFood('cheburek', 30, 10, 'money', 1800, '🥊 Улица')">10 грн</button>
+                    </div>
+                    <div class="item-card">
+                        <div class="item-info"><div>🥣 Горячий Борщ</div><span>+50 ХП (Только Улица) | ⏳ КД: 1 час</span></div>
+                        <button class="buy-btn" onclick="eatFood('borsch', 50, 15, 'money', 3600, '🥊 Улица')">15 грн</button>
+                    </div>
+                    <div class="item-card">
+                        <div class="item-info"><div>🥓 Сало с чесноком</div><span>+50 ХП (Только Махач) | ⏳ КД: 2 мин</span></div>
+                        <button class="buy-btn" onclick="eatFood('salo', 50, 1, 'samogon', 120, '⚔️ Махач')">1 сэм</button>
+                    </div>
+                    <div class="item-card">
+                        <div class="item-info"><div>🥪 Сытный Бутерброд</div><span>+100 ХП (Только Махач) | ⏳ КД: 4 мин</span></div>
+                        <button class="buy-btn" onclick="eatFood('buter', 100, 2, 'samogon', 240, '⚔️ Махач')">2 сэма</button>
+                    </div>
+                </div>
+
+                <!-- СЕКОНД -->
+                <div id="tab-second" class="tab-content" style="display:none;">
+                    <div id="second-items-list"></div>
+                </div>
+
+                <!-- ЦЫГАНКА -->
+                <div id="tab-gypsy" class="tab-content" style="display:none;">
+                    <div id="gypsy-items-list"></div>
+                </div>
+
+                <!-- ЛАРЕК -->
+                <div id="tab-larec" class="tab-content" style="display:none;">
+                    <div class="item-card">
+                        <div class="item-info"><div>🪵 Дубовая Доска</div><span>💥 +80% урона в Махаче Сёла на Село (Одноразовый)</span></div>
+                        <button class="buy-btn" onclick="buyConsumable('doska', '🪵 Дубовая Доска', 0.8, 5)">5 сэма</button>
+                    </div>
+                    <div class="item-card">
+                        <div class="item-info"><div>🌵 Кактус</div><span>💥 +120% урона в Махаче Сёла на Село (Одноразовый)</span></div>
+                        <button class="buy-btn" onclick="buyConsumable('kaktus', '🌵 Кактус', 1.2, 10)">10 сэма</button>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <!-- ================= 6. ЭКРАН ДОМА ================= -->
-        <div id="home-page" class="page">
-            <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
+            <!-- ================= 6. ЭКРАН ДОМА ================= -->
+            <div id="home-page" class="page">
+                <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
-            <div class="stats-panel">
-                <h3>💪 Твои Боевые Характеристики:</h3>
-                <div>🥊 Сила: <b id="stat-str">10</b> <span style="color:#888;" id="bonus-str">(+0 от снаряжения)</span></div>
-                <div>💨 Ловкость: <b id="stat-agi">10</b> <span style="color:#888;" id="bonus-agi">(+0 от снаряжения)</span></div>
+                <div class="stats-panel">
+                    <h3>💪 Твои Боевые Характеристики:</h3>
+                    <div>🥊 Сила: <b id="stat-str">10</b> <span style="color:#888;" id="bonus-str">(+0 от снаряжения)</span></div>
+                    <div>💨 Ловкость: <b id="stat-agi">10</b> <span style="color:#888;" id="bonus-agi">(+0 от снаряжения)</span></div>
+                </div>
+
+                <div class="tabs">
+                    <div class="tab-btn active" onclick="switchHomeTab('inventory', event)">🎒 Инвентарь</div>
+                    <div class="tab-btn" onclick="switchHomeTab('filip', event)">👴 Дед Филиппович</div>
+                </div>
+
+                <div id="home-inventory" class="home-tab-content">
+                    <h4 style="margin: 5px 0 10px 0; font-size: 13px; color: #aaa;">Купленное снаряжение (Можно продать за 50% стоимости):</h4>
+                    <div id="inventory-list"></div>
+                </div>
+
+                <div id="home-filip" class="home-tab-content" style="display:none;">
+                    <h4 style="margin: 5px 0 10px 0; font-size: 13px; color: #aaa;">👴 Дед Филиппович качает вещи до ⭐⭐⭐ за Сэм (Требуется время!):</h4>
+                    <div id="filip-list"></div>
+                </div>
             </div>
 
-            <div class="tabs">
-                <div class="tab-btn active" onclick="switchHomeTab('inventory', event)">🎒 Инвентарь</div>
-                <div class="tab-btn" onclick="switchHomeTab('filip', event)">👴 Дед Филиппович</div>
+            <!-- ================= 7. ЭКРАН КОЛХОЗА ================= -->
+            <div id="kolhoz-page" class="page">
+                <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
+                <h3 style="margin: 0 0 10px 0; font-size: 14px; color: #7cb342;">🌾 Работа в Колхозе «Заря»:</h3>
+                <div class="item-card"><div class="item-info"><div>🧹 Чистить коровник</div><span>Доход: +15 грн | 💤 +30 Усталости</span></div><button class="work-btn" onclick="doWork('barn')">Впахивать</button></div>
+                <div class="item-card"><div class="item-info"><div>🥔 Сбор картохи</div><span>Доход: +35 грн | 💤 +50 Усталости</span></div><button class="work-btn" onclick="doWork('potatoes')">Впахивать</button></div>
+                <div class="item-card"><div class="item-info"><div>🚜 Ремонт Трактора</div><span>Доход: +70 грн | 💤 +100 Усталости (Нужно 15+ Силы)</span></div><button class="work-btn" onclick="doWork('tractor')">Впахивать</button></div>
             </div>
-
-            <div id="home-inventory" class="home-tab-content">
-                <h4 style="margin: 5px 0 10px 0; font-size: 13px; color: #aaa;">Купленное снаряжение (Можно продать за 50% стоимости):</h4>
-                <div id="inventory-list"></div>
-            </div>
-
-            <div id="home-filip" class="home-tab-content" style="display:none;">
-                <h4 style="margin: 5px 0 10px 0; font-size: 13px; color: #aaa;">👴 Дед Филиппович качает вещи до ⭐⭐⭐ за Сэм (Требуется время!):</h4>
-                <div id="filip-list"></div>
-            </div>
-        </div>
-
-        <!-- ================= 7. ЭКРАН КОЛХОЗА ================= -->
-        <div id="kolhoz-page" class="page">
-            <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
-            <h3 style="margin: 0 0 10px 0; font-size: 14px; color: #7cb342;">🌾 Работа в Колхозе «Заря»:</h3>
-            <div class="item-card"><div class="item-info"><div>🧹 Чистить коровник</div><span>Доход: +15 грн | 💤 +30 Усталости</span></div><button class="work-btn" onclick="doWork('barn')">Впахивать</button></div>
-            <div class="item-card"><div class="item-info"><div>🥔 Сбор картохи</div><span>Доход: +35 грн | 💤 +50 Усталости</span></div><button class="work-btn" onclick="doWork('potatoes')">Впахивать</button></div>
-            <div class="item-card"><div class="item-info"><div>🚜 Ремонт Трактора</div><span>Доход: +70 грн | 💤 +100 Усталости (Нужно 15+ Силы)</span></div><button class="work-btn" onclick="doWork('tractor')">Впахивать</button></div>
         </div>
     </div>
 
@@ -362,15 +396,25 @@
 
         const xpRequirements = { 1: 3, 2: 8, 3: 24, 4: 50, 5: 85, 6: 150, 7: 200, 8: 230, 9: 270 };
 
-        // База сёл и кратких описаний
         const villagesCatalog = [
-            { id: 'vediltsi', name: '🌾 Ведильцы', desc: 'Центральное село. Шумный базар, огромный колхоз и пацаны, держащие район.' },
-            { id: 'pakul', name: '🌲 Пакуль', desc: 'Лесной край. Окружён густыми лесами, славится самым крепким самогоном.' },
-            { id: 'kovpyta', name: '🚌 Ковпыта', desc: 'Транспортный узел. Шумная остановка, где вечерами собирается вся местная элита.' },
-            { id: 'karhovka', name: '🛠️ Карховка', desc: 'Рабочий хутор. Край суровых механизаторов, кузнецов и чистой силы.' }
+            { id: 'vediltsi', name: '🌾 Ведильцы', desc: 'Центральное село. Шумный базар, огромный колхоз и пацаны.' },
+            { id: 'pakul', name: '🌲 Пакуль', desc: 'Лесной край. Окружён густыми лесами, славится крепким самогоном.' },
+            { id: 'kovpyta', name: '🚌 Ковпыта', desc: 'Транспортный узел. Шумная остановка с местной элитой.' },
+            { id: 'karhovka', name: '🛠️ Карховка', desc: 'Рабочий хутор. Край суровых механизаторов и кузнецов.' }
         ];
 
+        const charPrototypes = [
+            { avatar: '🧢', title: 'Ребятенок с Пятачка' },
+            { avatar: '😎', title: 'Блатной пацан' },
+            { avatar: '🤠', title: 'Местный тракторист' },
+            { avatar: '🥷', title: 'Ночной хулиган' }
+        ];
+
+        let selectedAvatar = '🧢';
+
         let player = {
+            name: '',
+            avatar: '🧢',
             level: 1,
             xp: 0,
             maxXp: xpRequirements[1],
@@ -380,11 +424,11 @@
             fatigue: 0,
             maxFatigue: 100,
             money: 100,
-            samogon: 1,
+            samogon: 350, // Выдано с запасом для теста смены села
             teeth: 0,
             authority: 0,
             winStreak: 0,
-            village: 'vediltsi', // Родное село по умолчанию
+            village: 'vediltsi',
             baseStr: 10,
             baseAgi: 10,
             inventory: [],
@@ -429,8 +473,53 @@
 
         let foodCooldowns = { cheburek: 0, borsch: 0, salo: 0, buter: 0 };
 
-        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
-            document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
+        // Инициализация при загрузке: показываем экран создания персонажа
+        window.onload = function() {
+            if (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) {
+                document.getElementById('custom-name-input').value = tg.initDataUnsafe.user.first_name;
+            }
+            renderCharCreation();
+            document.getElementById('create-char-page').style.display = 'block';
+        };
+
+        function renderCharCreation() {
+            const container = document.getElementById('char-variants-list');
+            container.innerHTML = '';
+            charPrototypes.forEach(c => {
+                const isSelected = selectedAvatar === c.avatar;
+                container.innerHTML += `
+                    <div class="char-choice-card ${isSelected ? 'selected' : ''}" onclick="selectCharAvatar('${c.avatar}')">
+                        <div class="char-avatar-big">${c.avatar}</div>
+                        <div>
+                            <div style="font-weight:bold; font-size:14px; color:#fff;">${c.title}</div>
+                            <span style="font-size:11px; color:#aaa;">Фиксированный аватар бойца</span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function selectCharAvatar(av) {
+            selectedAvatar = av;
+            renderCharCreation();
+        }
+
+        function finishCharacterCreation() {
+            const nameInput = document.getElementById('custom-name-input').value.trim();
+            if (!nameInput) {
+                tg.showAlert('⚠️ Введите имя или кличку персонажа!');
+                return;
+            }
+
+            player.name = nameInput;
+            player.avatar = selectedAvatar;
+            player.village = document.getElementById('start-village-select').value;
+
+            // Скрываем экран создания, открываем игру
+            document.getElementById('create-char-page').style.display = 'none';
+            document.getElementById('game-main-wrap').style.display = 'block';
+
+            updateUI();
         }
 
         setInterval(() => {
@@ -501,6 +590,8 @@
         }
 
         function updateUI() {
+            document.getElementById('username').innerText = player.name;
+            document.getElementById('char-avatar-icon').innerText = player.avatar;
             document.getElementById('user-level').innerText = player.level;
             document.getElementById('user-money').innerText = player.money;
             document.getElementById('user-samogon').innerText = player.samogon;
@@ -509,7 +600,7 @@
             document.getElementById('user-win-streak').innerText = player.winStreak;
 
             const currentVil = villagesCatalog.find(v => v.id === player.village);
-            document.getElementById('user-village-display').innerText = `🏡 Село: ${currentVil ? currentVil.name : 'Ведильцы'} ✏️`;
+            document.getElementById('user-village-display').innerText = `🏡 Село: ${currentVil ? currentVil.name : 'Ведильцы'} (Сменить за 300 🍾)`;
 
             const stats = getStats();
             document.getElementById('stat-str').innerText = stats.totalStr;
@@ -521,7 +612,7 @@
             renderCatalogs();
             renderInventory();
             renderFilipShop();
-            renderVillagesList();
+            renderChangeVillageList();
             updateQuestsUI();
         }
 
@@ -568,16 +659,19 @@
             event.target.classList.add('active');
         }
 
-        // РЕНДЕР СПИСКА СЁЛ
-        function renderVillagesList() {
-            const container = document.getElementById('villages-list');
+        // РЕНДЕР СМЕНЫ СЕЛА ЗА 300 САМОГОНА
+        function renderChangeVillageList() {
+            const container = document.getElementById('change-village-list');
             container.innerHTML = '';
 
             villagesCatalog.forEach(v => {
                 const isCurrent = player.village === v.id;
-                let btnHtml = isCurrent 
-                    ? `<span style="font-size:12px; color:#81c784; font-weight:bold;">Твое село ✅</span>`
-                    : `<button class="select-village-btn" onclick="selectVillage('${v.id}')">Выбрать</button>`;
+                let btnHtml = '';
+                if (isCurrent) {
+                    btnHtml = `<span style="font-size:12px; color:#81c784; font-weight:bold;">Твое текущее село ✅</span>`;
+                } else {
+                    btnHtml = `<button class="select-village-btn" onclick="changeVillage('${v.id}')">Переехать (300 🍾)</button>`;
+                }
 
                 container.innerHTML += `
                     <div class="item-card" style="${isCurrent ? 'border-color:#81c784; background:#223322;' : ''}">
@@ -591,11 +685,17 @@
             });
         }
 
-        function selectVillage(vId) {
+        function changeVillage(vId) {
+            if (player.samogon < 300) {
+                tg.showAlert('⚠️ Недостаточно Самогона! Для переезда в новое село нужно 300 бутылок сэма.');
+                return;
+            }
+
+            player.samogon -= 300;
             player.village = vId;
             const vil = villagesCatalog.find(v => v.id === vId);
             updateUI();
-            tg.showAlert(`🏡 Ты прописался в селе ${vil.name}!`);
+            tg.showAlert(`🗺️ Успешный переезд! Теперь ты официально прописан в селе ${vil.name}.`);
             showPage('main-page');
         }
 
@@ -972,10 +1072,9 @@
             const enemy = currentEnemies[index];
             const stats = getStats();
 
-            // ЧЕК СНАРЯЖЕНИЯ: Если нет одежды ИЛИ нет оружия -> Автоматический проигрыш!
             if (!stats.hasEquippedWeapon || !stats.hasEquippedArmor) {
                 player.hp -= 25;
-                player.winStreak = 0; // СБРОС СЕРИИ ПОБЕД!
+                player.winStreak = 0;
                 updateUI();
 
                 const fightLog = document.getElementById('fight-log');
@@ -1049,8 +1148,6 @@
         function buyStars(samogonAmount, stars) {
             tg.showAlert(`Запрос на покупку ${samogonAmount} 🍾 Сэма за ${stars} Stars.`);
         }
-
-        updateUI();
     </script>
 </body>
 </html>
