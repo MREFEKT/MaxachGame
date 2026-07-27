@@ -58,9 +58,9 @@
 
         .bar-fill { height: 100%; border-radius: 3px; }
         .hp-bar { background: linear-gradient(to right, #8b3a3a, #ff4d4d); width: 100%; }
-        .fatigue-bar { background: linear-gradient(to right, #f57c00, #ffb74d); width: 20%; } /* Усталость */
+        .fatigue-bar { background: linear-gradient(to right, #f57c00, #ffb74d); width: 20%; }
 
-        /* Вкладки/Кнопки Села */
+        /* Сетка Меню */
         .grid-menu {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -81,19 +81,42 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
-        .menu-btn:active {
-            background: #1a2417;
-            transform: translateY(1px);
+        .menu-btn:active { background: #1a2417; transform: translateY(1px); }
+        .full-btn { grid-column: span 2; }
+        .danger-btn { background: linear-gradient(to bottom, #8b2d2d, #5c1d1d); border-color: #a33e3e; }
+
+        /* Стили экранов и Вкладок Базара */
+        .page { display: none; }
+        .active-page { display: block; }
+
+        .back-btn {
+            background: #333; border: 1px solid #555; color: white;
+            padding: 8px 15px; border-radius: 6px; font-weight: bold;
+            margin-bottom: 12px; cursor: pointer; display: inline-block;
         }
 
-        .full-btn {
-            grid-column: span 2;
+        .tabs { display: flex; gap: 4px; margin-bottom: 12px; }
+        .tab-btn {
+            flex: 1; background: #222; border: 1px solid #444; color: #aaa;
+            padding: 8px 2px; font-size: 11px; font-weight: bold;
+            border-radius: 5px; cursor: pointer; text-align: center;
         }
+        .tab-btn.active { background: #4a633d; color: white; border-color: #628252; }
 
-        .danger-btn {
-            background: linear-gradient(to bottom, #8b2d2d, #5c1d1d);
-            border-color: #a33e3e;
+        /* Карточка товара */
+        .item-card {
+            background: #1c241a; border: 1px solid #33442d;
+            border-radius: 8px; padding: 10px; margin-bottom: 8px;
+            display: flex; justify-content: space-between; align-items: center;
         }
+        .item-info div { font-weight: bold; font-size: 14px; }
+        .item-info span { font-size: 11px; color: #888; }
+        .buy-btn {
+            background: #4a633d; border: 1px solid #5a7a4a; color: white;
+            padding: 6px 12px; border-radius: 5px; font-weight: bold; font-size: 12px;
+            cursor: pointer;
+        }
+        .buy-btn:active { background: #36492c; }
     </style>
 </head>
 <body>
@@ -113,7 +136,7 @@
     </div>
 
     <div class="content">
-        <!-- Статы: ХП и Усталость -->
+        <!-- Полоски ХП и Усталости -->
         <div class="bar-container">
             <div class="bar-label"><span>❤️ Здоровье</span><span>100 / 100</span></div>
             <div class="bar-bg"><div class="bar-fill hp-bar"></div></div>
@@ -124,31 +147,182 @@
             <div class="bar-bg"><div class="bar-fill fatigue-bar"></div></div>
         </div>
 
-        <!-- Кнопки Локаций -->
-        <div class="grid-menu">
-            <button class="menu-btn full-btn" onclick="tg.showAlert('Выходим на Улицу искать гопников...')">
-                🥊 УЛИЦА (Поиск Махача)
-            </button>
+        <!-- ================= ГЛАВНОЕ МЕНЮ ================= -->
+        <div id="main-page" class="page active-page">
+            <div class="grid-menu">
+                <button class="menu-btn full-btn" onclick="tg.showAlert('Выходим на Улицу искать гопников...')">
+                    🥊 УЛИЦА (Поиск Махача)
+                </button>
 
-            <button class="menu-btn full-btn danger-btn" onclick="tg.showAlert('Запись на Махач Сёла на Село в Беседке!')">
-                ⚔️ МАХАЧ РАЙОН НА РАЙОН
-            </button>
+                <button class="menu-btn full-btn danger-btn" onclick="tg.showAlert('Запись на Махач Сёла на Село в Беседке!')">
+                    ⚔️ МАХАЧ РАЙОН НА РАЙОН
+                </button>
 
-            <button class="menu-btn" onclick="tg.showAlert('Заходим на Базар: Столовка, Секонд, Цыганка, Ларек!')">
-                🏪 БАЗАР
-            </button>
+                <button class="menu-btn" onclick="showPage('bazar-page')">
+                    🏪 БАЗАР
+                </button>
 
-            <button class="menu-btn" onclick="tg.showAlert('Дом: Прокачка шмота/оружия у Филипповича')">
-                🏠 ДОМ
-            </button>
+                <button class="menu-btn" onclick="tg.showAlert('Дом: Прокачка шмота/оружия у Филипповича')">
+                    🏠 ДОМ
+                </button>
 
-            <button class="menu-btn" onclick="tg.showAlert('Колхоз: Работа на полях (копим Усталость)')">
-                🌾 КОЛХОЗ
-            </button>
+                <button class="menu-btn" onclick="tg.showAlert('Колхоз: Работа на полях')">
+                    🌾 КОЛХОЗ
+                </button>
 
-            <button class="menu-btn" onclick="tg.showAlert('Испытай удачу в Сельском Лохотроне!')">
-                🎟️ ЛОХОТРОН
-            </button>
+                <button class="menu-btn" onclick="tg.showAlert('Испытай удачу в Сельском Лохотроне!')">
+                    🎟️ ЛОХОТРОН
+                </button>
+            </div>
+        </div>
+
+        <!-- ================= ЭКРАН БАЗАРА ================= -->
+        <div id="bazar-page" class="page">
+            <div class="back-btn" onclick="showPage('main-page')">⬅️ В Село</div>
+
+            <!-- Вкладки раздела Базара -->
+            <div class="tabs">
+                <div class="tab-btn active" onclick="switchTab('stolovka')">🥗 Столовка</div>
+                <div class="tab-btn" onclick="switchTab('second')">👕 Секонд</div>
+                <div class="tab-btn" onclick="switchTab('gypsy')">🔨 Цыганка</div>
+                <div class="tab-btn" onclick="switchTab('larec')">🏪 Ларек</div>
+            </div>
+
+            <!-- 1. СТОЛОВКА -->
+            <div id="tab-stolovka" class="tab-content">
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🥣 Борщ</div>
+                        <span>+50 ХП (Улица) | КД: 30 мин</span>
+                    </div>
+                    <button class="buy-btn" onclick="tg.showAlert('Куплен Борщ!')">15 грн</button>
+                </div>
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🥪 Бутерброд</div>
+                        <span>+100 ХП (Улица) | КД: 1 час</span>
+                    </div>
+                    <button class="buy-btn" onclick="tg.showAlert('Куплен Бутерброд!')">30 грн</button>
+                </div>
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🥓 Сало</div>
+                        <span>+50 ХП (Махач) | КД: 2 мин</span>
+                    </div>
+                    <button class="buy-btn" onclick="tg.showAlert('Куплено Сало!')">25 грн</button>
+                </div>
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🍫 Батончик Рошен</div>
+                        <span>+100 ХП (Махач) | КД: 4 мин</span>
+                    </div>
+                    <button class="buy-btn" onclick="tg.showAlert('Куплен Батончик!')">45 грн</button>
+                </div>
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>☕ Капучино</div>
+                        <span>-100 Усталости | КД: 3 часа</span>
+                    </div>
+                    <button class="buy-btn" onclick="tg.showAlert('Выпит Капучино!')">50 грн</button>
+                </div>
+            </div>
+
+            <!-- 2. СЕКОНД-ХЕНД -->
+            <div id="tab-second" class="tab-content" style="display:none;">
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🎽 Майка «BMW»</div>
+                        <span>+4 Ловкость (с 3 ур.)</span>
+                    </div>
+                    <button class="buy-btn">80 грн</button>
+                </div>
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🐘 Стринги со слоником</div>
+                        <span>+7 Ловкость (с 5 ур.)</span>
+                    </div>
+                    <button class="buy-btn">150 грн</button>
+                </div>
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>👟 Олимпийка Абибас</div>
+                        <span>+12 Ловкость (с 6 ур.)</span>
+                    </div>
+                    <button class="buy-btn">300 грн</button>
+                </div>
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🧥 Кофта Stone Island</div>
+                        <span>+17 Ловкость (с 7 ур.)</span>
+                    </div>
+                    <button class="buy-btn">500 грн</button>
+                </div>
+            </div>
+
+            <!-- 3. ЦЫГАНКА С ОРУЖИЕМ -->
+            <div id="tab-gypsy" class="tab-content" style="display:none;">
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>📍 Гвоздь</div>
+                        <span>+3 Сила (с 2 ур.)</span>
+                    </div>
+                    <button class="buy-btn">50 грн</button>
+                </div>
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🪵 Палка</div>
+                        <span>+5 Сила (с 3 ур.)</span>
+                    </div>
+                    <button class="buy-btn">100 грн</button>
+                </div>
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🏏 Пластиковая бита</div>
+                        <span>+10 Сила (с 5 ур.)</span>
+                    </div>
+                    <button class="buy-btn">250 грн</button>
+                </div>
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🥊 Самодельный кастет</div>
+                        <span>+14 Сила (с 6 ур.)</span>
+                    </div>
+                    <button class="buy-btn">450 грн</button>
+                </div>
+            </div>
+
+            <!-- 4. ЛАРЕК (За Самогон) -->
+            <div id="tab-larec" class="tab-content" style="display:none;">
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🪵 Доска (Махач)</div>
+                        <span>Удар доской (120 злости)</span>
+                    </div>
+                    <button class="buy-btn">5 сэма</button>
+                </div>
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🌵 Кактус</div>
+                        <span>Расходник для Махача</span>
+                    </div>
+                    <button class="buy-btn">8 сэма</button>
+                </div>
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🍾 Чекушка</div>
+                        <span>+150 Ярости на 5 минут</span>
+                    </div>
+                    <button class="buy-btn">15 сэма</button>
+                </div>
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🧪 Чистый спирт</div>
+                        <span>+200 Ярости на 2 минуты</span>
+                    </div>
+                    <button class="buy-btn">25 сэма</button>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -161,7 +335,21 @@
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
         }
+
+        // Переключение Экранов
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
+            document.getElementById(pageId).classList.add('active-page');
+        }
+
+        // Переключение Вкладок Базара
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(tb => tb.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabName).style.display = 'block';
+            event.target.classList.add('active');
+        }
     </script>
 </body>
 </html>
-
