@@ -51,7 +51,7 @@
 
         .bar-fill { height: 100%; border-radius: 3px; transition: width 0.3s ease; }
         .hp-bar { background: linear-gradient(to right, #8b3a3a, #ff4d4d); width: 100%; }
-        .fatigue-bar { background: linear-gradient(to right, #f57c00, #ffb74d); width: 20%; }
+        .fatigue-bar { background: linear-gradient(to right, #f57c00, #ffb74d); width: 0%; }
 
         /* Сетка Меню */
         .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
@@ -86,7 +86,7 @@
         }
         .tab-btn.active { background: #4a633d; color: white; border-color: #628252; }
 
-        /* Карточка Товара / Предмета */
+        /* Карточка Товара / Работы */
         .item-card {
             background: #1c241a; border: 1px solid #33442d; border-radius: 8px;
             padding: 10px; margin-bottom: 8px; display: flex;
@@ -94,13 +94,13 @@
         }
         .item-info div { font-weight: bold; font-size: 14px; }
         .item-info span { font-size: 11px; color: #888; }
-        .buy-btn, .equip-btn {
+        .buy-btn, .equip-btn, .work-btn {
             background: #4a633d; border: 1px solid #5a7a4a; color: white;
-            padding: 6px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
+            padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
         }
         .unequip-btn {
             background: #8b3a3a; border: 1px solid #a34a4a; color: white;
-            padding: 6px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
+            padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
         }
 
         /* Карточка Противника */
@@ -146,7 +146,7 @@
         .log-win { color: #ffd700; font-weight: bold; margin-top: 4px; }
         .log-lose { color: #ff5252; font-weight: bold; margin-top: 4px; }
 
-        /* Блок статуса дома */
+        /* Панель статуса */
         .stats-panel {
             background: #182216; border: 1px solid #33442d; border-radius: 8px;
             padding: 10px; margin-bottom: 12px; font-size: 13px;
@@ -178,8 +178,8 @@
         </div>
         
         <div class="bar-container" style="margin-bottom: 12px;">
-            <div class="bar-label"><span>💤 Усталость</span><span>20 / 100</span></div>
-            <div class="bar-bg"><div class="bar-fill fatigue-bar"></div></div>
+            <div class="bar-label"><span>💤 Усталость</span><span id="fatigue-text">0 / 100</span></div>
+            <div class="bar-bg"><div class="bar-fill fatigue-bar" id="fatigue-bar"></div></div>
         </div>
 
         <!-- ================= 1. ГЛАВНОЕ МЕНЮ ================= -->
@@ -201,7 +201,7 @@
                     🏠 ДОМ
                 </button>
 
-                <button class="menu-btn" onclick="tg.showAlert('Колхоз: Работа на полях')">
+                <button class="menu-btn" onclick="showPage('kolhoz-page')">
                     🌾 КОЛХОЗ
                 </button>
 
@@ -317,6 +317,14 @@
                 <div>💨 Ловкость: <b id="stat-agi">10</b> <span style="color:#888;" id="bonus-agi">(+0 от шмота)</span></div>
             </div>
 
+            <div class="item-card" style="margin-bottom: 12px; background: #261f18; border-color: #59432d;">
+                <div class="item-info">
+                    <div>🛌 Поспать на печи</div>
+                    <span>Мгновенно сбросить всю Усталость</span>
+                </div>
+                <button class="buy-btn" onclick="sleepAtHome()">Поспать</button>
+            </div>
+
             <div class="tabs">
                 <div class="tab-btn active" onclick="switchHomeTab('inventory', event)">🎒 Инвентарь</div>
                 <div class="tab-btn" onclick="switchHomeTab('filip', event)">👴 Дед Филиппович</div>
@@ -350,6 +358,36 @@
 
         </div>
 
+        <!-- ================= 5. ЭКРАН КОЛХОЗА ================= -->
+        <div id="kolhoz-page" class="page">
+            <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
+            <h3 style="margin: 0 0 10px 0; font-size: 14px; color: #7cb342;">🌾 Работа в Колхозе «Заря»:</h3>
+
+            <div class="item-card">
+                <div class="item-info">
+                    <div>🧹 Чистить коровник</div>
+                    <span>+15 грн | 💤 +15 Усталости</span>
+                </div>
+                <button class="work-btn" onclick="doWork('barn')">Впахивать</button>
+            </div>
+
+            <div class="item-card">
+                <div class="item-info">
+                    <div>🥔 Сбор картохи</div>
+                    <span>+35 грн | 💤 +25 Усталости</span>
+                </div>
+                <button class="work-btn" onclick="doWork('potatoes')">Впахивать</button>
+            </div>
+
+            <div class="item-card">
+                <div class="item-info">
+                    <div>🚜 Ремонт Трактора</div>
+                    <span>+70 грн | 💤 +40 Усталости (Нужно 15+ Силы)</span>
+                </div>
+                <button class="work-btn" onclick="doWork('tractor')">Впахивать</button>
+            </div>
+        </div>
+
     </div>
 
     <script>
@@ -362,12 +400,14 @@
         let player = {
             hp: 100,
             maxHp: 100,
+            fatigue: 0,
+            maxFatigue: 100,
             money: 100,
             samogon: 5,
             teeth: 0,
             baseStr: 10,
             baseAgi: 10,
-            inventory: [], // [{ id, name, type ('str'/'agi'), value, equipped }]
+            inventory: []
         };
 
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
@@ -378,11 +418,18 @@
         setInterval(() => {
             if (player.hp < player.maxHp) {
                 player.hp += 1;
-                updateHpBar();
+                updateBars();
             }
         }, 36000);
 
-        // Расчет итоговых статов с учетом надетого шмота
+        // --- АВТО-ОТДЫХ (-1 Усталость каждые 36 сек = 100 Усталости за 60 мин) ---
+        setInterval(() => {
+            if (player.fatigue > 0) {
+                player.fatigue -= 1;
+                updateBars();
+            }
+        }, 36000);
+
         function getStats() {
             let bonusStr = 0;
             let bonusAgi = 0;
@@ -412,17 +459,22 @@
             document.getElementById('bonus-str').innerText = `(+${stats.bonusStr} от шмота)`;
             document.getElementById('bonus-agi').innerText = `(+${stats.bonusAgi} от шмота)`;
 
-            updateHpBar();
+            updateBars();
             renderInventory();
         }
 
-        function updateHpBar() {
+        function updateBars() {
+            // ХП
             if(player.hp < 0) player.hp = 0;
             if(player.hp > player.maxHp) player.hp = player.maxHp;
-            
             document.getElementById('hp-text').innerText = `${player.hp} / ${player.maxHp}`;
-            const percent = (player.hp / player.maxHp) * 100;
-            document.getElementById('hp-bar').style.width = percent + '%';
+            document.getElementById('hp-bar').style.width = ((player.hp / player.maxHp) * 100) + '%';
+
+            // Усталость
+            if(player.fatigue < 0) player.fatigue = 0;
+            if(player.fatigue > player.maxFatigue) player.fatigue = player.maxFatigue;
+            document.getElementById('fatigue-text').innerText = `${player.fatigue} / ${player.maxFatigue}`;
+            document.getElementById('fatigue-bar').style.width = ((player.fatigue / player.maxFatigue) * 100) + '%';
         }
 
         function showPage(pageId) {
@@ -446,7 +498,7 @@
             event.target.classList.add('active');
         }
 
-        // --- БАЗАР: ПОКУПКИ ---
+        // --- БАЗАР ---
         function buyFood(hpAmount, price, itemName) {
             if (player.money < price) {
                 tg.showAlert('⚠️ Недостаточно денег!');
@@ -503,7 +555,17 @@
             tg.showAlert('🍾 Куплена бутылка самогона!');
         }
 
-        // --- ДОМ И ИНВЕНТАРЬ ---
+        // --- ДОМ ---
+        function sleepAtHome() {
+            if (player.fatigue === 0) {
+                tg.showAlert('Ты и так свеж и полон сил!');
+                return;
+            }
+            player.fatigue = 0;
+            updateUI();
+            tg.showAlert('🛌 Выспался на печи! Усталость полностью снята.');
+        }
+
         function renderInventory() {
             const container = document.getElementById('inventory-list');
             if (player.inventory.length === 0) {
@@ -543,6 +605,52 @@
             if (type === 'agi') player.baseAgi += 2;
             updateUI();
             tg.showAlert('👴 Филиппович подсобил! Базовые характеристики увеличены!');
+        }
+
+        // --- КОЛХОЗ ---
+        function doWork(workType) {
+            const stats = getStats();
+
+            if (workType === 'barn') {
+                if (player.fatigue + 15 > player.maxFatigue) {
+                    tg.showAlert('⚠️ Ты слишком устал! Иди отдохни или поспи в Доме!');
+                    return;
+                }
+                player.fatigue += 15;
+                player.money += 15;
+                tg.showAlert('🧹 Вычистил коровник! Заработано: 15 грн.');
+            } 
+            else if (workType === 'potatoes') {
+                if (player.fatigue + 25 > player.maxFatigue) {
+                    tg.showAlert('⚠️ Ты слишком устал! Поспи на печи в Доме!');
+                    return;
+                }
+                player.fatigue += 25;
+                player.money += 35;
+                tg.showAlert('🥔 Собрал мешки картохи! Заработано: 35 грн.');
+            } 
+            else if (workType === 'tractor') {
+                if (stats.totalStr < 15) {
+                    tg.showAlert('⚠️ Не хватает Силы (нужно 15+)! Надень шмот или прокачайся у Деда.');
+                    return;
+                }
+                if (player.fatigue + 40 > player.maxFatigue) {
+                    tg.showAlert('⚠️ Ты валишься с ног от усталости!');
+                    return;
+                }
+                player.fatigue += 40;
+                player.money += 70;
+
+                // Шанс 30% найти сэм
+                if (Math.random() < 0.3) {
+                    player.samogon += 1;
+                    tg.showAlert('🚜 Починил трактор! Заработано: 70 грн и нашел 🍾 1 сэм в бардачке!');
+                } else {
+                    tg.showAlert('🚜 Починил трактор! Заработано: 70 грн.');
+                }
+            }
+
+            updateUI();
         }
 
         // --- УЛИЦА И СИСТЕМА ДРАК ---
