@@ -66,6 +66,7 @@
         .menu-btn:active { background: #1a2417; transform: translateY(1px); }
         .full-btn { grid-column: span 2; }
         .danger-btn { background: linear-gradient(to bottom, #8b2d2d, #5c1d1d); border-color: #a33e3e; }
+        .donate-btn { background: linear-gradient(to bottom, #2d588b, #1d395c); border-color: #3e73a3; }
 
         /* Навигация страниц */
         .page { display: none; }
@@ -86,18 +87,20 @@
         }
         .tab-btn.active { background: #4a633d; color: white; border-color: #628252; }
 
-        /* Карточка Товара / Работы */
+        /* Карточка Товара / Работы / Квеста */
         .item-card {
             background: #1c241a; border: 1px solid #33442d; border-radius: 8px;
             padding: 10px; margin-bottom: 8px; display: flex;
-            justify-content: space-between; align-items: center;
+            justify-content: space-between; align-align: center; align-items: center;
         }
         .item-info div { font-weight: bold; font-size: 14px; }
         .item-info span { font-size: 11px; color: #888; }
-        .buy-btn, .equip-btn, .work-btn {
+        .buy-btn, .equip-btn, .work-btn, .quest-btn {
             background: #4a633d; border: 1px solid #5a7a4a; color: white;
             padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
         }
+        .quest-btn.completed { background: #333; border-color: #555; color: #888; cursor: default; }
+        .star-btn { background: linear-gradient(to bottom, #d4af37, #8a6d1c); border: 1px solid #f3e5ab; color: black; }
         .unequip-btn {
             background: #8b3a3a; border: 1px solid #a34a4a; color: white;
             padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
@@ -165,7 +168,7 @@
             </div>
             <div class="main-stats">
                 <div>⭐ Уровень: <b id="user-level">1</b> | 🦷 Зубов: <b id="user-teeth">0</b></div>
-                <div><span class="money">💰 <span id="user-money">100</span> грн</span> | <span class="samogon">🍾 <span id="user-samogon">5</span> сэма</span></div>
+                <div><span class="money">💰 <span id="user-money">100</span> грн</span> | <span class="samogon">🍾 <span id="user-samogon">1</span> сэма</span></div>
             </div>
         </div>
     </div>
@@ -189,8 +192,8 @@
                     🥊 УЛИЦА (Поиск Махача)
                 </button>
 
-                <button class="menu-btn full-btn danger-btn" onclick="tg.showAlert('Запись на Махач Сёла на Село в Беседке!')">
-                    ⚔️ МАХАЧ РАЙОН НА РАЙОН
+                <button class="menu-btn full-btn donate-btn" onclick="showPage('quests-page')">
+                    📜 ЗАДАНИЯ И 💎 ДОНАТ
                 </button>
 
                 <button class="menu-btn" onclick="showPage('bazar-page')">
@@ -205,13 +208,81 @@
                     🌾 КОЛХОЗ
                 </button>
 
-                <button class="menu-btn" onclick="tg.showAlert('Испытай удачу в Сельском Лохотроне!')">
-                    🎟️ ЛОХОТРОН
+                <button class="menu-btn danger-btn" onclick="tg.showAlert('Запись на Махач Сёла на Село в Беседке!')">
+                    ⚔️ РАЙОН НА РАЙОН
                 </button>
             </div>
         </div>
 
-        <!-- ================= 2. ЭКРАН УЛИЦЫ (ПОИСК БОЯ) ================= -->
+        <!-- ================= 2. ЭКРАН ЗАДАНИЙ И ДОНАТА ================= -->
+        <div id="quests-page" class="page">
+            <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
+
+            <div class="tabs">
+                <div class="tab-btn active" onclick="switchQuestTab('tasks', event)">📜 Задания</div>
+                <div class="tab-btn" onclick="switchQuestTab('donate', event)">💎 Донат (Stars)</div>
+            </div>
+
+            <!-- ВКЛАДКА ЗАДАНИЙ -->
+            <div id="tab-tasks" class="quest-tab-content">
+                <h4 style="margin: 0 0 10px 0; color: #81d4fa; font-size: 13px;">Получи Сэм за достижения в Селе:</h4>
+
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🥊 Гроза Улицы</div>
+                        <span>Победить 3 пацанов (<b id="q1-progress">0/3</b>)</span>
+                    </div>
+                    <button id="q1-btn" class="quest-btn" onclick="claimQuest('q1', 1)">+1 🍾 Сэм</button>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🌾 Трудяга Колхоза</div>
+                        <span>Отработать 5 раз (<b id="q2-progress">0/5</b>)</span>
+                    </div>
+                    <button id="q2-btn" class="quest-btn" onclick="claimQuest('q2', 1)">+1 🍾 Сэм</button>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>📢 Сельский Сельсовет</div>
+                        <span>Подписаться на канал Села</span>
+                    </div>
+                    <button id="q3-btn" class="quest-btn" onclick="claimQuest('q3', 2)">+2 🍾 Сэма</button>
+                </div>
+            </div>
+
+            <!-- ВКЛАДКА ДОНАТА -->
+            <div id="tab-donate" class="quest-tab-content" style="display:none;">
+                <h4 style="margin: 0 0 10px 0; color: #ffd700; font-size: 13px;">Купить Сэм за Telegram Stars:</h4>
+
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🍾 Чекушка Сэма</div>
+                        <span>+5 Самогона</span>
+                    </div>
+                    <button class="buy-btn star-btn" onclick="buyStars(5, 50)">⭐ 50 Stars</button>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🍾🍾 Бутыль Сэма</div>
+                        <span>+15 Самогона</span>
+                    </div>
+                    <button class="buy-btn star-btn" onclick="buyStars(15, 120)">⭐ 120 Stars</button>
+                </div>
+
+                <div class="item-card">
+                    <div class="item-info">
+                        <div>🛢️ Ящик Сэма</div>
+                        <span>+50 Самогона</span>
+                    </div>
+                    <button class="buy-btn star-btn" onclick="buyStars(50, 350)">⭐ 350 Stars</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= 3. ЭКРАН УЛИЦЫ ================= -->
         <div id="street-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
             <h3 style="margin: 0 0 10px 0; font-size: 14px; color: #ffb3b3;">🥊 Поиск пацанов на Улице:</h3>
@@ -226,7 +297,7 @@
             </div>
         </div>
 
-        <!-- ================= 3. ЭКРАН БАЗАРА ================= -->
+        <!-- ================= 4. ЭКРАН БАЗАРА ================= -->
         <div id="bazar-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
@@ -299,15 +370,11 @@
                     <div class="item-info"><div>🚬 Пачка «Примы»</div><span>+5 Ловкость</span></div>
                     <button class="buy-btn" onclick="buyEquipment('prima', '🚬 Пачка «Примы»', 'agi', 5, 20)">20 грн</button>
                 </div>
-                <div class="item-card">
-                    <div class="item-info"><div>🍾 Бутылка Самогона</div><span>Ресурс для Филипповича</span></div>
-                    <button class="buy-btn" onclick="buySamogonItem(40)">40 грн</button>
-                </div>
             </div>
 
         </div>
 
-        <!-- ================= 4. ЭКРАН ДОМА ================= -->
+        <!-- ================= 5. ЭКРАН ДОМА ================= -->
         <div id="home-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
@@ -358,7 +425,7 @@
 
         </div>
 
-        <!-- ================= 5. ЭКРАН КОЛХОЗА ================= -->
+        <!-- ================= 6. ЭКРАН КОЛХОЗА ================= -->
         <div id="kolhoz-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
             <h3 style="margin: 0 0 10px 0; font-size: 14px; color: #7cb342;">🌾 Работа в Колхозе «Заря»:</h3>
@@ -403,11 +470,15 @@
             fatigue: 0,
             maxFatigue: 100,
             money: 100,
-            samogon: 5,
+            samogon: 1,
             teeth: 0,
             baseStr: 10,
             baseAgi: 10,
-            inventory: []
+            inventory: [],
+            // Прогресс квестов
+            fightsWon: 0,
+            worksDone: 0,
+            claimedQuests: { q1: false, q2: false, q3: false }
         };
 
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
@@ -461,16 +532,15 @@
 
             updateBars();
             renderInventory();
+            updateQuestsUI();
         }
 
         function updateBars() {
-            // ХП
             if(player.hp < 0) player.hp = 0;
             if(player.hp > player.maxHp) player.hp = player.maxHp;
             document.getElementById('hp-text').innerText = `${player.hp} / ${player.maxHp}`;
             document.getElementById('hp-bar').style.width = ((player.hp / player.maxHp) * 100) + '%';
 
-            // Усталость
             if(player.fatigue < 0) player.fatigue = 0;
             if(player.fatigue > player.maxFatigue) player.fatigue = player.maxFatigue;
             document.getElementById('fatigue-text').innerText = `${player.fatigue} / ${player.maxFatigue}`;
@@ -496,6 +566,68 @@
             document.querySelectorAll('#home-page .tab-btn').forEach(tb => tb.classList.remove('active'));
             document.getElementById('home-' + tabName).style.display = 'block';
             event.target.classList.add('active');
+        }
+
+        function switchQuestTab(tabName, event) {
+            document.querySelectorAll('#quests-page .quest-tab-content').forEach(tc => tc.style.display = 'none');
+            document.querySelectorAll('#quests-page .tab-btn').forEach(tb => tb.classList.remove('active'));
+            document.getElementById('tab-' + tabName).style.display = 'block';
+            event.target.classList.add('active');
+        }
+
+        // --- ЗАДАНИЯ И ДОНАТ ---
+        function updateQuestsUI() {
+            document.getElementById('q1-progress').innerText = `${Math.min(player.fightsWon, 3)}/3`;
+            document.getElementById('q2-progress').innerText = `${Math.min(player.worksDone, 5)}/5`;
+
+            const btn1 = document.getElementById('q1-btn');
+            if (player.claimedQuests.q1) {
+                btn1.innerText = 'Забрано ✅'; btn1.classList.add('completed');
+            } else if (player.fightsWon < 3) {
+                btn1.innerText = 'Не готово'; btn1.classList.add('completed');
+            } else {
+                btn1.innerText = '+1 🍾 Сэм'; btn1.classList.remove('completed');
+            }
+
+            const btn2 = document.getElementById('q2-btn');
+            if (player.claimedQuests.q2) {
+                btn2.innerText = 'Забрано ✅'; btn2.classList.add('completed');
+            } else if (player.worksDone < 5) {
+                btn2.innerText = 'Не готово'; btn2.classList.add('completed');
+            } else {
+                btn2.innerText = '+1 🍾 Сэм'; btn2.classList.remove('completed');
+            }
+
+            const btn3 = document.getElementById('q3-btn');
+            if (player.claimedQuests.q3) {
+                btn3.innerText = 'Забрано ✅'; btn3.classList.add('completed');
+            }
+        }
+
+        function claimQuest(questId, amount) {
+            if (player.claimedQuests[questId]) {
+                tg.showAlert('Ты уже забрал эту награду!');
+                return;
+            }
+
+            if (questId === 'q1' && player.fightsWon < 3) {
+                tg.showAlert('Выиграй 3 боя на Улице!');
+                return;
+            }
+            if (questId === 'q2' && player.worksDone < 5) {
+                tg.showAlert('Поработай 5 раз в Колхозе!');
+                return;
+            }
+
+            player.claimedQuests[questId] = true;
+            player.samogon += amount;
+            updateUI();
+            tg.showAlert(`🎉 Награда получена: +${amount} 🍾 Сэма!`);
+        }
+
+        function buyStars(samogonAmount, stars) {
+            tg.showAlert(`Покупка ${samogonAmount} 🍾 Сэма за ${stars} Telegram Stars!\n(Подключи обработку счетов через бота)`);
+            // Здесь вызывается tg.openInvoice() при интеграции с ботом
         }
 
         // --- БАЗАР ---
@@ -542,17 +674,6 @@
             player.inventory.push({ id, name, type, value, equipped: false });
             updateUI();
             tg.showAlert(`🛍️ Выменял "${name}"! Она ждет в Доме.`);
-        }
-
-        function buySamogonItem(price) {
-            if (player.money < price) {
-                tg.showAlert('⚠️ Недостаточно денег!');
-                return;
-            }
-            player.money -= price;
-            player.samogon += 1;
-            updateUI();
-            tg.showAlert('🍾 Куплена бутылка самогона!');
         }
 
         // --- ДОМ ---
@@ -618,6 +739,7 @@
                 }
                 player.fatigue += 15;
                 player.money += 15;
+                player.worksDone++;
                 tg.showAlert('🧹 Вычистил коровник! Заработано: 15 грн.');
             } 
             else if (workType === 'potatoes') {
@@ -627,6 +749,7 @@
                 }
                 player.fatigue += 25;
                 player.money += 35;
+                player.worksDone++;
                 tg.showAlert('🥔 Собрал мешки картохи! Заработано: 35 грн.');
             } 
             else if (workType === 'tractor') {
@@ -640,14 +763,8 @@
                 }
                 player.fatigue += 40;
                 player.money += 70;
-
-                // Шанс 30% найти сэм
-                if (Math.random() < 0.3) {
-                    player.samogon += 1;
-                    tg.showAlert('🚜 Починил трактор! Заработано: 70 грн и нашел 🍾 1 сэм в бардачке!');
-                } else {
-                    tg.showAlert('🚜 Починил трактор! Заработано: 70 грн.');
-                }
+                player.worksDone++;
+                tg.showAlert('🚜 Починил трактор! Заработано: 70 грн.');
             }
 
             updateUI();
@@ -736,6 +853,7 @@
             if (isWin) {
                 player.teeth++;
                 player.money += 15;
+                player.fightsWon++;
                 logHTML += `<div class="log-win">🏆 Ты вырубил соперника! Получено: +15 грн и 🦷 1 зуб</div>`;
             } else {
                 player.hp -= 15;
