@@ -7,7 +7,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            background-color: #121711;
+            background-color: #1a1e19;
             color: #e0e0e0;
             font-family: Arial, sans-serif;
             margin: 0; padding: 0;
@@ -17,10 +17,10 @@
 
         /* Шапка Профиля */
         .banner {
-            width: 100%; height: 130px;
+            width: 100%; height: 120px;
             background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop');
             background-size: cover; background-position: center;
-            border-bottom: 2px solid #3e5035; position: relative;
+            border-bottom: 2px solid #33442d; position: relative;
         }
 
         .profile-header {
@@ -31,7 +31,7 @@
         }
 
         .user-info h2 { margin: 0; font-size: 15px; color: #fff; text-shadow: 1px 1px 2px black; }
-        .user-info span { font-size: 10px; color: #7cb342; font-weight: bold; cursor: pointer; }
+        .user-info span { font-size: 10px; color: #8bc34a; font-weight: bold; cursor: pointer; }
 
         .main-stats { text-align: right; font-size: 10px; text-shadow: 1px 1px 2px black; line-height: 1.2; }
         .money { color: #ffd700; font-weight: bold; }
@@ -40,40 +40,69 @@
         .teeth-stat { color: #e0e0e0; font-weight: bold; }
         .streak-stat { color: #ff7043; font-weight: bold; }
 
-        .content { padding: 10px; }
+        .content { padding: 8px; }
 
-        /* Компактные прогресс-бары */
-        .bar-container { margin-bottom: 5px; }
+        /* Прогресс-бары */
+        .bar-container { margin-bottom: 4px; }
         .bar-label { font-size: 10px; margin-bottom: 1px; display: flex; justify-content: space-between; color: #ccc; }
-        
         .bar-bg {
             width: 100%; height: 6px;
-            background-color: #222; border-radius: 3px; overflow: hidden;
-            border: 1px solid #333;
+            background-color: #111; border-radius: 3px; overflow: hidden;
+            border: 1px solid #2a3327;
         }
-
         .bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s ease; }
         .hp-bar { background: linear-gradient(to right, #8b3a3a, #ff4d4d); width: 100%; }
         .fatigue-bar { background: linear-gradient(to right, #f57c00, #ffb74d); width: 0%; }
         .xp-bar { background: linear-gradient(to right, #afb42b, #d4e157); width: 0%; }
 
-        /* Кнопки и Сетка */
-        .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
+        /* Вкладочная навигация (3 верхние кнопки) */
+        .top-menu-grid {
+            display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 4px; margin: 8px 0;
+        }
+        .top-menu-btn {
+            background: #2b3b28; border: 1px solid #42573e; border-radius: 4px;
+            padding: 8px 4px; text-align: center; color: white; cursor: pointer;
+        }
+        .top-menu-btn .icon { font-size: 18px; display: block; margin-bottom: 2px; }
+        .top-menu-btn .label { font-size: 11px; font-weight: bold; color: #d0e0cc; }
 
-        .menu-btn {
-            background: linear-gradient(to bottom, #2e3d28, #222e1e);
-            border: 1px solid #435a3a; border-radius: 8px; color: white;
-            padding: 12px 8px; text-align: center; font-size: 13px;
-            font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        /* Вертикальное меню по образцу (Список локаций) */
+        .list-menu { display: flex; flex-direction: column; gap: 3px; margin-bottom: 6px; }
+
+        .list-btn {
+            background: #46693d; border: 1px solid #5a854e;
+            color: #ffffff; padding: 10px 12px; font-size: 14px; font-weight: bold;
+            display: flex; align-items: center; gap: 10px; cursor: pointer;
+            border-radius: 3px; text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+        }
+        .list-btn:active { background: #35502e; }
+        .list-btn.disabled { background: #313d2f; border-color: #3f4e3c; color: #889985; cursor: default; }
+
+        .list-btn-danger {
+            background: #a83d3d; border: 1px solid #c44d4d; color: white;
+            padding: 11px 12px; font-size: 14px; font-weight: bold;
+            display: flex; align-items: center; gap: 10px; cursor: pointer;
+            border-radius: 3px; margin-bottom: 6px; text-shadow: 1px 1px 1px rgba(0,0,0,0.5);
+        }
+        .list-btn-danger:active { background: #822e2e; }
+
+        /* Нижняя сетка 2x3 параметров */
+        .bottom-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; }
+        .bottom-btn {
+            background: #2e4029; border: 1px solid #3e5637; color: white;
+            padding: 9px 8px; font-size: 13px; font-weight: bold;
+            display: flex; align-items: center; gap: 8px; border-radius: 3px; cursor: pointer;
         }
 
-        .menu-btn:active { background: #1a2417; transform: translateY(1px); }
-        .full-btn { grid-column: span 2; }
-        .danger-btn { background: linear-gradient(to bottom, #8b2d2d, #5c1d1d); border-color: #a33e3e; }
-        .donate-btn { background: linear-gradient(to bottom, #2d588b, #1d395c); border-color: #3e73a3; }
-        .board-btn { background: linear-gradient(to bottom, #8b732d, #5c4b1d); border-color: #a38c3e; }
+        /* Служебный подвал (Футер) */
+        .footer-links {
+            margin-top: 15px; padding: 10px 0 20px 0; border-top: 1px solid #2a3327;
+            text-align: center; font-size: 11px; color: #8fa389;
+        }
+        .footer-links a { color: #8fa389; text-decoration: none; margin: 0 4px; }
+        .footer-online { margin-top: 8px; font-size: 10px; color: #667861; }
 
-        /* Экран и Навигация */
+        /* Экраны страниц */
         .page { display: none; }
         .active-page { display: block; }
 
@@ -83,7 +112,7 @@
             margin-bottom: 10px; cursor: pointer; display: inline-block;
         }
 
-        /* Вкладки */
+        /* Табы и Кнопки */
         .tabs { display: flex; gap: 4px; margin-bottom: 10px; }
         .tab-btn {
             flex: 1; background: #222; border: 1px solid #444; color: #aaa;
@@ -92,7 +121,6 @@
         }
         .tab-btn.active { background: #4a633d; color: white; border-color: #628252; }
 
-        /* Карточки элементов */
         .item-card {
             background: #1c241a; border: 1px solid #33442d; border-radius: 8px;
             padding: 10px; margin-bottom: 8px; display: flex;
@@ -100,22 +128,17 @@
         }
         .item-info div { font-weight: bold; font-size: 14px; }
         .item-info span { font-size: 11px; color: #aaa; }
-        
+
         .buy-btn, .equip-btn, .work-btn, .quest-btn, .star-upgrade-btn, .sell-btn, .select-village-btn {
             background: #4a633d; border: 1px solid #5a7a4a; color: white;
             padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
         }
         .sell-btn { background: #d84315; border-color: #ff7043; }
         .buy-btn.locked { background: #333; border-color: #555; color: #777; cursor: not-allowed; }
-        .quest-btn.completed { background: #333; border-color: #555; color: #888; cursor: default; }
-        .star-btn { background: linear-gradient(to bottom, #d4af37, #8a6d1c); border: 1px solid #f3e5ab; color: black; }
         .star-upgrade-btn { background: linear-gradient(to bottom, #00838f, #004d40); border-color: #80deea; }
-        .unequip-btn {
-            background: #8b3a3a; border: 1px solid #a34a4a; color: white;
-            padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
-        }
+        .unequip-btn { background: #8b3a3a; border: 1px solid #a34a4a; color: white; padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer; }
 
-        /* Выбор персонажа на старте */
+        /* Персонаж старт */
         .char-choice-card {
             background: #1c241a; border: 2px solid #435a3a; border-radius: 8px;
             padding: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; cursor: pointer;
@@ -123,61 +146,44 @@
         .char-choice-card.selected { border-color: #81d4fa; background: #1a2a2e; }
         .char-avatar-big { font-size: 32px; width: 50px; text-align: center; }
 
-        /* Карточка соперника */
+        /* Враги на улице */
         .enemy-card {
             background: linear-gradient(to right, #241c1c, #1a1515);
             border: 1px solid #4a2d2d; border-radius: 8px;
-            padding: 10px; margin-bottom: 8px;
-            display: flex; align-items: center; justify-content: space-between;
+            padding: 10px; margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;
         }
-        .enemy-card.player-enemy {
-            background: linear-gradient(to right, #1c2424, #151a1a);
-            border-color: #2d4a4a;
-        }
-
+        .enemy-card.player-enemy { background: linear-gradient(to right, #1c2424, #151a1a); border-color: #2d4a4a; }
         .enemy-left { display: flex; align-items: center; gap: 10px; }
         .enemy-avatar {
             width: 42px; height: 42px; background: #3a2222; border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 20px; border: 1px solid #633333;
+            display: flex; align-items: center; justify-content: center; font-size: 20px; border: 1px solid #633333;
         }
         .enemy-details h4 { margin: 0; font-size: 14px; color: #ffb3b3; }
         .enemy-details span { font-size: 11px; color: #aaa; }
         .player-tag { font-size: 9px; background: #00838f; color: white; padding: 2px 4px; border-radius: 3px; font-weight: bold; margin-left: 4px; }
 
         .hit-btn {
-            background: linear-gradient(to bottom, #a83232, #782222);
-            border: 1px solid #c44343; color: white;
-            padding: 8px 14px; border-radius: 6px; font-weight: bold;
-            font-size: 12px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            background: linear-gradient(to bottom, #a83232, #782222); border: 1px solid #c44343;
+            color: white; padding: 8px 14px; border-radius: 6px; font-weight: bold; font-size: 12px; cursor: pointer;
         }
-
         .refresh-btn {
-            width: 100%; background: #2a3327; border: 1px solid #435a3a;
-            color: #7cb342; padding: 10px; border-radius: 8px; font-weight: bold;
-            font-size: 13px; cursor: pointer; margin-top: 5px; text-align: center;
+            width: 100%; background: #2a3327; border: 1px solid #435a3a; color: #8bc34a;
+            padding: 10px; border-radius: 8px; font-weight: bold; font-size: 13px; cursor: pointer; margin-top: 5px; text-align: center;
         }
-
         .fight-log {
             background: #111610; border: 1px solid #33442d; border-radius: 8px;
-            padding: 10px; margin-top: 10px; font-size: 12px; line-height: 1.4;
-            max-height: 150px; overflow-y: auto; display: none;
+            padding: 10px; margin-top: 10px; font-size: 12px; line-height: 1.4; max-height: 150px; overflow-y: auto; display: none;
         }
         .log-title { font-weight: bold; color: #ffb3b3; margin-bottom: 5px; border-bottom: 1px solid #333; padding-bottom: 3px; }
         .log-win { color: #ffd700; font-weight: bold; margin-top: 4px; }
         .log-lose { color: #ff5252; font-weight: bold; margin-top: 4px; }
 
-        .stats-panel {
-            background: #182216; border: 1px solid #33442d; border-radius: 8px;
-            padding: 10px; margin-bottom: 12px; font-size: 13px;
-        }
-        .stats-panel h3 { margin: 0 0 8px 0; color: #7cb342; font-size: 15px; }
+        .stats-panel { background: #182216; border: 1px solid #33442d; border-radius: 8px; padding: 10px; margin-bottom: 12px; font-size: 13px; }
+        .stats-panel h3 { margin: 0 0 8px 0; color: #8bc34a; font-size: 15px; }
 
-        /* Таблица лидеров */
         .leader-row {
             background: #1c241a; border: 1px solid #33442d; border-radius: 8px;
-            padding: 8px 12px; margin-bottom: 6px; display: flex;
-            justify-content: space-between; align-items: center; font-size: 13px;
+            padding: 8px 12px; margin-bottom: 6px; display: flex; justify-content: space-between; align-items: center; font-size: 13px;
         }
         .leader-row.is-me { background: #243320; border-color: #628252; }
         .leader-place { font-weight: bold; width: 30px; color: #ffd700; }
@@ -187,8 +193,8 @@
 
     <!-- ================= ЭКРАН СОЗДАНИЯ ПЕРСОНАЖА (СТАРТ) ================= -->
     <div id="create-char-page" class="page" style="padding: 16px;">
-        <h2 style="color: #7cb342; text-align: center; margin-top: 10px;">👤 Создание Персонажа</h2>
-        <p style="font-size: 12px; color: #aaa; text-align: center; margin-bottom: 15px;">Выбери своего бойца и родное село. Обрати внимание: **выбор персонажа изменить нельзя**!</p>
+        <h2 style="color: #8bc34a; text-align: center; margin-top: 10px;">👤 Создание Персонажа</h2>
+        <p style="font-size: 12px; color: #aaa; text-align: center; margin-bottom: 15px;">Выбери своего бойца и родное село. Обрати внимание: выбор персонажа изменить нельзя!</p>
 
         <div style="margin-bottom: 12px;">
             <label style="font-size:12px; color:#ffd700; font-weight:bold;">Твое Кличка / Имя:</label>
@@ -206,7 +212,7 @@
             <option value="karhovka">🛠️ Карховка (Рабочий хутор)</option>
         </select>
 
-        <button class="menu-btn full-btn" style="background: linear-gradient(to bottom, #4a633d, #2e3d28); padding: 14px; font-size: 15px;" onclick="finishCharacterCreation()">🚀 ВОРВАТЬСЯ В РАЙОН</button>
+        <button class="list-btn" style="width:100%; justify-content:center; padding: 14px;" onclick="finishCharacterCreation()">🚀 ВОРВАТЬСЯ В РАЙОН</button>
     </div>
 
     <!-- Шапка Профиля (Основная игра) -->
@@ -244,16 +250,56 @@
                 <div class="bar-bg"><div class="bar-fill fatigue-bar" id="fatigue-bar"></div></div>
             </div>
 
-            <!-- ================= 1. ГЛАВНОЕ МЕНЮ ================= -->
+            <!-- ================= 1. ГЛАВНОЕ МЕНЮ (СПИСОК ЛОКАЦИЙ) ================= -->
             <div id="main-page" class="page active-page">
-                <div class="grid-menu">
-                    <button class="menu-btn full-btn" onclick="showPage('street-page')">🥊 УЛИЦА (Поиск Махача)</button>
-                    <button class="menu-btn full-btn donate-btn" onclick="showPage('quests-page')">📜 ЗАДАНИЯ И 💎 ДОНАТ</button>
-                    <button class="menu-btn" onclick="showPage('bazar-page')">🏪 БАЗАР</button>
-                    <button class="menu-btn" onclick="showPage('home-page')">🏠 ДОМ</button>
-                    <button class="menu-btn" onclick="showPage('kolhoz-page')">🌾 КОЛХОЗ</button>
-                    <button class="menu-btn board-btn" onclick="showPage('leaderboard-page')">🏆 ДОШКА ПОЧЁТА</button>
-                    <button class="menu-btn danger-btn full-btn" onclick="tg.showAlert('Режим «Район на Район» находится в разработке!')">⚔️ РАЙОН НА РАЙОН</button>
+                
+                <!-- Верхние 3 кнопки вкладки -->
+                <div class="top-menu-grid">
+                    <div class="top-menu-btn" onclick="showPage('quests-page')">
+                        <span class="icon">🎯</span>
+                        <span class="label">Задания</span>
+                    </div>
+                    <div class="top-menu-btn" onclick="tg.showAlert('События района откроются в будущем обновлении!')">
+                        <span class="icon">⭐</span>
+                        <span class="label">События</span>
+                    </div>
+                    <div class="top-menu-btn" onclick="showPage('leaderboard-page')">
+                        <span class="icon">🏆</span>
+                        <span class="label">Рейтинг</span>
+                    </div>
+                </div>
+
+                <!-- Вертикальный список локаций -->
+                <div class="list-menu">
+                    <div class="list-btn" onclick="showPage('street-page')"><span>🥔</span> Район</div>
+                    <div class="list-btn" onclick="showPage('bazar-page')"><span>🏪</span> Центр (Базар)</div>
+                    <div class="list-btn" onclick="showPage('kolhoz-page')"><span>🌾</span> Колхоз «Заря»</div>
+                    <div class="list-btn" onclick="showPage('home-page')"><span>🏠</span> Свой Дом</div>
+                    <div class="list-btn" onclick="showPage('change-village-page')"><span>🗺️</span> Сменить Село (300 🍾)</div>
+                    <div class="list-btn disabled"><span>🕵️</span> Банда Сиплого [скоро]</div>
+                </div>
+
+                <!-- Красная акцентная кнопка махача -->
+                <div class="list-btn-danger" onclick="showPage('street-page')">
+                    <span>💥</span> БЫСТРЫЙ СТАРТ (Махач)
+                </div>
+
+                <!-- Нижняя сетка параметров 2x3 -->
+                <div class="bottom-grid">
+                    <div class="bottom-btn" onclick="showPage('home-page')"><span>👤</span> Перс</div>
+                    <div class="bottom-btn" onclick="showPage('bazar-page')"><span>🥗</span> Столовка</div>
+                    <div class="bottom-btn" onclick="showPage('quests-page')"><span>✉️</span> Задания</div>
+                    <div class="bottom-btn" onclick="showPage('kolhoz-page')"><span>🚜</span> Работа</div>
+                    <div class="bottom-btn" onclick="showPage('leaderboard-page')"><span>🛡️</span> Авторитеты</div>
+                    <div class="bottom-btn" onclick="showPage('quests-page')"><span>🍾</span> Сэм (Донат)</div>
+                </div>
+
+                <!-- Служебный Подвал (Футер) -->
+                <div class="footer-links">
+                    <a href="#" onclick="showPage('main-page')">На главную</a> | 
+                    <a href="#" onclick="tg.showAlert('Махач за Село v2.0 — Текстовая РПГ игра про жизнь в деревне!')">Помощь</a> | 
+                    <a href="#" onclick="tg.showAlert('Правила: Не обижать пацанов из своего села, побеждать на улице и копить Авторитет!')">Правила</a>
+                    <div class="footer-online">Пользователей онлайн: 55</div>
                 </div>
             </div>
 
@@ -307,9 +353,9 @@
 
                 <div id="tab-donate" class="quest-tab-content" style="display:none;">
                     <h4 style="margin: 0 0 10px 0; color: #ffd700; font-size: 13px;">Запасы Самогона за Telegram Stars:</h4>
-                    <div class="item-card"><div class="item-info"><div>🍾 Чекушка Сэма</div><span>+5 Самогона</span></div><button class="buy-btn star-btn" onclick="buyStars(5, 50)">⭐ 50 Stars</button></div>
-                    <div class="item-card"><div class="item-info"><div>🍾🍾 Бутыль Сэма</div><span>+15 Самогона</span></div><button class="buy-btn star-btn" onclick="buyStars(15, 120)">⭐ 120 Stars</button></div>
-                    <div class="item-card"><div class="item-info"><div>🛢️ Ящик Сэма</div><span>+50 Самогона</span></div><button class="buy-btn star-btn" onclick="buyStars(50, 350)">⭐ 350 Stars</button></div>
+                    <div class="item-card"><div class="item-info"><div>🍾 Чекушка Сэма</div><span>+5 Самогона</span></div><button class="buy-btn" onclick="buyStars(5, 50)">⭐ 50 Stars</button></div>
+                    <div class="item-card"><div class="item-info"><div>🍾🍾 Бутыль Сэма</div><span>+15 Самогона</span></div><button class="buy-btn" onclick="buyStars(15, 120)">⭐ 120 Stars</button></div>
+                    <div class="item-card"><div class="item-info"><div>🛢️ Ящик Сэма</div><span>+50 Самогона</span></div><button class="buy-btn" onclick="buyStars(50, 350)">⭐ 350 Stars</button></div>
                 </div>
             </div>
 
@@ -406,7 +452,7 @@
             <!-- ================= 8. ЭКРАН КОЛХОЗА ================= -->
             <div id="kolhoz-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
-                <h3 style="margin: 0 0 10px 0; font-size: 14px; color: #7cb342;">🌾 Работа в Колхозе «Заря»:</h3>
+                <h3 style="margin: 0 0 10px 0; font-size: 14px; color: #8bc34a;">🌾 Работа в Колхозе «Заря»:</h3>
                 <div class="item-card"><div class="item-info"><div>🧹 Чистить коровник</div><span>Доход: +15 грн | 💤 +30 Усталости</span></div><button class="work-btn" onclick="doWork('barn')">Впахивать</button></div>
                 <div class="item-card"><div class="item-info"><div>🥔 Сбор картохи</div><span>Доход: +35 грн | 💤 +50 Усталости</span></div><button class="work-btn" onclick="doWork('potatoes')">Впахивать</button></div>
                 <div class="item-card"><div class="item-info"><div>🚜 Ремонт Трактора</div><span>Доход: +70 грн | 💤 +100 Усталости (Нужно 15+ Силы)</span></div><button class="work-btn" onclick="doWork('tractor')">Впахивать</button></div>
@@ -418,7 +464,7 @@
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.ready();
-        tg.setHeaderColor('#121711');
+        tg.setHeaderColor('#1a1e19');
 
         const xpRequirements = { 1: 3, 2: 8, 3: 24, 4: 50, 5: 85, 6: 150, 7: 200, 8: 230, 9: 270 };
 
@@ -722,7 +768,7 @@
                             <span class="leader-place">#${index + 1}</span>
                             <span style="font-size:18px;">${item.avatar}</span>
                             <div>
-                                <b>${item.name}</b> ${item.isMe ? '<span style="color:#7cb342; font-size:10px;">(ТЫ)</span>' : ''}
+                                <b>${item.name}</b> ${item.isMe ? '<span style="color:#8bc34a; font-size:10px;">(ТЫ)</span>' : ''}
                             </div>
                         </div>
                         <div style="font-weight:bold; color:#ffd700; font-size:12px;">${statVal}</div>
@@ -772,7 +818,7 @@
             showPage('main-page');
         }
 
-        // --- ЕДА ДЛЯ ОБЫЧНОЙ УЛИЦЫ (СЪЕДАЕТСЯ СРАЗУ) ---
+        // Еда для обычной улицы
         function eatStreetFood(id, hpBonus, priceGrn, cooldownSec) {
             const now = Date.now();
             if (foodCooldowns[id] && now < foodCooldowns[id]) {
@@ -794,7 +840,7 @@
             tg.showAlert(`😋 Перекусил! Восстановлено +${hpBonus} ХП.`);
         }
 
-        // --- ЕДА ДЛЯ МАХАЧА СЁЛ (ПОКУПАЕТСЯ В ИНВЕНТАРЬ) ---
+        // Еда для Махача Сёл
         function buyFightFood(id, name, hpBonus, priceSamogon) {
             if (player.samogon < priceSamogon) {
                 tg.showAlert('⚠️ Недостаточно Самогона!');
