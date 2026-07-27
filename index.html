@@ -337,20 +337,20 @@
                 <!-- СТОЛОВКА -->
                 <div id="tab-stolovka" class="tab-content">
                     <div class="item-card">
-                        <div class="item-info"><div>🥟 Чебурек с мясом</div><span>+30 ХП (Только Улица) | ⏳ КД: 30 мин</span></div>
-                        <button class="buy-btn" onclick="eatFood('cheburek', 30, 10, 'money', 1800, '🥊 Улица')">10 грн</button>
+                        <div class="item-info"><div>🥟 Чебурек с мясом</div><span>+30 ХП (Съедается сразу) | ⏳ КД: 30 мин</span></div>
+                        <button class="buy-btn" onclick="eatStreetFood('cheburek', 30, 10, 1800)">10 грн</button>
                     </div>
                     <div class="item-card">
-                        <div class="item-info"><div>🥣 Горячий Борщ</div><span>+50 ХП (Только Улица) | ⏳ КД: 1 час</span></div>
-                        <button class="buy-btn" onclick="eatFood('borsch', 50, 15, 'money', 3600, '🥊 Улица')">15 грн</button>
+                        <div class="item-info"><div>🥣 Горячий Борщ</div><span>+50 ХП (Съедается сразу) | ⏳ КД: 1 час</span></div>
+                        <button class="buy-btn" onclick="eatStreetFood('borsch', 50, 15, 3600)">15 грн</button>
                     </div>
                     <div class="item-card">
-                        <div class="item-info"><div>🥓 Сало с чесноком</div><span>+50 ХП (Только Махач) | ⏳ КД: 2 мин</span></div>
-                        <button class="buy-btn" onclick="eatFood('salo', 50, 1, 'samogon', 120, '⚔️ Махач')">1 сэм</button>
+                        <div class="item-info"><div>🥓 Сало с чесноком</div><span>📦 В инвентарь: +50 ХП (Только в Махаче Сёл)</span></div>
+                        <button class="buy-btn" onclick="buyFightFood('salo', '🥓 Сало с чесноком', 50, 1)">1 сэм</button>
                     </div>
                     <div class="item-card">
-                        <div class="item-info"><div>🥪 Сытный Бутерброд</div><span>+100 ХП (Только Махач) | ⏳ КД: 4 мин</span></div>
-                        <button class="buy-btn" onclick="eatFood('buter', 100, 2, 'samogon', 240, '⚔️ Махач')">2 сэма</button>
+                        <div class="item-info"><div>🥪 Сытный Бутерброд</div><span>📦 В инвентарь: +100 ХП (Только в Махаче Сёл)</span></div>
+                        <button class="buy-btn" onclick="buyFightFood('buter', '🥪 Сытный Бутерброд', 100, 2)">2 сэма</button>
                     </div>
                 </div>
 
@@ -393,7 +393,7 @@
                 </div>
 
                 <div id="home-inventory" class="home-tab-content">
-                    <h4 style="margin: 5px 0 10px 0; font-size: 13px; color: #aaa;">Купленное снаряжение (Можно продать за 50% стоимости):</h4>
+                    <h4 style="margin: 5px 0 10px 0; font-size: 13px; color: #aaa;">Купленное снаряжение и боевые припасы:</h4>
                     <div id="inventory-list"></div>
                 </div>
 
@@ -497,7 +497,7 @@
             { id: 'dver', name: '🚜 Дверь от Трактора МТЗ', reqLevel: 10, baseValue: 85, price: 3000 }
         ];
 
-        let foodCooldowns = { cheburek: 0, borsch: 0, salo: 0, buter: 0 };
+        let foodCooldowns = { cheburek: 0, borsch: 0 };
         let currentLeaderTab = 'auth';
 
         window.onload = function() {
@@ -772,7 +772,8 @@
             showPage('main-page');
         }
 
-        function eatFood(id, hpBonus, price, currency, cooldownSec, targetMode) {
+        // --- ЕДА ДЛЯ ОБЫЧНОЙ УЛИЦЫ (СЪЕДАЕТСЯ СРАЗУ) ---
+        function eatStreetFood(id, hpBonus, priceGrn, cooldownSec) {
             const now = Date.now();
             if (foodCooldowns[id] && now < foodCooldowns[id]) {
                 const secondsLeft = Math.ceil((foodCooldowns[id] - now) / 1000);
@@ -782,18 +783,28 @@
                 return;
             }
 
-            if (currency === 'money' && player.money < price) { tg.showAlert('⚠️ Недостаточно денег!'); return; }
-            if (currency === 'samogon' && player.samogon < price) { tg.showAlert('⚠️ Недостаточно Самогона!'); return; }
+            if (player.money < priceGrn) { tg.showAlert('⚠️ Недостаточно денег!'); return; }
             if (player.hp >= player.maxHp) { tg.showAlert('Ты полностью здоров!'); return; }
 
-            if (currency === 'money') player.money -= price;
-            if (currency === 'samogon') player.samogon -= price;
-
+            player.money -= priceGrn;
             player.hp = Math.min(player.maxHp, player.hp + hpBonus);
             foodCooldowns[id] = now + (cooldownSec * 1000);
 
             updateUI();
-            tg.showAlert(`😋 Восстановлено +${hpBonus} ХП для режима [${targetMode}].`);
+            tg.showAlert(`😋 Перекусил! Восстановлено +${hpBonus} ХП.`);
+        }
+
+        // --- ЕДА ДЛЯ МАХАЧА СЁЛ (ПОКУПАЕТСЯ В ИНВЕНТАРЬ) ---
+        function buyFightFood(id, name, hpBonus, priceSamogon) {
+            if (player.samogon < priceSamogon) {
+                tg.showAlert('⚠️ Недостаточно Самогона!');
+                return;
+            }
+
+            player.samogon -= priceSamogon;
+            player.consumables.push({ id, name, hpBonus, isFood: true });
+            updateUI();
+            tg.showAlert(`📦 Куплен боевой припас: "${name}"! Предмет отправлен в инвентарь и может быть съеден ТОЛЬКО во время Махача Сёл.`);
         }
 
         function renderCatalogs() {
@@ -881,7 +892,7 @@
                 return;
             }
             player.samogon -= priceSamogon;
-            player.consumables.push({ id, name, bonusPercent });
+            player.consumables.push({ id, name, bonusPercent, isFood: false });
             updateUI();
             tg.showAlert(`🛍️ Куплен расходник для Махача Сел: "${name}"!`);
         }
@@ -932,12 +943,13 @@
             }
 
             if (player.consumables.length > 0) {
-                html += '<h4 style="margin: 10px 0 5px 0; font-size: 12px; color: #ffd700;">Расходники для Махача Сел:</h4>';
+                html += '<h4 style="margin: 10px 0 5px 0; font-size: 12px; color: #ffd700;">Припасы и Расходники для Махача Сел:</h4>';
                 player.consumables.forEach((c) => {
+                    const desc = c.isFood ? `Восстановление ХП во время махача: +${c.hpBonus} ХП` : `Урон в махаче сел: +${c.bonusPercent * 100}%`;
                     html += `
                         <div class="item-card" style="border-color: #5c4d1d; background: #242014;">
-                            <div class="item-info"><div>${c.name}</div><span>Урон в махаче сел: +${c.bonusPercent * 100}%</span></div>
-                            <span style="font-size: 11px; color: #888;">Одноразовый</span>
+                            <div class="item-info"><div>${c.name}</div><span>${desc}</span></div>
+                            <span style="font-size: 11px; color: #888;">Только в Махаче Сёл</span>
                         </div>
                     `;
                 });
