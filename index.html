@@ -57,7 +57,7 @@
         .fatigue-bar { background: linear-gradient(to right, #f57c00, #ffb74d); width: 0%; }
         .xp-bar { background: linear-gradient(to right, #afb42b, #d4e157); width: 0%; }
 
-        /* Кнопки и Сетка */
+        /* Кнопки Нашего Главного Меню */
         .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
 
         .menu-btn {
@@ -112,7 +112,7 @@
         .char-choice-card.selected { border-color: #81d4fa; background: #1a2a2e; }
         .char-avatar-big { font-size: 32px; width: 50px; text-align: center; }
 
-        /* ================= ЭКРАН УЛИЦЫ (СТИЛЬ ХУЛИГАНЫ) ================= */
+        /* ЭКРАН УЛИЦЫ (СТИЛЬ ХУЛИГАНЫ) */
         .street-header-info {
             background: linear-gradient(to bottom, #d89635, #b0721c);
             border: 1px solid #e0a346; border-radius: 6px;
@@ -160,14 +160,6 @@
             text-align: center; cursor: pointer; margin-top: 6px; display: flex;
             align-items: center; justify-content: center; gap: 8px;
         }
-
-        .fight-log {
-            background: #111610; border: 1px solid #33442d; border-radius: 8px;
-            padding: 10px; margin-top: 10px; font-size: 12px; line-height: 1.4;
-            max-height: 150px; overflow-y: auto; display: none;
-        }
-        .log-win { color: #ffd700; font-weight: bold; }
-        .log-lose { color: #ff5252; font-weight: bold; }
 
         .stats-panel {
             background: #182216; border: 1px solid #33442d; border-radius: 8px;
@@ -237,7 +229,7 @@
                 <div class="bar-bg"><div class="bar-fill fatigue-bar" id="fatigue-bar"></div></div>
             </div>
 
-            <!-- ================= 1. ГЛАВНОЕ МЕНЮ ================= -->
+            <!-- ================= 1. НАШЕ РОДНОЕ ГЛАВНОЕ МЕНЮ ================= -->
             <div id="main-page" class="page active-page">
                 <div class="grid-menu">
                     <button class="menu-btn full-btn" onclick="showPage('street-page')">🥊 УЛИЦА (Поиск Махача)</button>
@@ -256,31 +248,25 @@
                 <div id="change-village-list"></div>
             </div>
 
-            <!-- ================= 3. ЭКРАН УЛИЦЫ (СТИЛЬ ХУЛИГАНЫ) ================= -->
+            <!-- ================= 3. ЭКРАН УЛИЦЫ ================= -->
             <div id="street-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
-                <!-- Информационное табло Улицы -->
                 <div class="street-header-info">
                     <div style="font-size: 14px; font-weight: bold; margin-bottom: 2px;">🥊 Улица</div>
-                    <div>Лучшее место для заработка и проверки твоих боевых навыков. Онлайн: <span id="street-online">48</span></div>
-                    <div style="margin-top: 3px;">Гроза района (село): <b id="top-village">🌾 Ведильцы</b> | У тебя выбито зубов: <b id="street-teeth">0</b> 🦷</div>
+                    <div>Заработок и махачи района. Онлайн: 48</div>
+                    <div style="margin-top: 3px;">Гроза района: <b>🌾 Ведильцы</b> | Твои зубы: <b id="street-teeth">0</b> 🦷</div>
                 </div>
 
-                <!-- Быстрый переход в Дом/Качалку -->
                 <div class="street-sub-btn" onclick="showPage('home-page')">
-                    🏋️‍♂️ Качалка / Характеристики
+                    🏋️‍♂️ Качалка / Инвентарь
                 </div>
 
-                <!-- Список соперников на улице -->
                 <div id="enemies-list"></div>
 
-                <!-- Кнопка обновить -->
                 <div class="search-more-btn" onclick="generateEnemies()">
                     🥔 Искать ещё пацанов
                 </div>
-
-                <div id="fight-log" class="fight-log"><div id="log-text"></div></div>
             </div>
 
             <!-- ================= 4. ЭКРАН БАЗАРА ================= -->
@@ -517,7 +503,6 @@
             document.getElementById('bonus-str').innerText = `(+${stats.bonusStr} от снаряжения)`;
             document.getElementById('bonus-agi').innerText = `(+${stats.bonusAgi} от снаряжения)`;
 
-            // Показ информации в табло Улицы
             if (document.getElementById('street-teeth')) {
                 document.getElementById('street-teeth').innerText = player.teeth;
             }
@@ -669,7 +654,6 @@
             updateUI();
         }
 
-        /* --- ГЕНЕРАЦИЯ СОПЕРНИКОВ В СТИЛЕ «ХУЛИГАНЫ» --- */
         const streetBots = [
             { name: "Копченый", type: "бот", lvl: 1, phrase: "Чё нна?! Иди сюда нна!", avatar: "🧢" },
             { name: "Егор", type: "бот", lvl: 1, phrase: "Давай решим вопрос мирно.", avatar: "🧔‍♂️" },
