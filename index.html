@@ -7,16 +7,15 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         body {
-            background-color: #1a2416;
+            background-color: #121711;
             color: #e0e0e0;
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Баннер-шапка */
+        /* Баннер */
         .banner {
             width: 100%;
             height: 120px;
@@ -29,126 +28,135 @@
 
         .profile-header {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.85), transparent);
-            padding: 10px 15px;
+            bottom: 0; left: 0; right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+            padding: 8px 12px;
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
         }
 
-        .user-info h2 { margin: 0; font-size: 18px; text-shadow: 1px 1px 3px black; }
-        .user-info span { font-size: 12px; color: #b0b0b0; }
+        .user-info h2 { margin: 0; font-size: 16px; color: #fff; text-shadow: 1px 1px 2px black; }
+        .user-info span { font-size: 11px; color: #7cb342; font-weight: bold; }
 
-        .main-stats { text-align: right; font-size: 13px; text-shadow: 1px 1px 3px black; }
+        .main-stats { text-align: right; font-size: 12px; text-shadow: 1px 1px 2px black; }
         .money { color: #ffd700; font-weight: bold; }
+        .samogon { color: #81d4fa; font-weight: bold; }
 
-        .content { padding: 15px; }
+        .content { padding: 12px; }
 
-        /* Полоски характеристик */
-        .bar-container { margin-bottom: 10px; }
-        .bar-label { font-size: 12px; margin-bottom: 3px; display: flex; justify-content: space-between; }
+        /* Полоски ХП и Усталости */
+        .bar-container { margin-bottom: 8px; }
+        .bar-label { font-size: 11px; margin-bottom: 2px; display: flex; justify-content: space-between; }
         
         .bar-bg {
-            width: 100%;
-            height: 10px;
-            background-color: #2a2a2a;
-            border-radius: 5px;
-            overflow: hidden;
-            border: 1px solid #3d3d3d;
+            width: 100%; height: 9px;
+            background-color: #222;
+            border-radius: 4px; overflow: hidden;
+            border: 1px solid #333;
         }
 
-        .bar-fill { height: 100%; border-radius: 4px; }
+        .bar-fill { height: 100%; border-radius: 3px; }
         .hp-bar { background: linear-gradient(to right, #8b3a3a, #ff4d4d); width: 100%; }
-        .energy-bar { background: linear-gradient(to right, #3a8b8b, #4dffff); width: 80%; }
+        .fatigue-bar { background: linear-gradient(to right, #f57c00, #ffb74d); width: 20%; } /* Усталость */
 
-        /* Кнопки меню */
+        /* Вкладки/Кнопки Села */
+        .grid-menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
         .menu-btn {
-            background: linear-gradient(to bottom, #4a633d, #3e5035);
-            border: 1px solid #5a734e;
+            background: linear-gradient(to bottom, #2e3d28, #222e1e);
+            border: 1px solid #435a3a;
             border-radius: 8px;
             color: white;
-            padding: 14px;
-            margin-bottom: 10px;
-            width: 100%;
-            text-align: left;
-            font-size: 15px;
+            padding: 12px 8px;
+            text-align: center;
+            font-size: 13px;
             font-weight: bold;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .menu-btn:active {
-            background: linear-gradient(to bottom, #3e5035, #36462e);
+            background: #1a2417;
             transform: translateY(1px);
         }
 
-        .btn-icon { margin-right: 12px; font-size: 20px; }
+        .full-btn {
+            grid-column: span 2;
+        }
 
         .danger-btn {
-            background: linear-gradient(to bottom, #8b3a3a, #6e2e2e);
-            border-color: #a34545;
-        }
-        .danger-btn:active {
-            background: linear-gradient(to bottom, #6e2e2e, #5c2626);
+            background: linear-gradient(to bottom, #8b2d2d, #5c1d1d);
+            border-color: #a33e3e;
         }
     </style>
 </head>
 <body>
 
-    <!-- Баннер со статами -->
+    <!-- Шапка Профиля -->
     <div class="banner">
         <div class="profile-header">
             <div class="user-info">
-                <h2 id="username">Селянин</h2>
-                <span>Класс: Гопник</span>
+                <h2 id="username">Миша</h2>
+                <span>🏡 Село: Ведильцы</span>
             </div>
             <div class="main-stats">
-                <div>⭐ Уровень: <b>1</b></div>
-                <div class="money">💰 100 грн</div>
+                <div>⭐ Уровень: <b>1</b> | 🦷 Выбито зубов: <b>0</b></div>
+                <div><span class="money">💰 100 грн</span> | <span class="samogon">🍾 0 сэма</span></div>
             </div>
         </div>
     </div>
 
     <div class="content">
-        <!-- Полоски ХП и Энергии -->
+        <!-- Статы: ХП и Усталость -->
         <div class="bar-container">
             <div class="bar-label"><span>❤️ Здоровье</span><span>100 / 100</span></div>
             <div class="bar-bg"><div class="bar-fill hp-bar"></div></div>
         </div>
         
-        <div class="bar-container" style="margin-bottom: 20px;">
-            <div class="bar-label"><span>⚡ Энергия</span><span>8 / 10</span></div>
-            <div class="bar-bg"><div class="bar-fill energy-bar"></div></div>
+        <div class="bar-container" style="margin-bottom: 12px;">
+            <div class="bar-label"><span>💤 Усталость</span><span>20 / 100</span></div>
+            <div class="bar-bg"><div class="bar-fill fatigue-bar"></div></div>
         </div>
 
-        <!-- Кнопки -->
-        <button class="menu-btn" onclick="tg.showAlert('Ты вышел на Улицу. Тишина...')">
-            <span class="btn-icon">🥊</span> Улица (Поиск махача)
-        </button>
-        
-        <button class="menu-btn" onclick="tg.showAlert('В Колхозе кипит работа!')">
-            <span class="btn-icon">🌾</span> Колхоз (Работа/Фарм)
-        </button>
-        
-        <button class="menu-btn" onclick="tg.showAlert('В Пабе пахнет пивом!')">
-            <span class="btn-icon">🍺</span> Сельский Паб
-        </button>
-        
-        <button class="menu-btn danger-btn" onclick="tg.showAlert('ЗАМЕС! Стенка на стенку!')">
-            <span class="btn-icon">⚔️</span> Замес Район на Район
-        </button>
+        <!-- Кнопки Локаций -->
+        <div class="grid-menu">
+            <button class="menu-btn full-btn" onclick="tg.showAlert('Выходим на Улицу искать гопников...')">
+                🥊 УЛИЦА (Поиск Махача)
+            </button>
+
+            <button class="menu-btn full-btn danger-btn" onclick="tg.showAlert('Запись на Махач Сёла на Село в Беседке!')">
+                ⚔️ МАХАЧ РАЙОН НА РАЙОН
+            </button>
+
+            <button class="menu-btn" onclick="tg.showAlert('Заходим на Базар: Столовка, Секонд, Цыганка, Ларек!')">
+                🏪 БАЗАР
+            </button>
+
+            <button class="menu-btn" onclick="tg.showAlert('Дом: Прокачка шмота/оружия у Филипповича')">
+                🏠 ДОМ
+            </button>
+
+            <button class="menu-btn" onclick="tg.showAlert('Колхоз: Работа на полях (копим Усталость)')">
+                🌾 КОЛХОЗ
+            </button>
+
+            <button class="menu-btn" onclick="tg.showAlert('Испытай удачу в Сельском Лохотроне!')">
+                🎟️ ЛОХОТРОН
+            </button>
+        </div>
     </div>
 
     <script>
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.ready();
-        tg.setHeaderColor('#1a2416');
+        tg.setHeaderColor('#121711');
 
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
@@ -156,3 +164,4 @@
     </script>
 </body>
 </html>
+
