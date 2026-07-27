@@ -15,7 +15,7 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Шапка-баннер */
+        /* Шапка Профиля */
         .banner {
             width: 100%; height: 110px;
             background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop');
@@ -39,7 +39,7 @@
 
         .content { padding: 12px; }
 
-        /* Полоски статов */
+        /* Прогресс-бары */
         .bar-container { margin-bottom: 8px; }
         .bar-label { font-size: 11px; margin-bottom: 2px; display: flex; justify-content: space-between; }
         
@@ -54,7 +54,7 @@
         .fatigue-bar { background: linear-gradient(to right, #f57c00, #ffb74d); width: 0%; }
         .xp-bar { background: linear-gradient(to right, #afb42b, #d4e157); width: 0%; }
 
-        /* Сетка Меню */
+        /* Кнопки и Сетка */
         .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
 
         .menu-btn {
@@ -69,7 +69,7 @@
         .danger-btn { background: linear-gradient(to bottom, #8b2d2d, #5c1d1d); border-color: #a33e3e; }
         .donate-btn { background: linear-gradient(to bottom, #2d588b, #1d395c); border-color: #3e73a3; }
 
-        /* Навигация страниц */
+        /* Экран и Навигация */
         .page { display: none; }
         .active-page { display: block; }
 
@@ -88,14 +88,15 @@
         }
         .tab-btn.active { background: #4a633d; color: white; border-color: #628252; }
 
-        /* Карточки */
+        /* Карточки элементов */
         .item-card {
             background: #1c241a; border: 1px solid #33442d; border-radius: 8px;
             padding: 10px; margin-bottom: 8px; display: flex;
             justify-content: space-between; align-items: center;
         }
         .item-info div { font-weight: bold; font-size: 14px; }
-        .item-info span { font-size: 11px; color: #888; }
+        .item-info span { font-size: 11px; color: #aaa; }
+        
         .buy-btn, .equip-btn, .work-btn, .quest-btn {
             background: #4a633d; border: 1px solid #5a7a4a; color: white;
             padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
@@ -107,7 +108,7 @@
             padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
         }
 
-        /* Карточка Противника */
+        /* Карточка соперника */
         .enemy-card {
             background: linear-gradient(to right, #241c1c, #1a1515);
             border: 1px solid #4a2d2d; border-radius: 8px;
@@ -138,7 +139,7 @@
             font-size: 13px; cursor: pointer; margin-top: 5px; text-align: center;
         }
 
-        /* Окно Лога Боя */
+        /* Лог Боя */
         .fight-log {
             background: #111610; border: 1px solid #33442d; border-radius: 8px;
             padding: 10px; margin-top: 10px; font-size: 12px; line-height: 1.4;
@@ -150,7 +151,6 @@
         .log-win { color: #ffd700; font-weight: bold; margin-top: 4px; }
         .log-lose { color: #ff5252; font-weight: bold; margin-top: 4px; }
 
-        /* Панель статуса */
         .stats-panel {
             background: #182216; border: 1px solid #33442d; border-radius: 8px;
             padding: 10px; margin-bottom: 12px; font-size: 13px;
@@ -175,9 +175,9 @@
     </div>
 
     <div class="content">
-        <!-- Полоски статов -->
+        <!-- Полоски Статуса -->
         <div class="bar-container">
-            <div class="bar-label"><span>⭐ Опыт</span><span id="xp-text">0 / 3</span></div>
+            <div class="bar-label"><span>⭐ Опыт (Уровень)</span><span id="xp-text">0 / 3</span></div>
             <div class="bar-bg"><div class="bar-fill xp-bar" id="xp-bar"></div></div>
         </div>
 
@@ -187,7 +187,7 @@
         </div>
         
         <div class="bar-container" style="margin-bottom: 12px;">
-            <div class="bar-label"><span>💤 Усталость</span><span id="fatigue-text">0 / 100</span></div>
+            <div class="bar-label"><span>💤 Усталость (Лимит работы)</span><span id="fatigue-text">0 / 100</span></div>
             <div class="bar-bg"><div class="bar-fill fatigue-bar" id="fatigue-bar"></div></div>
         </div>
 
@@ -214,7 +214,7 @@
                     🌾 КОЛХОЗ
                 </button>
 
-                <button class="menu-btn danger-btn" onclick="tg.showAlert('Запись на Махач Сёла на Село в Беседке!')">
+                <button class="menu-btn danger-btn" onclick="tg.showAlert('Режим «Район на Район» находится в разработке!')">
                     ⚔️ РАЙОН НА РАЙОН
                 </button>
             </div>
@@ -229,14 +229,14 @@
                 <div class="tab-btn" onclick="switchQuestTab('donate', event)">💎 Донат (Stars)</div>
             </div>
 
-            <!-- ВКЛАДКА ЗАДАНИЙ -->
+            <!-- ЗАДАНИЯ -->
             <div id="tab-tasks" class="quest-tab-content">
-                <h4 style="margin: 0 0 10px 0; color: #81d4fa; font-size: 13px;">Получи Сэм за достижения в Селе:</h4>
+                <h4 style="margin: 0 0 10px 0; color: #81d4fa; font-size: 13px;">Выполняй дела и получай премиум-ресурс:</h4>
 
                 <div class="item-card">
                     <div class="item-info">
                         <div>🥊 Гроза Улицы</div>
-                        <span>Победить 3 пацанов (<b id="q1-progress">0/3</b>)</span>
+                        <span>Выиграть 3 боя на Улице (<b id="q1-progress">0/3</b>)</span>
                     </div>
                     <button id="q1-btn" class="quest-btn" onclick="claimQuest('q1', 1)">+1 🍾 Сэм</button>
                 </div>
@@ -244,7 +244,7 @@
                 <div class="item-card">
                     <div class="item-info">
                         <div>🌾 Трудяга Колхоза</div>
-                        <span>Отработать 5 раз (<b id="q2-progress">0/5</b>)</span>
+                        <span>Отработать 5 смен в Колхозе (<b id="q2-progress">0/5</b>)</span>
                     </div>
                     <button id="q2-btn" class="quest-btn" onclick="claimQuest('q2', 1)">+1 🍾 Сэм</button>
                 </div>
@@ -252,20 +252,20 @@
                 <div class="item-card">
                     <div class="item-info">
                         <div>📢 Сельский Сельсовет</div>
-                        <span>Подписаться на канал Села</span>
+                        <span>Подписаться на официальный канал</span>
                     </div>
                     <button id="q3-btn" class="quest-btn" onclick="claimQuest('q3', 2)">+2 🍾 Сэма</button>
                 </div>
             </div>
 
-            <!-- ВКЛАДКА ДОНАТА -->
+            <!-- ДОНАТ -->
             <div id="tab-donate" class="quest-tab-content" style="display:none;">
-                <h4 style="margin: 0 0 10px 0; color: #ffd700; font-size: 13px;">Купить Сэм за Telegram Stars:</h4>
+                <h4 style="margin: 0 0 10px 0; color: #ffd700; font-size: 13px;">Запасы Самогона за Telegram Stars:</h4>
 
                 <div class="item-card">
                     <div class="item-info">
                         <div>🍾 Чекушка Сэма</div>
-                        <span>+5 Самогона</span>
+                        <span>+5 Самогона для Деда Филипповича</span>
                     </div>
                     <button class="buy-btn star-btn" onclick="buyStars(5, 50)">⭐ 50 Stars</button>
                 </div>
@@ -273,7 +273,7 @@
                 <div class="item-card">
                     <div class="item-info">
                         <div>🍾🍾 Бутыль Сэма</div>
-                        <span>+15 Самогона</span>
+                        <span>+15 Самогона для Деда Филипповича</span>
                     </div>
                     <button class="buy-btn star-btn" onclick="buyStars(15, 120)">⭐ 120 Stars</button>
                 </div>
@@ -281,7 +281,7 @@
                 <div class="item-card">
                     <div class="item-info">
                         <div>🛢️ Ящик Сэма</div>
-                        <span>+50 Самогона</span>
+                        <span>+50 Самогона для Деда Филипповича</span>
                     </div>
                     <button class="buy-btn star-btn" onclick="buyStars(50, 350)">⭐ 350 Stars</button>
                 </div>
@@ -292,14 +292,14 @@
         <div id="street-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
             <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #ffb3b3;">🥊 Поиск пацанов на Улице:</h3>
-            <p style="margin: 0 0 10px 0; font-size: 11px; color: #aaa;">⭐ Даётся +1 XP за победу (раз в 50 минут).</p>
+            <p style="margin: 0 0 10px 0; font-size: 11px; color: #aaa;">Дрись сколько есть ХП! Чем выше Ловкость, тем меньше урона получаешь.</p>
 
             <div id="enemies-list"></div>
 
             <button class="refresh-btn" onclick="generateEnemies()">🔍 ИСКАТЬ ЕЩЁ ПРОТИВНИКОВ</button>
 
             <div id="fight-log" class="fight-log">
-                <div class="log-title">📜 Подробности махача:</div>
+                <div class="log-title">📜 Ход махача:</div>
                 <div id="log-text"></div>
             </div>
         </div>
@@ -318,19 +318,19 @@
             <!-- СТОЛОВКА -->
             <div id="tab-stolovka" class="tab-content">
                 <div class="item-card">
-                    <div class="item-info"><div>🥟 Чебурек</div><span>+30 ХП</span></div>
+                    <div class="item-info"><div>🥟 Чебурек с мясом</div><span>Восстанавливает +30 ХП</span></div>
                     <button class="buy-btn" onclick="buyFood(30, 10, 'Чебурек')">10 грн</button>
                 </div>
                 <div class="item-card">
-                    <div class="item-info"><div>🥣 Борщ</div><span>+50 ХП</span></div>
+                    <div class="item-info"><div>🥣 Горячий Борщ</div><span>Восстанавливает +50 ХП</span></div>
                     <button class="buy-btn" onclick="buyFood(50, 15, 'Борщ')">15 грн</button>
                 </div>
                 <div class="item-card">
-                    <div class="item-info"><div>🥓 Сало с хлебом</div><span>+50 ХП</span></div>
-                    <button class="buy-btn" onclick="buyFood(50, 25, 'Сало с хлебом')">25 грн</button>
+                    <div class="item-info"><div>🥓 Сало с чесноком</div><span>Восстанавливает +50 ХП</span></div>
+                    <button class="buy-btn" onclick="buyFood(50, 25, 'Сало с чесноком')">25 грн</button>
                 </div>
                 <div class="item-card">
-                    <div class="item-info"><div>🥪 Сытный Бутерброд</div><span>+100 ХП</span></div>
+                    <div class="item-info"><div>🥪 Сытный Бутерброд</div><span>Полностью лечит (+100 ХП)</span></div>
                     <button class="buy-btn" onclick="buyFood(100, 30, 'Сытный Бутерброд')">30 грн</button>
                 </div>
             </div>
@@ -338,15 +338,15 @@
             <!-- СЕКОНД -->
             <div id="tab-second" class="tab-content" style="display:none;">
                 <div class="item-card">
-                    <div class="item-info"><div>🎽 Майка «BMW»</div><span>+4 Ловкость</span></div>
+                    <div class="item-info"><div>🎽 Майка «BMW»</div><span>+4 к Ловкости</span></div>
                     <button class="buy-btn" onclick="buyEquipment('mayka', '🎽 Майка «BMW»', 'agi', 4, 80)">80 грн</button>
                 </div>
                 <div class="item-card">
-                    <div class="item-info"><div>🧥 Олимпийка Abibas</div><span>+8 Ловкость</span></div>
+                    <div class="item-info"><div>🧥 Олимпийка Abibas</div><span>+8 к Ловкости</span></div>
                     <button class="buy-btn" onclick="buyEquipment('olimp', '🧥 Олимпийка Abibas', 'agi', 8, 150)">150 грн</button>
                 </div>
                 <div class="item-card">
-                    <div class="item-info"><div>👟 Кроссы со светодиодами</div><span>+12 Ловкость</span></div>
+                    <div class="item-info"><div>👟 Кроссы со светодиодами</div><span>+12 к Ловкости</span></div>
                     <button class="buy-btn" onclick="buyEquipment('crossy', '👟 Кроссы со светодиодами', 'agi', 12, 250)">250 грн</button>
                 </div>
             </div>
@@ -354,15 +354,15 @@
             <!-- ЦЫГАНКА -->
             <div id="tab-gypsy" class="tab-content" style="display:none;">
                 <div class="item-card">
-                    <div class="item-info"><div>📍 Гвоздь-сотка</div><span>+3 Сила</span></div>
+                    <div class="item-info"><div>📍 Гвоздь-сотка</div><span>+3 к Силе</span></div>
                     <button class="buy-btn" onclick="buyEquipment('gvozd', '📍 Гвоздь-сотка', 'str', 3, 50)">50 грн</button>
                 </div>
                 <div class="item-card">
-                    <div class="item-info"><div>🥊 Самодельный Кастет</div><span>+7 Сила</span></div>
+                    <div class="item-info"><div>🥊 Самодельный Кастет</div><span>+7 к Силе</span></div>
                     <button class="buy-btn" onclick="buyEquipment('kastet', '🥊 Самодельный Кастет', 'str', 7, 120)">120 грн</button>
                 </div>
                 <div class="item-card">
-                    <div class="item-info"><div>🪵 Нунчаки из дуба</div><span>+12 Сила</span></div>
+                    <div class="item-info"><div>🪵 Нунчаки из дуба</div><span>+12 к Силе</span></div>
                     <button class="buy-btn" onclick="buyEquipment('nunchak', '🪵 Нунчаки из дуба', 'str', 12, 220)">220 грн</button>
                 </div>
             </div>
@@ -370,11 +370,11 @@
             <!-- ЛАРЕК -->
             <div id="tab-larec" class="tab-content" style="display:none;">
                 <div class="item-card">
-                    <div class="item-info"><div>🪵 Дубовая Доска</div><span>+15 Сила</span></div>
+                    <div class="item-info"><div>🪵 Дубовая Доска</div><span>Убойное оружие (+15 Силы)</span></div>
                     <button class="buy-btn" onclick="buyEquipmentSamogon('doska', '🪵 Дубовая Доска', 'str', 15, 5)">5 сэма</button>
                 </div>
                 <div class="item-card">
-                    <div class="item-info"><div>🚬 Пачка «Примы»</div><span>+5 Ловкость</span></div>
+                    <div class="item-info"><div>🚬 Пачка «Примы»</div><span>Дает уважение (+5 Ловкости)</span></div>
                     <button class="buy-btn" onclick="buyEquipment('prima', '🚬 Пачка «Примы»', 'agi', 5, 20)">20 грн</button>
                 </div>
             </div>
@@ -386,9 +386,9 @@
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
             <div class="stats-panel">
-                <h3>💪 Характеристики персонажа:</h3>
-                <div>🥊 Сила: <b id="stat-str">10</b> <span style="color:#888;" id="bonus-str">(+0 от шмота)</span></div>
-                <div>💨 Ловкость: <b id="stat-agi">10</b> <span style="color:#888;" id="bonus-agi">(+0 от шмота)</span></div>
+                <h3>💪 Твои Боевые Характеристики:</h3>
+                <div>🥊 Сила: <b id="stat-str">10</b> <span style="color:#888;" id="bonus-str">(+0 от снаряжения)</span></div>
+                <div>💨 Ловкость: <b id="stat-agi">10</b> <span style="color:#888;" id="bonus-agi">(+0 от снаряжения)</span></div>
             </div>
 
             <div class="tabs">
@@ -398,7 +398,7 @@
 
             <!-- ИНВЕНТАРЬ -->
             <div id="home-inventory" class="home-tab-content">
-                <h4 style="margin: 5px 0 10px 0; font-size: 13px; color: #aaa;">Купленные вещи:</h4>
+                <h4 style="margin: 5px 0 10px 0; font-size: 13px; color: #aaa;">Купленное снаряжение:</h4>
                 <div id="inventory-list">
                     <div style="font-size: 12px; color: #666;">Инвентарь пуст. Купи шмот на Базаре!</div>
                 </div>
@@ -408,15 +408,15 @@
             <div id="home-filip" class="home-tab-content" style="display:none;">
                 <div class="item-card">
                     <div class="item-info">
-                        <div>💪 Прокачать Базовую Силу</div>
-                        <span>+2 Сила навсегда</span>
+                        <div>💪 Обучение Силе</div>
+                        <span>+2 к Базовой Силе навсегда</span>
                     </div>
                     <button class="buy-btn" onclick="upgradeBaseStat('str')">2 сэма</button>
                 </div>
                 <div class="item-card">
                     <div class="item-info">
-                        <div>💨 Прокачать Базовую Ловкость</div>
-                        <span>+2 Ловкость навсегда</span>
+                        <div>💨 Тренировка Ловкости</div>
+                        <span>+2 к Базовой Ловкости навсегда</span>
                     </div>
                     <button class="buy-btn" onclick="upgradeBaseStat('agi')">2 сэма</button>
                 </div>
@@ -432,7 +432,7 @@
             <div class="item-card">
                 <div class="item-info">
                     <div>🧹 Чистить коровник</div>
-                    <span>+15 грн | 💤 +15 Усталости</span>
+                    <span>Доход: +15 грн | 💤 +30 Усталости</span>
                 </div>
                 <button class="work-btn" onclick="doWork('barn')">Впахивать</button>
             </div>
@@ -440,7 +440,7 @@
             <div class="item-card">
                 <div class="item-info">
                     <div>🥔 Сбор картохи</div>
-                    <span>+35 грн | 💤 +25 Усталости</span>
+                    <span>Доход: +35 грн | 💤 +50 Усталости</span>
                 </div>
                 <button class="work-btn" onclick="doWork('potatoes')">Впахивать</button>
             </div>
@@ -448,7 +448,7 @@
             <div class="item-card">
                 <div class="item-info">
                     <div>🚜 Ремонт Трактора</div>
-                    <span>+70 грн | 💤 +40 Усталости (Нужно 15+ Силы)</span>
+                    <span>Доход: +70 грн | 💤 +100 Усталости (Нужно 15+ Силы)</span>
                 </div>
                 <button class="work-btn" onclick="doWork('tractor')">Впахивать</button>
             </div>
@@ -462,25 +462,15 @@
         tg.ready();
         tg.setHeaderColor('#121711');
 
-        // Таблица требований XP для каждого уровня
-        const xpRequirements = {
-            1: 3,
-            2: 8,
-            3: 24,
-            4: 50,
-            5: 85,
-            6: 150,
-            7: 200,
-            8: 230,
-            9: 270
-        };
+        // Таблица требований XP
+        const xpRequirements = { 1: 3, 2: 8, 3: 24, 4: 50, 5: 85, 6: 150, 7: 200, 8: 230, 9: 270 };
 
-        // Данные игрока
+        // Состояние игрока
         let player = {
             level: 1,
             xp: 0,
             maxXp: xpRequirements[1],
-            lastXpTime: 0, // Время последнего получения XP
+            lastXpTime: 0,
             hp: 100,
             maxHp: 100,
             fatigue: 0,
@@ -491,7 +481,6 @@
             baseStr: 10,
             baseAgi: 10,
             inventory: [],
-            // Прогресс квестов
             fightsWon: 0,
             worksDone: 0,
             claimedQuests: { q1: false, q2: false, q3: false }
@@ -501,58 +490,39 @@
             document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
         }
 
-        // --- АВТОРЕГЕНЕРАЦИЯ ХП ---
+        // --- ТАЙМЕРЫ ВОССТАНОВЛЕНИЯ (+1 ХП и -1 Усталость каждые 36 сек = 60 минут) ---
         setInterval(() => {
-            if (player.hp < player.maxHp) {
-                player.hp += 1;
-                updateBars();
-            }
+            if (player.hp < player.maxHp) player.hp += 1;
+            if (player.fatigue > 0) player.fatigue -= 1;
+            updateBars();
         }, 36000);
 
-        // --- АВТО-ОТДЫХ ---
-        setInterval(() => {
-            if (player.fatigue > 0) {
-                player.fatigue -= 1;
-                updateBars();
-            }
-        }, 36000);
-
-        // --- ЛЕВИЛАП И XP ---
+        // --- СИСТЕМА ОПЫТА И УРОВНЕЙ ---
         function addXp(amount) {
             player.xp += amount;
             while (player.xp >= player.maxXp) {
                 player.xp -= player.maxXp;
                 player.level++;
-                
-                // Устанавливаем порог опыта из таблицы или делаем +50 для уровня > 9
                 player.maxXp = xpRequirements[player.level] || (270 + (player.level - 9) * 50);
-                
                 player.maxHp += 10;
                 player.hp = player.maxHp;
                 const bonusMoney = player.level * 30;
                 player.money += bonusMoney;
 
-                tg.showAlert(`🎉 НОВЫЙ УРОВЕНЬ! Поздравляем, ты достиг ${player.level} уровня!\n\n🎁 Награда:\n❤️ +10 к Макс. ХП (ХП полностью восстановлено!)\n💰 +${bonusMoney} грн!`);
+                tg.showAlert(`🎉 НОВЫЙ УРОВЕНЬ! Достигнут ${player.level} уровень!\n\n🎁 Бонусы:\n❤️ +10 к Макс. ХП (ХП восстановлено)\n💰 +${bonusMoney} грн премия!`);
             }
             updateUI();
         }
 
         function getStats() {
-            let bonusStr = 0;
-            let bonusAgi = 0;
-
+            let bonusStr = 0, bonusAgi = 0;
             player.inventory.forEach(item => {
                 if (item.equipped) {
                     if (item.type === 'str') bonusStr += item.value;
                     if (item.type === 'agi') bonusAgi += item.value;
                 }
             });
-
-            return {
-                totalStr: player.baseStr + bonusStr,
-                totalAgi: player.baseAgi + bonusAgi,
-                bonusStr, bonusAgi
-            };
+            return { totalStr: player.baseStr + bonusStr, totalAgi: player.baseAgi + bonusAgi, bonusStr, bonusAgi };
         }
 
         function updateUI() {
@@ -564,8 +534,8 @@
             const stats = getStats();
             document.getElementById('stat-str').innerText = stats.totalStr;
             document.getElementById('stat-agi').innerText = stats.totalAgi;
-            document.getElementById('bonus-str').innerText = `(+${stats.bonusStr} от шмота)`;
-            document.getElementById('bonus-agi').innerText = `(+${stats.bonusAgi} от шмота)`;
+            document.getElementById('bonus-str').innerText = `(+${stats.bonusStr} от снаряжения)`;
+            document.getElementById('bonus-agi').innerText = `(+${stats.bonusAgi} от снаряжения)`;
 
             updateBars();
             renderInventory();
@@ -573,17 +543,14 @@
         }
 
         function updateBars() {
-            // Опыт
             document.getElementById('xp-text').innerText = `${player.xp} / ${player.maxXp}`;
             document.getElementById('xp-bar').style.width = Math.min(100, ((player.xp / player.maxXp) * 100)) + '%';
 
-            // Здоровье
             if(player.hp < 0) player.hp = 0;
             if(player.hp > player.maxHp) player.hp = player.maxHp;
             document.getElementById('hp-text').innerText = `${player.hp} / ${player.maxHp}`;
             document.getElementById('hp-bar').style.width = ((player.hp / player.maxHp) * 100) + '%';
 
-            // Усталость
             if(player.fatigue < 0) player.fatigue = 0;
             if(player.fatigue > player.maxFatigue) player.fatigue = player.maxFatigue;
             document.getElementById('fatigue-text').innerText = `${player.fatigue} / ${player.maxFatigue}`;
@@ -649,27 +616,27 @@
 
         function claimQuest(questId, amount) {
             if (player.claimedQuests[questId]) {
-                tg.showAlert('Ты уже забрал эту награду!');
+                tg.showAlert('Награда уже была получена!');
                 return;
             }
 
             if (questId === 'q1' && player.fightsWon < 3) {
-                tg.showAlert('Выиграй 3 боя на Улице!');
+                tg.showAlert('Сначала выиграй 3 боя на Улице!');
                 return;
             }
             if (questId === 'q2' && player.worksDone < 5) {
-                tg.showAlert('Поработай 5 раз в Колхозе!');
+                tg.showAlert('Сначала отработай 5 смен в Колхозе!');
                 return;
             }
 
             player.claimedQuests[questId] = true;
             player.samogon += amount;
             updateUI();
-            tg.showAlert(`🎉 Награда получена: +${amount} 🍾 Сэма!`);
+            tg.showAlert(`🎉 Задание выполнено! Получено: +${amount} 🍾 Сэма`);
         }
 
         function buyStars(samogonAmount, stars) {
-            tg.showAlert(`Покупка ${samogonAmount} 🍾 Сэма за ${stars} Telegram Stars!\n(Подключи обработку счетов через бота)`);
+            tg.showAlert(`Запрос на покупку ${samogonAmount} 🍾 Сэма за ${stars} Telegram Stars.`);
         }
 
         // --- БАЗАР ---
@@ -679,18 +646,18 @@
                 return;
             }
             if (player.hp >= player.maxHp) {
-                tg.showAlert('Ты полностью здоров!');
+                tg.showAlert('У тебя максимальное здоровье!');
                 return;
             }
             player.money -= price;
             player.hp = Math.min(player.maxHp, player.hp + hpAmount);
             updateUI();
-            tg.showAlert(`😋 Скушал ${itemName}! Восстановлено: +${hpAmount} ХП`);
+            tg.showAlert(`😋 Ты съел: ${itemName}! Восстановлено: +${hpAmount} ХП`);
         }
 
         function buyEquipment(id, name, type, value, price) {
             if (player.inventory.some(item => item.id === id)) {
-                tg.showAlert('⚠️ У тебя уже есть этот предмет!');
+                tg.showAlert('⚠️ Этот предмет уже куплен!');
                 return;
             }
             if (player.money < price) {
@@ -700,25 +667,25 @@
             player.money -= price;
             player.inventory.push({ id, name, type, value, equipped: false });
             updateUI();
-            tg.showAlert(`🛍️ Покупка успешна! "${name}" добавлена в Инвентарь Дома.`);
+            tg.showAlert(`🛍️ Покупка успешна: "${name}" отправлен в Дом.`);
         }
 
         function buyEquipmentSamogon(id, name, type, value, priceSamogon) {
             if (player.inventory.some(item => item.id === id)) {
-                tg.showAlert('⚠️ У тебя уже есть этот предмет!');
+                tg.showAlert('⚠️ Этот предмет уже куплен!');
                 return;
             }
             if (player.samogon < priceSamogon) {
-                tg.showAlert('⚠️ Недостаточно самогона!');
+                tg.showAlert('⚠️ Недостаточно Самогона!');
                 return;
             }
             player.samogon -= priceSamogon;
             player.inventory.push({ id, name, type, value, equipped: false });
             updateUI();
-            tg.showAlert(`🛍️ Выменял "${name}"! Она ждет в Доме.`);
+            tg.showAlert(`🛍️ Обмен успешен: "${name}" отправлен в Дом.`);
         }
 
-        // --- ДОМ ---
+        // --- ДОМ И ИНВЕНТАРЬ ---
         function renderInventory() {
             const container = document.getElementById('inventory-list');
             if (player.inventory.length === 0) {
@@ -733,7 +700,7 @@
                     <div class="item-card">
                         <div class="item-info">
                             <div>${item.name}</div>
-                            <span>${statText} ${item.equipped ? '<b>(Надето)</b>' : ''}</span>
+                            <span>${statText} ${item.equipped ? '<b>(Экипировано)</b>' : ''}</span>
                         </div>
                         <button class="${item.equipped ? 'unequip-btn' : 'equip-btn'}" onclick="toggleEquip(${index})">
                             ${item.equipped ? 'Снять' : 'Надеть'}
@@ -750,14 +717,14 @@
 
         function upgradeBaseStat(type) {
             if (player.samogon < 2) {
-                tg.showAlert('⚠️ У тебя нет 2 бутылок сэма для Филипповича!');
+                tg.showAlert('⚠️ У тебя нет 2 бутылок Сэма для Филипповича!');
                 return;
             }
             player.samogon -= 2;
             if (type === 'str') player.baseStr += 2;
             if (type === 'agi') player.baseAgi += 2;
             updateUI();
-            tg.showAlert('👴 Филиппович подсобил! Базовые характеристики увеличены!');
+            tg.showAlert('👴 Дед Филиппович провел тренировку! Базовые статы увеличены.');
         }
 
         // --- КОЛХОЗ ---
@@ -765,44 +732,44 @@
             const stats = getStats();
 
             if (workType === 'barn') {
-                if (player.fatigue + 15 > player.maxFatigue) {
-                    tg.showAlert('⚠️ Ты слишком устал! Подожди, пока восстановится усталость.');
+                if (player.fatigue + 30 > player.maxFatigue) {
+                    tg.showAlert('⚠️ Высокая усталость! Подожди восстановления сил.');
                     return;
                 }
-                player.fatigue += 15;
+                player.fatigue += 30;
                 player.money += 15;
                 player.worksDone++;
-                tg.showAlert('🧹 Вычистил коровник! Заработано: 15 грн');
+                tg.showAlert('🧹 Вычистил коровник! Заработано: 15 грн.');
             } 
             else if (workType === 'potatoes') {
-                if (player.fatigue + 25 > player.maxFatigue) {
-                    tg.showAlert('⚠️ Ты слишком устал! Подожди восстановления сил.');
+                if (player.fatigue + 50 > player.maxFatigue) {
+                    tg.showAlert('⚠️ Высокая усталость! Передохни перед работой.');
                     return;
                 }
-                player.fatigue += 25;
+                player.fatigue += 50;
                 player.money += 35;
                 player.worksDone++;
-                tg.showAlert('🥔 Собрал мешки картохи! Заработано: 35 грн');
+                tg.showAlert('🥔 Собрал мешки картохи! Заработано: 35 грн.');
             } 
             else if (workType === 'tractor') {
                 if (stats.totalStr < 15) {
-                    tg.showAlert('⚠️ Не хватает Силы (нужно 15+)! Надень шмот или прокачайся у Деда.');
+                    tg.showAlert('⚠️ Не хватает Силы (нужно 15+)! Экипируй шмот в Доме.');
                     return;
                 }
-                if (player.fatigue + 40 > player.maxFatigue) {
-                    tg.showAlert('⚠️ Ты валишься с ног от усталости! Передохни немного.');
+                if (player.fatigue + 100 > player.maxFatigue) {
+                    tg.showAlert('⚠️ Для ремонта трактора нужна полная бодрость (0 Усталости)!');
                     return;
                 }
-                player.fatigue += 40;
+                player.fatigue += 100;
                 player.money += 70;
                 player.worksDone++;
-                tg.showAlert('🚜 Починил трактор! Заработано: 70 грн');
+                tg.showAlert('🚜 Починил трактор! Заработано: 70 грн.');
             }
 
             updateUI();
         }
 
-        // --- УЛИЦА И СИСТЕМА ДРАК ---
+        // --- УЛИЦА И СИСТЕМА БОЯ ---
         const enemyData = [
             { name: "Васька Алкаш", avatar: "🧢", str: 5, agi: 5 },
             { name: "Коля Лысый", avatar: "👨‍🌾", str: 8, agi: 12 },
@@ -843,18 +810,24 @@
 
         function attackEnemy(index) {
             if (player.hp <= 15) {
-                tg.showAlert('⚠️ У тебя слишком мало ХП! Поешь в Столовке на Базаре!');
+                tg.showAlert('⚠️ У тебя слишком мало ХП! Покрепись в Столовке.');
                 return;
             }
 
             const enemy = currentEnemies[index];
             const stats = getStats();
 
-            let userDamage = Math.floor(stats.totalStr * 2.5 + Math.random() * 10);
-            let enemyDamage = Math.floor(enemy.str * 2.2 + Math.random() * 10);
+            // Динамический урон игроков
+            let userDamage = Math.floor(stats.totalStr * 2.5 + Math.random() * 8);
+            
+            // Ловкость снижает входящий урон (чем больше ловкость, тем меньше тебе сносят)
+            let rawEnemyDamage = Math.floor(enemy.str * 2.2 + Math.random() * 8);
+            let defenseMultiplier = Math.max(0.3, 1 - (stats.totalAgi * 0.03)); // Каждая ед. ловкости режет 3% урона
+            let enemyDamage = Math.floor(rawEnemyDamage * defenseMultiplier);
 
+            // Шансы уклонения
             let enemyDodged = Math.random() * 100 < enemy.agi; 
-            let playerDodged = Math.random() * 100 < stats.totalAgi;
+            let playerDodged = Math.random() * 100 < (stats.totalAgi * 1.5);
 
             if (enemyDodged) userDamage = 0;
             if (playerDodged) enemyDamage = 0;
@@ -876,9 +849,9 @@
             }
 
             if (playerDodged) {
-                logHTML += `<div class="log-hit-user">🛡️ Ты увернулся от ответного удара!</div>`;
+                logHTML += `<div class="log-hit-user">🛡️ Ты технично увернулся от удара!</div>`;
             } else {
-                logHTML += `<div class="log-hit-enemy">🔻 ${enemy.name} ${enemyHit} в ответ (-${enemyDamage} ХП)</div>`;
+                logHTML += `<div class="log-hit-enemy">🔻 ${enemy.name} ${enemyHit} (-${enemyDamage} ХП)</div>`;
                 player.hp -= enemyDamage;
             }
 
@@ -887,24 +860,23 @@
                 player.money += 15;
                 player.fightsWon++;
 
-                // ПРОВЕРКА КУЛДАУНА НА ПОЛУЧЕНИЕ ОПЫТА (50 МИНУТ)
                 const now = Date.now();
-                const cooldownMs = 50 * 60 * 1000; // 50 минут в миллисекундах
+                const cooldownMs = 50 * 60 * 1000;
                 let xpLogMessage = "";
 
                 if (now - player.lastXpTime >= cooldownMs) {
                     player.lastXpTime = now;
-                    addXp(1); // Награждаем ровно 1 XP за победу
-                    xpLogMessage = "<br>⭐ <b>Получено +1 XP!</b>";
+                    addXp(1);
+                    xpLogMessage = "<br>⭐ <b>Получено: +1 XP!</b>";
                 } else {
                     const minutesLeft = Math.ceil((cooldownMs - (now - player.lastXpTime)) / 60000);
-                    xpLogMessage = `<br>⏳ <span style="color:#aaa;">Опыт на перезарядке (следующий доступен через ${minutesLeft} мин)</span>`;
+                    xpLogMessage = `<br>⏳ <span style="color:#aaa;">Опыт появится через ${minutesLeft} мин</span>`;
                 }
 
-                logHTML += `<div class="log-win">🏆 Ты вырубил соперника! Получено: +15 грн, 🦷 1 зуб.${xpLogMessage}</div>`;
+                logHTML += `<div class="log-win">🏆 Ты уложил соперника! Получено: +15 грн, 🦷 1 зуб.${xpLogMessage}</div>`;
             } else {
-                player.hp -= 15;
-                logHTML += `<div class="log-lose">❌ Ты проиграл махач! ${enemy.name} заставил тебя отступить! (-15 ХП)</div>`;
+                player.hp -= 10;
+                logHTML += `<div class="log-lose">❌ Ты проиграл бой и отступил (-10 ХП)</div>`;
             }
 
             updateUI();
@@ -914,7 +886,7 @@
             generateEnemies();
         }
 
-        // Старт
+        // Запуск UI
         updateUI();
     </script>
 </body>
