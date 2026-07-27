@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Махач за Село</title>
+    <!-- Подключаем Telegram WebApp скрипт -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body {
+            background-color: #2b3925;
+            color: white;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 15px;
+        }
+        .header {
+            background: #3e5035;
+            padding: 10px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #5a734e;
+        }
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        .menu-btn {
+            background: #4a633d;
+            border: 1px solid #6b8c58;
+            color: white;
+            padding: 12px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            text-align: left;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+        .menu-btn:active {
+            background: #384d2e;
+        }
+        .danger-btn {
+            background: #8b3a3a;
+            border-color: #b54a4a;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Шапка профиля (как в HoolsOnline) -->
+    <div class="header">
+        <h2 id="username" style="margin:0; font-size: 18px;">Селянин</h2>
+        <div class="stats">
+            <span>⭐ Уровень: <b>1</b></span>
+            <span>💰 Деньги: <b>100 грн</b></span>
+        </div>
+        <div class="stats">
+            <span>❤️ ХП: <b>100/100</b></span>
+            <span>⚡ Энергия: <b>10/10</b></span>
+        </div>
+    </div>
+
+    <!-- Список локаций и кнопок -->
+    <button class="menu-btn" onclick="alert('Переход на Улицу!')">🥊 Улица (Поиск махача)</button>
+    <button class="menu-btn" onclick="alert('Переход в Колхоз!')">🌾 Колхоз (Работа/Фарм)</button>
+    <button class="menu-btn" onclick="alert('Открываем Паб!')">🍺 Сельский Паб</button>
+    <button class="menu-btn danger-btn" onclick="alert('Махач за Село!')">⚔️ Замес Район на Район</button>
+
+    <script>
+        // Инициализация Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        tg.expand(); // Разворачивает окно на весь экран
+
+        // Берём имя игрока из Telegram
+        if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+            document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
+        }
+    </script>
+</body>
+</html>
