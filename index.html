@@ -17,7 +17,7 @@
 
         /* Шапка Профиля */
         .banner {
-            width: 100%; height: 110px;
+            width: 100%; height: 120px;
             background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop');
             background-size: cover; background-position: center;
             border-bottom: 2px solid #3e5035; position: relative;
@@ -33,9 +33,10 @@
         .user-info h2 { margin: 0; font-size: 16px; color: #fff; text-shadow: 1px 1px 2px black; }
         .user-info span { font-size: 11px; color: #7cb342; font-weight: bold; }
 
-        .main-stats { text-align: right; font-size: 12px; text-shadow: 1px 1px 2px black; }
+        .main-stats { text-align: right; font-size: 11px; text-shadow: 1px 1px 2px black; }
         .money { color: #ffd700; font-weight: bold; }
         .samogon { color: #81d4fa; font-weight: bold; }
+        .authority { color: #ffb74d; font-weight: bold; }
 
         .content { padding: 12px; }
 
@@ -97,12 +98,15 @@
         .item-info div { font-weight: bold; font-size: 14px; }
         .item-info span { font-size: 11px; color: #aaa; }
         
-        .buy-btn, .equip-btn, .work-btn, .quest-btn {
+        .buy-btn, .equip-btn, .work-btn, .quest-btn, .star-upgrade-btn, .sell-btn {
             background: #4a633d; border: 1px solid #5a7a4a; color: white;
             padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
         }
+        .sell-btn { background: #d84315; border-color: #ff7043; }
+        .buy-btn.locked { background: #333; border-color: #555; color: #777; cursor: not-allowed; }
         .quest-btn.completed { background: #333; border-color: #555; color: #888; cursor: default; }
         .star-btn { background: linear-gradient(to bottom, #d4af37, #8a6d1c); border: 1px solid #f3e5ab; color: black; }
+        .star-upgrade-btn { background: linear-gradient(to bottom, #00838f, #004d40); border-color: #80deea; }
         .unequip-btn {
             background: #8b3a3a; border: 1px solid #a34a4a; color: white;
             padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
@@ -131,7 +135,6 @@
             padding: 8px 14px; border-radius: 6px; font-weight: bold;
             font-size: 12px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.4);
         }
-        .hit-btn:active { background: #5e1a1a; }
 
         .refresh-btn {
             width: 100%; background: #2a3327; border: 1px solid #435a3a;
@@ -139,15 +142,12 @@
             font-size: 13px; cursor: pointer; margin-top: 5px; text-align: center;
         }
 
-        /* Лог Боя */
         .fight-log {
             background: #111610; border: 1px solid #33442d; border-radius: 8px;
             padding: 10px; margin-top: 10px; font-size: 12px; line-height: 1.4;
             max-height: 150px; overflow-y: auto; display: none;
         }
         .log-title { font-weight: bold; color: #ffb3b3; margin-bottom: 5px; border-bottom: 1px solid #333; padding-bottom: 3px; }
-        .log-hit-user { color: #81c784; }
-        .log-hit-enemy { color: #e57373; }
         .log-win { color: #ffd700; font-weight: bold; margin-top: 4px; }
         .log-lose { color: #ff5252; font-weight: bold; margin-top: 4px; }
 
@@ -169,6 +169,7 @@
             </div>
             <div class="main-stats">
                 <div>⭐ Уровень: <b id="user-level" style="color:#d4e157;">1</b> | 🦷 Зубов: <b id="user-teeth">0</b></div>
+                <div><span class="authority">🏆 Авторитет: <b id="user-authority">0</b></span></div>
                 <div><span class="money">💰 <span id="user-money">100</span> грн</span> | <span class="samogon">🍾 <span id="user-samogon">1</span> сэма</span></div>
             </div>
         </div>
@@ -194,29 +195,12 @@
         <!-- ================= 1. ГЛАВНОЕ МЕНЮ ================= -->
         <div id="main-page" class="page active-page">
             <div class="grid-menu">
-                <button class="menu-btn full-btn" onclick="showPage('street-page')">
-                    🥊 УЛИЦА (Поиск Махача)
-                </button>
-
-                <button class="menu-btn full-btn donate-btn" onclick="showPage('quests-page')">
-                    📜 ЗАДАНИЯ И 💎 ДОНАТ
-                </button>
-
-                <button class="menu-btn" onclick="showPage('bazar-page')">
-                    🏪 БАЗАР
-                </button>
-
-                <button class="menu-btn" onclick="showPage('home-page')">
-                    🏠 ДОМ
-                </button>
-
-                <button class="menu-btn" onclick="showPage('kolhoz-page')">
-                    🌾 КОЛХОЗ
-                </button>
-
-                <button class="menu-btn danger-btn" onclick="tg.showAlert('Режим «Район на Район» находится в разработке!')">
-                    ⚔️ РАЙОН НА РАЙОН
-                </button>
+                <button class="menu-btn full-btn" onclick="showPage('street-page')">🥊 УЛИЦА (Поиск Махача)</button>
+                <button class="menu-btn full-btn donate-btn" onclick="showPage('quests-page')">📜 ЗАДАНИЯ И 💎 ДОНАТ</button>
+                <button class="menu-btn" onclick="showPage('bazar-page')">🏪 БАЗАР</button>
+                <button class="menu-btn" onclick="showPage('home-page')">🏠 ДОМ</button>
+                <button class="menu-btn" onclick="showPage('kolhoz-page')">🌾 КОЛХОЗ</button>
+                <button class="menu-btn danger-btn" onclick="tg.showAlert('Режим «Район на Район» находится в разработке!')">⚔️ РАЙОН НА РАЙОН</button>
             </div>
         </div>
 
@@ -229,62 +213,27 @@
                 <div class="tab-btn" onclick="switchQuestTab('donate', event)">💎 Донат (Stars)</div>
             </div>
 
-            <!-- ЗАДАНИЯ -->
             <div id="tab-tasks" class="quest-tab-content">
                 <h4 style="margin: 0 0 10px 0; color: #81d4fa; font-size: 13px;">Выполняй дела и получай премиум-ресурс:</h4>
-
                 <div class="item-card">
-                    <div class="item-info">
-                        <div>🥊 Гроза Улицы</div>
-                        <span>Выиграть 3 боя на Улице (<b id="q1-progress">0/3</b>)</span>
-                    </div>
+                    <div class="item-info"><div>🥊 Гроза Улицы</div><span>Выиграть 3 боя на Улице (<b id="q1-progress">0/3</b>)</span></div>
                     <button id="q1-btn" class="quest-btn" onclick="claimQuest('q1', 1)">+1 🍾 Сэм</button>
                 </div>
-
                 <div class="item-card">
-                    <div class="item-info">
-                        <div>🌾 Трудяга Колхоза</div>
-                        <span>Отработать 5 смен в Колхозе (<b id="q2-progress">0/5</b>)</span>
-                    </div>
+                    <div class="item-info"><div>🌾 Трудяга Колхоза</div><span>Отработать 5 смен в Колхозе (<b id="q2-progress">0/5</b>)</span></div>
                     <button id="q2-btn" class="quest-btn" onclick="claimQuest('q2', 1)">+1 🍾 Сэм</button>
                 </div>
-
                 <div class="item-card">
-                    <div class="item-info">
-                        <div>📢 Сельский Сельсовет</div>
-                        <span>Подписаться на официальный канал</span>
-                    </div>
+                    <div class="item-info"><div>📢 Сельский Сельсовет</div><span>Подписаться на канал</span></div>
                     <button id="q3-btn" class="quest-btn" onclick="claimQuest('q3', 2)">+2 🍾 Сэма</button>
                 </div>
             </div>
 
-            <!-- ДОНАТ -->
             <div id="tab-donate" class="quest-tab-content" style="display:none;">
                 <h4 style="margin: 0 0 10px 0; color: #ffd700; font-size: 13px;">Запасы Самогона за Telegram Stars:</h4>
-
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>🍾 Чекушка Сэма</div>
-                        <span>+5 Самогона</span>
-                    </div>
-                    <button class="buy-btn star-btn" onclick="buyStars(5, 50)">⭐ 50 Stars</button>
-                </div>
-
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>🍾🍾 Бутыль Сэма</div>
-                        <span>+15 Самогона</span>
-                    </div>
-                    <button class="buy-btn star-btn" onclick="buyStars(15, 120)">⭐ 120 Stars</button>
-                </div>
-
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>🛢️ Ящик Сэма</div>
-                        <span>+50 Самогона</span>
-                    </div>
-                    <button class="buy-btn star-btn" onclick="buyStars(50, 350)">⭐ 350 Stars</button>
-                </div>
+                <div class="item-card"><div class="item-info"><div>🍾 Чекушка Сэма</div><span>+5 Самогона</span></div><button class="buy-btn star-btn" onclick="buyStars(5, 50)">⭐ 50 Stars</button></div>
+                <div class="item-card"><div class="item-info"><div>🍾🍾 Бутыль Сэма</div><span>+15 Самогона</span></div><button class="buy-btn star-btn" onclick="buyStars(15, 120)">⭐ 120 Stars</button></div>
+                <div class="item-card"><div class="item-info"><div>🛢️ Ящик Сэма</div><span>+50 Самогона</span></div><button class="buy-btn star-btn" onclick="buyStars(50, 350)">⭐ 350 Stars</button></div>
             </div>
         </div>
 
@@ -293,15 +242,9 @@
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
             <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #ffb3b3;">🥊 Поиск пацанов на Улице:</h3>
             <p style="margin: 0 0 10px 0; font-size: 11px; color: #aaa;">Дрись сколько есть ХП! Чем выше Ловкость, тем меньше урона получаешь.</p>
-
             <div id="enemies-list"></div>
-
             <button class="refresh-btn" onclick="generateEnemies()">🔍 ИСКАТЬ ЕЩЁ ПРОТИВНИКОВ</button>
-
-            <div id="fight-log" class="fight-log">
-                <div class="log-title">📜 Ход махача:</div>
-                <div id="log-text"></div>
-            </div>
+            <div id="fight-log" class="fight-log"><div class="log-title">📜 Ход махача:</div><div id="log-text"></div></div>
         </div>
 
         <!-- ================= 4. ЭКРАН БАЗАРА ================= -->
@@ -312,79 +255,66 @@
                 <div class="tab-btn active" onclick="switchBazarTab('stolovka', event)">🥗 Столовка</div>
                 <div class="tab-btn" onclick="switchBazarTab('second', event)">👕 Секонд</div>
                 <div class="tab-btn" onclick="switchBazarTab('gypsy', event)">🔨 Цыганка</div>
+                <div class="tab-btn" onclick="switchBazarTab('authority', event)">🏆 Авторитет</div>
                 <div class="tab-btn" onclick="switchBazarTab('larec', event)">🏪 Ларек</div>
             </div>
 
             <!-- СТОЛОВКА -->
             <div id="tab-stolovka" class="tab-content">
                 <div class="item-card">
-                    <div class="item-info"><div>🥟 Чебурек с мясом</div><span>Восстанавливает +30 ХП</span></div>
-                    <button class="buy-btn" onclick="buyFood(30, 10, 'Чебурек')">10 грн</button>
+                    <div class="item-info"><div>🥟 Чебурек с мясом</div><span>+30 ХП (Только Улица) | ⏳ КД: 30 мин</span></div>
+                    <button class="buy-btn" onclick="eatFood('cheburek', 30, 10, 'money', 1800, '🥊 Улица')">10 грн</button>
                 </div>
                 <div class="item-card">
-                    <div class="item-info"><div>🥣 Горячий Борщ</div><span>Восстанавливает +50 ХП</span></div>
-                    <button class="buy-btn" onclick="buyFood(50, 15, 'Борщ')">15 грн</button>
+                    <div class="item-info"><div>🥣 Горячий Борщ</div><span>+50 ХП (Только Улица) | ⏳ КД: 1 час</span></div>
+                    <button class="buy-btn" onclick="eatFood('borsch', 50, 15, 'money', 3600, '🥊 Улица')">15 грн</button>
                 </div>
                 <div class="item-card">
-                    <div class="item-info"><div>🥓 Сало с чесноком</div><span>Восстанавливает +50 ХП</span></div>
-                    <button class="buy-btn" onclick="buyFood(50, 25, 'Сало с чесноком')">25 грн</button>
+                    <div class="item-info"><div>🥓 Сало с чесноком</div><span>+50 ХП (Только Махач) | ⏳ КД: 2 мин</span></div>
+                    <button class="buy-btn" onclick="eatFood('salo', 50, 1, 'samogon', 120, '⚔️ Махач')">1 сэм</button>
                 </div>
                 <div class="item-card">
-                    <div class="item-info"><div>🥪 Сытный Бутерброд</div><span>Полностью лечит (+100 ХП)</span></div>
-                    <button class="buy-btn" onclick="buyFood(100, 30, 'Сытный Бутерброд')">30 грн</button>
+                    <div class="item-info"><div>🥪 Сытный Бутерброд</div><span>+100 ХП (Только Махач) | ⏳ КД: 4 мин</span></div>
+                    <button class="buy-btn" onclick="eatFood('buter', 100, 2, 'samogon', 240, '⚔️ Махач')">2 сэма</button>
                 </div>
             </div>
 
             <!-- СЕКОНД -->
             <div id="tab-second" class="tab-content" style="display:none;">
-                <div class="item-card">
-                    <div class="item-info"><div>🎽 Майка «BMW»</div><span>+4 к Ловкости</span></div>
-                    <button class="buy-btn" onclick="buyEquipment('mayka', '🎽 Майка «BMW»', 'agi', 4, 80)">80 грн</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info"><div>🧥 Олимпийка Abibas</div><span>+8 к Ловкости</span></div>
-                    <button class="buy-btn" onclick="buyEquipment('olimp', '🧥 Олимпийка Abibas', 'agi', 8, 150)">150 грн</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info"><div>👟 Кроссы со светодиодами</div><span>+12 к Ловкости</span></div>
-                    <button class="buy-btn" onclick="buyEquipment('crossy', '👟 Кроссы со светодиодами', 'agi', 12, 250)">250 грн</button>
-                </div>
+                <div id="second-items-list"></div>
             </div>
 
             <!-- ЦЫГАНКА -->
             <div id="tab-gypsy" class="tab-content" style="display:none;">
-                <div class="item-card">
-                    <div class="item-info"><div>📍 Гвоздь-сотка</div><span>+3 к Силе</span></div>
-                    <button class="buy-btn" onclick="buyEquipment('gvozd', '📍 Гвоздь-сотка', 'str', 3, 50)">50 грн</button>
+                <div id="gypsy-items-list"></div>
+            </div>
+
+            <!-- ВКЛАДКА АВТОРИТЕТА СЕЛА (Обмен зубов) -->
+            <div id="tab-authority" class="tab-content" style="display:none;">
+                <div class="item-card" style="border-color: #ffb74d;">
+                    <div class="item-info">
+                        <div>🏆 Сдать Зубы в Сельсовет</div>
+                        <span>Курс: <b>5 Зубов 🦷 = +1 Авторитета Села</b></span>
+                    </div>
+                    <button class="buy-btn star-btn" onclick="convertTeethToAuthority()">Сдать 5 Зубов</button>
                 </div>
-                <div class="item-card">
-                    <div class="item-info"><div>🥊 Самодельный Кастет</div><span>+7 к Силе</span></div>
-                    <button class="buy-btn" onclick="buyEquipment('kastet', '🥊 Самодельный Кастет', 'str', 7, 120)">120 грн</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info"><div>🪵 Нунчаки из дуба</div><span>+12 к Силе</span></div>
-                    <button class="buy-btn" onclick="buyEquipment('nunchak', '🪵 Нунчаки из дуба', 'str', 12, 220)">220 грн</button>
+                <div style="font-size: 12px; color: #aaa; margin-top: 10px; line-height: 1.4;">
+                    💡 <b>Зачем нужен Авторитет Села?</b><br>
+                    Чем выше Авторитет твоего села, тем больше престижа и бонусов получает команда в командных боях «Район на Район»!
                 </div>
             </div>
 
-            <!-- ЛАРЕК (Расходники для Махача между Селами) -->
+            <!-- ЛАРЕК -->
             <div id="tab-larec" class="tab-content" style="display:none;">
                 <div class="item-card">
-                    <div class="item-info">
-                        <div>🪵 Дубовая Доска</div>
-                        <span>💥 +80% урона в Махаче Сёла на Село (Одноразовый)</span>
-                    </div>
-                    <button class="buy-btn" onclick="buyConsumable('doska', '🪵 Дубовая Доска', 0.8, 5, 'samogon')">5 сэма</button>
+                    <div class="item-info"><div>🪵 Дубовая Доска</div><span>💥 +80% урона в Махаче Сёла на Село (Одноразовый)</span></div>
+                    <button class="buy-btn" onclick="buyConsumable('doska', '🪵 Дубовая Доска', 0.8, 5)">5 сэма</button>
                 </div>
                 <div class="item-card">
-                    <div class="item-info">
-                        <div>🌵 Кактус</div>
-                        <span>💥 +120% урона в Махаче Сёла на Село (Одноразовый)</span>
-                    </div>
-                    <button class="buy-btn" onclick="buyConsumable('kaktus', '🌵 Кактус', 1.2, 10, 'samogon')">10 сэма</button>
+                    <div class="item-info"><div>🌵 Кактус</div><span>💥 +120% урона в Махаче Сёла на Село (Одноразовый)</span></div>
+                    <button class="buy-btn" onclick="buyConsumable('kaktus', '🌵 Кактус', 1.2, 10)">10 сэма</button>
                 </div>
             </div>
-
         </div>
 
         <!-- ================= 5. ЭКРАН ДОМА ================= -->
@@ -402,54 +332,25 @@
                 <div class="tab-btn" onclick="switchHomeTab('filip', event)">👴 Дед Филиппович</div>
             </div>
 
-            <!-- ИНВЕНТАРЬ -->
             <div id="home-inventory" class="home-tab-content">
-                <h4 style="margin: 5px 0 10px 0; font-size: 13px; color: #aaa;">Купленное снаряжение:</h4>
-                <div id="inventory-list">
-                    <div style="font-size: 12px; color: #666;">Инвентарь пуст. Купи шмот на Базаре!</div>
-                </div>
+                <h4 style="margin: 5px 0 10px 0; font-size: 13px; color: #aaa;">Купленное снаряжение (Можно продать за 50% стоимости):</h4>
+                <div id="inventory-list"></div>
             </div>
 
-            <!-- ФИЛИППОВИЧ (Заточка Оружия и Заплатки на Одежду) -->
             <div id="home-filip" class="home-tab-content" style="display:none;">
-                <h4 style="margin: 5px 0 10px 0; font-size: 13px; color: #aaa;">Улучшение снаряжения (+2 стата):</h4>
-                <div id="filip-list">
-                    <div style="font-size: 12px; color: #666;">Купи оружие или одежду, чтобы Филиппович мог их заточить или заштопать!</div>
-                </div>
+                <h4 style="margin: 5px 0 10px 0; font-size: 13px; color: #aaa;">👴 Дед Филиппович качает вещи до ⭐⭐⭐ за Сэм:</h4>
+                <div id="filip-list"></div>
             </div>
-
         </div>
 
         <!-- ================= 6. ЭКРАН КОЛХОЗА ================= -->
         <div id="kolhoz-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
             <h3 style="margin: 0 0 10px 0; font-size: 14px; color: #7cb342;">🌾 Работа в Колхозе «Заря»:</h3>
-
-            <div class="item-card">
-                <div class="item-info">
-                    <div>🧹 Чистить коровник</div>
-                    <span>Доход: +15 грн | 💤 +30 Усталости</span>
-                </div>
-                <button class="work-btn" onclick="doWork('barn')">Впахивать</button>
-            </div>
-
-            <div class="item-card">
-                <div class="item-info">
-                    <div>🥔 Сбор картохи</div>
-                    <span>Доход: +35 грн | 💤 +50 Усталости</span>
-                </div>
-                <button class="work-btn" onclick="doWork('potatoes')">Впахивать</button>
-            </div>
-
-            <div class="item-card">
-                <div class="item-info">
-                    <div>🚜 Ремонт Трактора</div>
-                    <span>Доход: +70 грн | 💤 +100 Усталости (Нужно 15+ Силы)</span>
-                </div>
-                <button class="work-btn" onclick="doWork('tractor')">Впахивать</button>
-            </div>
+            <div class="item-card"><div class="item-info"><div>🧹 Чистить коровник</div><span>Доход: +15 грн | 💤 +30 Усталости</span></div><button class="work-btn" onclick="doWork('barn')">Впахивать</button></div>
+            <div class="item-card"><div class="item-info"><div>🥔 Сбор картохи</div><span>Доход: +35 грн | 💤 +50 Усталости</span></div><button class="work-btn" onclick="doWork('potatoes')">Впахивать</button></div>
+            <div class="item-card"><div class="item-info"><div>🚜 Ремонт Трактора</div><span>Доход: +70 грн | 💤 +100 Усталости (Нужно 15+ Силы)</span></div><button class="work-btn" onclick="doWork('tractor')">Впахивать</button></div>
         </div>
-
     </div>
 
     <script>
@@ -458,10 +359,8 @@
         tg.ready();
         tg.setHeaderColor('#121711');
 
-        // Таблица требований XP
         const xpRequirements = { 1: 3, 2: 8, 3: 24, 4: 50, 5: 85, 6: 150, 7: 200, 8: 230, 9: 270 };
 
-        // Состояние игрока
         let player = {
             level: 1,
             xp: 0,
@@ -474,39 +373,68 @@
             money: 100,
             samogon: 1,
             teeth: 0,
+            authority: 0, // Авторитет Села
             baseStr: 10,
             baseAgi: 10,
             inventory: [],
-            consumables: [], // Одноразовые предметы (Доска, Кактус)
+            consumables: [],
             fightsWon: 0,
             worksDone: 0,
             claimedQuests: { q1: false, q2: false, q3: false }
         };
 
+        const starPriceTable = {
+            1: [1, 2, 3], 2: [1, 2, 4], 3: [2, 3, 5], 4: [2, 4, 6], 5: [3, 5, 7],
+            6: [3, 6, 9], 7: [4, 7, 10], 8: [4, 8, 12], 9: [5, 9, 14], 10: [5, 10, 15]
+        };
+
+        const secondCatalog = [
+            { id: 'mayka', name: '🎽 Майка «BMW»', reqLevel: 1, baseValue: 4, price: 80 },
+            { id: 'shorty', name: '🩳 Шорты с начесом', reqLevel: 2, baseValue: 7, price: 140 },
+            { id: 'olimp', name: '🧥 Олимпийка Abibas', reqLevel: 3, baseValue: 11, price: 230 },
+            { id: 'kepka', name: '🧢 Кепка «Eighteen»', reqLevel: 4, baseValue: 16, price: 350 },
+            { id: 'crossy', name: '👟 Кроссы со светодиодами', reqLevel: 5, baseValue: 22, price: 500 },
+            { id: 'kozhanka', name: '🥾 Кожанка Дяди', reqLevel: 6, baseValue: 30, price: 750 },
+            { id: 'zhilet', name: '🦺 Жилет сварщика', reqLevel: 7, baseValue: 39, price: 1100 },
+            { id: 'kostyum', name: '🥋 Костюм «Титаник»', reqLevel: 8, baseValue: 49, price: 1600 },
+            { id: 'bronyuk', name: '🛡️ Бронежилет из капота', reqLevel: 9, baseValue: 60, price: 2300 },
+            { id: 'shuba', name: '👑 Шуба с барского плеча', reqLevel: 10, baseValue: 75, price: 3200 }
+        ];
+
+        const gypsyCatalog = [
+            { id: 'gvozd', name: '📍 Гвоздь-сотка', reqLevel: 1, baseValue: 3, price: 50 },
+            { id: 'kastet', name: '🥊 Самодельный Кастет', reqLevel: 2, baseValue: 7, price: 120 },
+            { id: 'rozochka', name: '🍾 Розочка из бутылки', reqLevel: 3, baseValue: 12, price: 210 },
+            { id: 'nunchak', name: '🪵 Нунчаки из дуба', reqLevel: 4, baseValue: 18, price: 330 },
+            { id: 'cep', name: '⛓️ Тяжелая цепь комбайна', reqLevel: 5, baseValue: 25, price: 480 },
+            { id: 'armatura', name: '🪓 Арматура с бетоном', reqLevel: 6, baseValue: 34, price: 700 },
+            { id: 'bita', name: '🏏 Бита с шурупами', reqLevel: 7, baseValue: 44, price: 1000 },
+            { id: 'kuvalda', name: '🔨 Кувалда Деда', reqLevel: 8, baseValue: 55, price: 1450 },
+            { id: 'pila', name: '🪚 Бензопила «Дружба»', reqLevel: 9, baseValue: 68, price: 2100 },
+            { id: 'dver', name: '🚜 Дверь от Трактора МТЗ', reqLevel: 10, baseValue: 85, price: 3000 }
+        ];
+
+        let foodCooldowns = { cheburek: 0, borsch: 0, salo: 0, buter: 0 };
+
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
         }
 
-        // --- ТАЙМЕРЫ ВОССТАНОВЛЕНИЯ (+1 ХП и -1 Усталость каждые 36 сек = 60 минут) ---
         setInterval(() => {
             if (player.hp < player.maxHp) player.hp += 1;
             if (player.fatigue > 0) player.fatigue -= 1;
             updateBars();
         }, 36000);
 
-        // --- СИСТЕМА ОПЫТА И УРОВНЕЙ ---
         function addXp(amount) {
             player.xp += amount;
             while (player.xp >= player.maxXp) {
                 player.xp -= player.maxXp;
                 player.level++;
                 player.maxXp = xpRequirements[player.level] || (270 + (player.level - 9) * 50);
-                
-                // ХП не растёт при левелапе (только полная регенерация текущего ХП)
                 player.hp = player.maxHp;
                 const bonusMoney = player.level * 30;
                 player.money += bonusMoney;
-
                 tg.showAlert(`🎉 НОВЫЙ УРОВЕНЬ! Достигнут ${player.level} уровень!\n\n🎁 Бонусы:\n❤️ ХП полностью восстановлено\n💰 +${bonusMoney} грн премия!`);
             }
             updateUI();
@@ -516,9 +444,11 @@
             let bonusStr = 0, bonusAgi = 0;
             player.inventory.forEach(item => {
                 if (item.equipped) {
-                    const upgradeBonus = item.upgrades ? item.upgrades * 2 : 0;
-                    if (item.type === 'str') bonusStr += (item.value + upgradeBonus);
-                    if (item.type === 'agi') bonusAgi += (item.value + upgradeBonus);
+                    const starBonus = Math.floor(item.baseValue * 0.30 * (item.stars || 0));
+                    const totalVal = item.baseValue + starBonus;
+
+                    if (item.type === 'str') bonusStr += totalVal;
+                    if (item.type === 'agi') bonusAgi += totalVal;
                 }
             });
             return { totalStr: player.baseStr + bonusStr, totalAgi: player.baseAgi + bonusAgi, bonusStr, bonusAgi };
@@ -529,6 +459,7 @@
             document.getElementById('user-money').innerText = player.money;
             document.getElementById('user-samogon').innerText = player.samogon;
             document.getElementById('user-teeth').innerText = player.teeth;
+            document.getElementById('user-authority').innerText = player.authority;
 
             const stats = getStats();
             document.getElementById('stat-str').innerText = stats.totalStr;
@@ -537,6 +468,7 @@
             document.getElementById('bonus-agi').innerText = `(+${stats.bonusAgi} от снаряжения)`;
 
             updateBars();
+            renderCatalogs();
             renderInventory();
             renderFilipShop();
             updateQuestsUI();
@@ -585,92 +517,112 @@
             event.target.classList.add('active');
         }
 
-        // --- ЗАДАНИЯ И ДОНАТ ---
-        function updateQuestsUI() {
-            document.getElementById('q1-progress').innerText = `${Math.min(player.fightsWon, 3)}/3`;
-            document.getElementById('q2-progress').innerText = `${Math.min(player.worksDone, 5)}/5`;
-
-            const btn1 = document.getElementById('q1-btn');
-            if (player.claimedQuests.q1) {
-                btn1.innerText = 'Забрано ✅'; btn1.classList.add('completed');
-            } else if (player.fightsWon < 3) {
-                btn1.innerText = 'Не готово'; btn1.classList.add('completed');
-            } else {
-                btn1.innerText = '+1 🍾 Сэм'; btn1.classList.remove('completed');
-            }
-
-            const btn2 = document.getElementById('q2-btn');
-            if (player.claimedQuests.q2) {
-                btn2.innerText = 'Забрано ✅'; btn2.classList.add('completed');
-            } else if (player.worksDone < 5) {
-                btn2.innerText = 'Не готово'; btn2.classList.add('completed');
-            } else {
-                btn2.innerText = '+1 🍾 Сэм'; btn2.classList.remove('completed');
-            }
-
-            const btn3 = document.getElementById('q3-btn');
-            if (player.claimedQuests.q3) {
-                btn3.innerText = 'Забрано ✅'; btn3.classList.add('completed');
-            }
-        }
-
-        function claimQuest(questId, amount) {
-            if (player.claimedQuests[questId]) {
-                tg.showAlert('Награда уже была получена!');
+        function eatFood(id, hpBonus, price, currency, cooldownSec, targetMode) {
+            const now = Date.now();
+            if (foodCooldowns[id] && now < foodCooldowns[id]) {
+                const secondsLeft = Math.ceil((foodCooldowns[id] - now) / 1000);
+                const mins = Math.floor(secondsLeft / 60);
+                const secs = secondsLeft % 60;
+                tg.showAlert(`⏳ Блюдо еще готовится! Подожди: ${mins > 0 ? mins + ' мин ' : ''}${secs} сек.`);
                 return;
             }
 
-            if (questId === 'q1' && player.fightsWon < 3) {
-                tg.showAlert('Сначала выиграй 3 боя на Улице!');
-                return;
-            }
-            if (questId === 'q2' && player.worksDone < 5) {
-                tg.showAlert('Сначала отработай 5 смен в Колхозе!');
-                return;
-            }
+            if (currency === 'money' && player.money < price) { tg.showAlert('⚠️ Недостаточно денег!'); return; }
+            if (currency === 'samogon' && player.samogon < price) { tg.showAlert('⚠️ Недостаточно Самогона!'); return; }
+            if (player.hp >= player.maxHp) { tg.showAlert('Ты полностью здоров!'); return; }
 
-            player.claimedQuests[questId] = true;
-            player.samogon += amount;
+            if (currency === 'money') player.money -= price;
+            if (currency === 'samogon') player.samogon -= price;
+
+            player.hp = Math.min(player.maxHp, player.hp + hpBonus);
+            foodCooldowns[id] = now + (cooldownSec * 1000);
+
             updateUI();
-            tg.showAlert(`🎉 Задание выполнено! Получено: +${amount} 🍾 Сэма`);
+            tg.showAlert(`😋 Восстановлено +${hpBonus} ХП для режима [${targetMode}].`);
         }
 
-        function buyStars(samogonAmount, stars) {
-            tg.showAlert(`Запрос на покупку ${samogonAmount} 🍾 Сэма за ${stars} Telegram Stars.`);
+        function renderCatalogs() {
+            // Секонд
+            const secondContainer = document.getElementById('second-items-list');
+            secondContainer.innerHTML = '';
+            secondCatalog.forEach(item => {
+                const bought = player.inventory.find(i => i.id === item.id);
+                const locked = player.level < item.reqLevel;
+
+                let btnHtml = '';
+                if (bought) {
+                    btnHtml = `<span style="font-size:12px; color:#81c784; font-weight:bold;">Куплено ✅</span>`;
+                } else if (locked) {
+                    btnHtml = `<button class="buy-btn locked">🔒 c ${item.reqLevel} ур.</button>`;
+                } else {
+                    btnHtml = `<button class="buy-btn" onclick="buyCatalogItem('${item.id}', 'agi')">${item.price} грн</button>`;
+                }
+
+                secondContainer.innerHTML += `
+                    <div class="item-card">
+                        <div class="item-info">
+                            <div>${item.name}</div>
+                            <span>+${item.baseValue} Ловкости (Нужен ${item.reqLevel} ур.)</span>
+                        </div>
+                        ${btnHtml}
+                    </div>
+                `;
+            });
+
+            // Цыганка
+            const gypsyContainer = document.getElementById('gypsy-items-list');
+            gypsyContainer.innerHTML = '';
+            gypsyCatalog.forEach(item => {
+                const bought = player.inventory.find(i => i.id === item.id);
+                const locked = player.level < item.reqLevel;
+
+                let btnHtml = '';
+                if (bought) {
+                    btnHtml = `<span style="font-size:12px; color:#81c784; font-weight:bold;">Куплено ✅</span>`;
+                } else if (locked) {
+                    btnHtml = `<button class="buy-btn locked">🔒 c ${item.reqLevel} ур.</button>`;
+                } else {
+                    btnHtml = `<button class="buy-btn" onclick="buyCatalogItem('${item.id}', 'str')">${item.price} грн</button>`;
+                }
+
+                gypsyContainer.innerHTML += `
+                    <div class="item-card">
+                        <div class="item-info">
+                            <div>${item.name}</div>
+                            <span>+${item.baseValue} Силы (Нужен ${item.reqLevel} ур.)</span>
+                        </div>
+                        ${btnHtml}
+                    </div>
+                `;
+            });
         }
 
-        // --- БАЗАР ---
-        function buyFood(hpAmount, price, itemName) {
-            if (player.money < price) {
+        function buyCatalogItem(id, type) {
+            const catalog = type === 'agi' ? secondCatalog : gypsyCatalog;
+            const item = catalog.find(i => i.id === id);
+
+            if (player.money < item.price) {
                 tg.showAlert('⚠️ Недостаточно денег!');
                 return;
             }
-            if (player.hp >= player.maxHp) {
-                tg.showAlert('У тебя максимальное здоровье!');
-                return;
-            }
-            player.money -= price;
-            player.hp = Math.min(player.maxHp, player.hp + hpAmount);
+
+            player.money -= item.price;
+            player.inventory.push({
+                id: item.id,
+                name: item.name,
+                type: type,
+                reqLevel: item.reqLevel,
+                price: item.price,
+                baseValue: item.baseValue,
+                stars: 0,
+                equipped: false
+            });
+
             updateUI();
-            tg.showAlert(`😋 Ты съел: ${itemName}! Восстановлено: +${hpAmount} ХП`);
+            tg.showAlert(`🛍️ Куплено: "${item.name}"! Заточить у Деда можно в Доме.`);
         }
 
-        function buyEquipment(id, name, type, value, price) {
-            if (player.inventory.some(item => item.id === id)) {
-                tg.showAlert('⚠️ Этот предмет уже куплен!');
-                return;
-            }
-            if (player.money < price) {
-                tg.showAlert('⚠️ Недостаточно денег!');
-                return;
-            }
-            player.money -= price;
-            player.inventory.push({ id, name, type, value, upgrades: 0, equipped: false });
-            updateUI();
-            tg.showAlert(`🛍️ Покупка успешна: "${name}" отправлен в Дом.`);
-        }
-
-        function buyConsumable(id, name, bonusPercent, priceSamogon, currency) {
+        function buyConsumable(id, name, bonusPercent, priceSamogon) {
             if (player.samogon < priceSamogon) {
                 tg.showAlert('⚠️ Недостаточно Самогона!');
                 return;
@@ -678,55 +630,102 @@
             player.samogon -= priceSamogon;
             player.consumables.push({ id, name, bonusPercent });
             updateUI();
-            tg.showAlert(`🛍️ Куплен расходник: "${name}"! Он лежит про запас для Махача Сёла на Село.`);
+            tg.showAlert(`🛍️ Куплен расходник: "${name}"!`);
         }
 
-        // --- ДОМ И ИНВЕНТАРЬ ---
+        // ОБМЕН ЗУБОВ НА АВТОРИТЕТ
+        function convertTeethToAuthority() {
+            if (player.teeth < 5) {
+                tg.showAlert('⚠️ Недостаточно Зубов! Для получения +1 Авторитета нужно минимум 5 Зубов.');
+                return;
+            }
+            player.teeth -= 5;
+            player.authority += 1;
+            updateUI();
+            tg.showAlert('🏆 Ты сдал 5 Выбитых Зубов в Сельсовет и поднял Авторитет Села на +1!');
+        }
+
+        // --- ИНВЕНТАРЬ В ДОМЕ (С ПРОДАЖЕЙ Б/У ЗА 50%) ---
         function renderInventory() {
             const container = document.getElementById('inventory-list');
-            
             let html = '';
+
             if (player.inventory.length > 0) {
                 player.inventory.forEach((item, index) => {
-                    const upgradeBonus = item.upgrades ? item.upgrades * 2 : 0;
-                    const totalVal = item.value + upgradeBonus;
-                    const statText = item.type === 'str' ? `+${totalVal} Сила` : `+${totalVal} Ловкость`;
-                    const upgradeLabel = item.upgrades > 0 ? ` (+${item.upgrades * 2} от Заточки)` : '';
+                    const currentStars = item.stars || 0;
+                    const starBonus = Math.floor(item.baseValue * 0.30 * currentStars);
+                    const totalVal = item.baseValue + starBonus;
                     
+                    const statName = item.type === 'str' ? 'Сила' : 'Ловкость';
+                    const starsStr = '⭐'.repeat(currentStars);
+
+                    // Расчет компенсации 50% денег и 50% потраченного сэма
+                    const refundMoney = Math.floor(item.price * 0.5);
+                    let spentSamogon = 0;
+                    const starPrices = starPriceTable[item.reqLevel] || [1, 2, 3];
+                    for (let s = 0; s < currentStars; s++) {
+                        spentSamogon += starPrices[s];
+                    }
+                    const refundSamogon = Math.floor(spentSamogon * 0.5);
+
+                    let refundText = `${refundMoney} грн`;
+                    if (refundSamogon > 0) refundText += ` и ${refundSamogon} сэма`;
+
                     html += `
-                        <div class="item-card">
-                            <div class="item-info">
-                                <div>${item.name}</div>
-                                <span>${statText}${upgradeLabel} ${item.equipped ? '<b>(Экипировано)</b>' : ''}</span>
+                        <div class="item-card" style="flex-direction: column; align-items: stretch; gap: 6px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center;">
+                                <div>
+                                    <b>${item.name}</b> ${starsStr}
+                                    <div style="font-size:11px; color:#aaa;">+${totalVal} ${statName} (База ${item.baseValue} + ⭐${starBonus})</div>
+                                </div>
+                                <button class="${item.equipped ? 'unequip-btn' : 'equip-btn'}" onclick="toggleEquip(${index})">
+                                    ${item.equipped ? 'Снять' : 'Надеть'}
+                                </button>
                             </div>
-                            <button class="${item.equipped ? 'unequip-btn' : 'equip-btn'}" onclick="toggleEquip(${index})">
-                                ${item.equipped ? 'Снять' : 'Надеть'}
-                            </button>
+                            <div style="display:flex; justify-content:flex-end; align-items:center; border-top:1px solid #2e3d28; padding-top:4px;">
+                                <button class="sell-btn" onclick="sellItem(${index})">♻️ Продать б/у (${refundText})</button>
+                            </div>
                         </div>
                     `;
                 });
             }
 
             if (player.consumables.length > 0) {
-                html += '<h4 style="margin: 10px 0 5px 0; font-size: 12px; color: #ffd700;">Расходники для Район на Район:</h4>';
+                html += '<h4 style="margin: 10px 0 5px 0; font-size: 12px; color: #ffd700;">Расходники для Махача Сел:</h4>';
                 player.consumables.forEach((c) => {
                     html += `
                         <div class="item-card" style="border-color: #5c4d1d; background: #242014;">
-                            <div class="item-info">
-                                <div>${c.name}</div>
-                                <span>Урон в махаче сел: +${c.bonusPercent * 100}%</span>
-                            </div>
+                            <div class="item-info"><div>${c.name}</div><span>Урон в махаче сел: +${c.bonusPercent * 100}%</span></div>
                             <span style="font-size: 11px; color: #888;">Одноразовый</span>
                         </div>
                     `;
                 });
             }
 
-            if (html === '') {
-                container.innerHTML = '<div style="font-size: 12px; color: #666;">Инвентарь пуст. Купи шмот на Базаре!</div>';
-            } else {
-                container.innerHTML = html;
+            container.innerHTML = html || '<div style="font-size: 12px; color: #666;">Инвентарь пуст. Купи шмот на Базаре!</div>';
+        }
+
+        function sellItem(index) {
+            const item = player.inventory[index];
+            const currentStars = item.stars || 0;
+
+            const refundMoney = Math.floor(item.price * 0.5);
+            let spentSamogon = 0;
+            const starPrices = starPriceTable[item.reqLevel] || [1, 2, 3];
+            for (let s = 0; s < currentStars; s++) {
+                spentSamogon += starPrices[s];
             }
+            const refundSamogon = Math.floor(spentSamogon * 0.5);
+
+            player.money += refundMoney;
+            player.samogon += refundSamogon;
+
+            player.inventory.splice(index, 1);
+            updateUI();
+
+            let msg = `♻️ Предмет "${item.name}" успешно продан!\n\nВозвращено:\n💰 +${refundMoney} грн`;
+            if (refundSamogon > 0) msg += `\n🍾 +${refundSamogon} Сэма за звёзды`;
+            tg.showAlert(msg);
         }
 
         function toggleEquip(index) {
@@ -734,108 +733,99 @@
             updateUI();
         }
 
-        // Дед Филиппович качает ТОЛЬКО предметы (оружие/одежду)
+        // --- ДЕД ФИЛИППОВИЧ ---
         function renderFilipShop() {
             const container = document.getElementById('filip-list');
             if (player.inventory.length === 0) {
-                container.innerHTML = '<div style="font-size: 12px; color: #666;">Купи оружие или одежду на Базаре, чтобы Филиппович мог их прокачать!</div>';
+                container.innerHTML = '<div style="font-size: 12px; color: #666;">Купи шмот или оружие на Базаре, чтобы Филиппович мог поднять его характеристики за Сэм!</div>';
                 return;
             }
 
             container.innerHTML = '';
             player.inventory.forEach((item, index) => {
-                const upgradeBonus = item.upgrades ? item.upgrades * 2 : 0;
+                const currentStars = item.stars || 0;
+                const starBonus = Math.floor(item.baseValue * 0.30 * currentStars);
                 const statName = item.type === 'str' ? 'Сила' : 'Ловкость';
+                const starsStr = '⭐'.repeat(currentStars);
+
+                let upgradeBtn = '';
+                if (currentStars < 3) {
+                    const priceList = starPriceTable[item.reqLevel] || [1, 2, 3];
+                    const nextPrice = priceList[currentStars];
+                    const nextStarNum = currentStars + 1;
+                    upgradeBtn = `<button class="star-upgrade-btn" onclick="upgradeItemWithFilip(${index}, ${nextPrice})">Заточить на ${nextStarNum}⭐ (${nextPrice} сэма)</button>`;
+                } else {
+                    upgradeBtn = `<span style="font-size:11px; color:#ffd700; font-weight:bold;">МАКС ⭐⭐⭐</span>`;
+                }
+
                 container.innerHTML += `
-                    <div class="item-card">
-                        <div class="item-info">
-                            <div>Заточить/Заштопать: ${item.name}</div>
-                            <span>Текущий плюс: +${item.value + upgradeBonus} ${statName} (Уровень заточки: +${item.upgrades || 0})</span>
+                    <div class="item-card" style="flex-direction: column; align-items: stretch; gap: 6px;">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <div>
+                                <b>${item.name}</b> ${starsStr}
+                                <div style="font-size:11px; color:#aaa;">Текущее преимущество: +${item.baseValue + starBonus} ${statName}</div>
+                            </div>
                         </div>
-                        <button class="buy-btn" onclick="upgradeItemWithFilip(${index})">2 сэма</button>
+                        <div style="display:flex; justify-content:flex-end; align-items:center; border-top:1px solid #2e3d28; padding-top:4px;">
+                            ${upgradeBtn}
+                        </div>
                     </div>
                 `;
             });
         }
 
-        function upgradeItemWithFilip(index) {
-            if (player.samogon < 2) {
-                tg.showAlert('⚠️ У тебя нет 2 бутылок Сэма для Филипповича!');
+        function upgradeItemWithFilip(index, priceSamogon) {
+            const item = player.inventory[index];
+            if ((item.stars || 0) >= 3) {
+                tg.showAlert('Филиппович уже вкачал этот предмет на максимум (3 звезды)!');
                 return;
             }
-            player.samogon -= 2;
-            if (!player.inventory[index].upgrades) player.inventory[index].upgrades = 0;
-            player.inventory[index].upgrades += 1;
-            updateUI();
-            tg.showAlert(`👴 Дед Филиппович отлично поработал! Предмет "${player.inventory[index].name}" получил +2 к статам!`);
-        }
-
-        // --- КОЛХОЗ ---
-        function doWork(workType) {
-            const stats = getStats();
-
-            if (workType === 'barn') {
-                if (player.fatigue + 30 > player.maxFatigue) {
-                    tg.showAlert('⚠️ Высокая усталость! Подожди восстановления сил.');
-                    return;
-                }
-                player.fatigue += 30;
-                player.money += 15;
-                player.worksDone++;
-                tg.showAlert('🧹 Вычистил коровник! Заработано: 15 грн.');
-            } 
-            else if (workType === 'potatoes') {
-                if (player.fatigue + 50 > player.maxFatigue) {
-                    tg.showAlert('⚠️ Высокая усталость! Передохни перед работой.');
-                    return;
-                }
-                player.fatigue += 50;
-                player.money += 35;
-                player.worksDone++;
-                tg.showAlert('🥔 Собрал мешки картохи! Заработано: 35 грн.');
-            } 
-            else if (workType === 'tractor') {
-                if (stats.totalStr < 15) {
-                    tg.showAlert('⚠️ Не хватает Силы (нужно 15+)! Экипируй шмот в Доме.');
-                    return;
-                }
-                if (player.fatigue + 100 > player.maxFatigue) {
-                    tg.showAlert('⚠️ Для ремонта трактора нужна полная бодрость (0 Усталости)!');
-                    return;
-                }
-                player.fatigue += 100;
-                player.money += 70;
-                player.worksDone++;
-                tg.showAlert('🚜 Починил трактор! Заработано: 70 грн.');
+            if (player.samogon < priceSamogon) {
+                tg.showAlert(`⚠️ Недостаточно Самогона! Дед запрашивает ${priceSamogon} бутылок Сэма.`);
+                return;
             }
 
+            player.samogon -= priceSamogon;
+            item.stars = (item.stars || 0) + 1;
+            updateUI();
+            tg.showAlert(`👴 Дед Филиппович постарался на славу! Предмет "${item.name}" вкачан до ${item.stars} ⭐!`);
+        }
+
+        // --- КОЛХОЗ И УЛИЦА ---
+        function doWork(workType) {
+            const stats = getStats();
+            if (workType === 'barn') {
+                if (player.fatigue + 30 > player.maxFatigue) { tg.showAlert('⚠️ Высокая усталость!'); return; }
+                player.fatigue += 30; player.money += 15; player.worksDone++;
+                tg.showAlert('🧹 Вычистил коровник! Заработано: 15 грн.');
+            } else if (workType === 'potatoes') {
+                if (player.fatigue + 50 > player.maxFatigue) { tg.showAlert('⚠️ Высокая усталость!'); return; }
+                player.fatigue += 50; player.money += 35; player.worksDone++;
+                tg.showAlert('🥔 Собрал мешки картохи! Заработано: 35 грн.');
+            } else if (workType === 'tractor') {
+                if (stats.totalStr < 15) { tg.showAlert('⚠️ Не хватает Силы (нужно 15+)!'); return; }
+                if (player.fatigue + 100 > player.maxFatigue) { tg.showAlert('⚠️ Нужна полная бодрость!'); return; }
+                player.fatigue += 100; player.money += 70; player.worksDone++;
+                tg.showAlert('🚜 Починил трактор! Заработано: 70 грн.');
+            }
             updateUI();
         }
 
-        // --- УЛИЦА И СИСТЕМА БОЯ ---
         const enemyData = [
             { name: "Васька Алкаш", avatar: "🧢", str: 5, agi: 5 },
             { name: "Коля Лысый", avatar: "👨‍🌾", str: 8, agi: 12 },
             { name: "Петька Тракторист", avatar: "🧔", str: 15, agi: 6 },
-            { name: "Серега Злой", avatar: "🕶️", str: 18, agi: 14 },
-            { name: "Толик Шофер", avatar: "👴", str: 10, agi: 10 },
-            { name: "Димон Качок", avatar: "🧟‍♂️", str: 22, agi: 8 }
+            { name: "Серега Злой", avatar: "🕶️", str: 18, agi: 14 }
         ];
 
-        const hitTypesUser = ["прописал лоу-кик", "дал с правой в челюсть", "ввалил двойку", "заехал джебом"];
-        const hitTypesEnemy = ["дал ответку с локтя", "зацепил по уху", "ударил с пыра в живот", "заехал с ноги"];
-
         let currentEnemies = [];
-
         function generateEnemies() {
             const container = document.getElementById('enemies-list');
             container.innerHTML = '';
             currentEnemies = [];
-
             for (let i = 0; i < 3; i++) {
                 const randomEnemy = enemyData[Math.floor(Math.random() * enemyData.length)];
                 currentEnemies.push(randomEnemy);
-
                 container.innerHTML += `
                     <div class="enemy-card">
                         <div class="enemy-left">
@@ -852,10 +842,7 @@
         }
 
         function attackEnemy(index) {
-            if (player.hp <= 15) {
-                tg.showAlert('⚠️ У тебя слишком мало ХП! Покрепись в Столовке.');
-                return;
-            }
+            if (player.hp <= 15) { tg.showAlert('⚠️ Мало ХП! Покрепись в Столовке.'); return; }
 
             const enemy = currentEnemies[index];
             const stats = getStats();
@@ -865,67 +852,54 @@
             let defenseMultiplier = Math.max(0.3, 1 - (stats.totalAgi * 0.03));
             let enemyDamage = Math.floor(rawEnemyDamage * defenseMultiplier);
 
-            let enemyDodged = Math.random() * 100 < enemy.agi; 
-            let playerDodged = Math.random() * 100 < (stats.totalAgi * 1.5);
-
-            if (enemyDodged) userDamage = 0;
-            if (playerDodged) enemyDamage = 0;
-
             const isWin = (stats.totalStr + stats.totalAgi + Math.random() * 15) >= (enemy.str + enemy.agi);
-
-            const userHit = hitTypesUser[Math.floor(Math.random() * hitTypesUser.length)];
-            const enemyHit = hitTypesEnemy[Math.floor(Math.random() * hitTypesEnemy.length)];
 
             const fightLog = document.getElementById('fight-log');
             const logText = document.getElementById('log-text');
+            let logHTML = `💥 Твой урон: ${userDamage} | 🔻 Враг снес: ${enemyDamage} ХП<br>`;
 
-            let logHTML = "";
-
-            if (enemyDodged) {
-                logHTML += `<div class="log-hit-enemy">💨 ${enemy.name} уклонился от твоего удара!</div>`;
-            } else {
-                logHTML += `<div class="log-hit-user">💥 Ты ${userHit} по ${enemy.name} (-${userDamage} ХП)</div>`;
-            }
-
-            if (playerDodged) {
-                logHTML += `<div class="log-hit-user">🛡️ Ты технично увернулся от удара!</div>`;
-            } else {
-                logHTML += `<div class="log-hit-enemy">🔻 ${enemy.name} ${enemyHit} (-${enemyDamage} ХП)</div>`;
-                player.hp -= enemyDamage;
-            }
+            player.hp -= enemyDamage;
 
             if (isWin) {
-                player.teeth++;
-                player.money += 15;
-                player.fightsWon++;
-
+                player.teeth++; player.money += 15; player.fightsWon++;
                 const now = Date.now();
-                const cooldownMs = 50 * 60 * 1000;
-                let xpLogMessage = "";
-
-                if (now - player.lastXpTime >= cooldownMs) {
-                    player.lastXpTime = now;
-                    addXp(1);
-                    xpLogMessage = "<br>⭐ <b>Получено: +1 XP!</b>";
+                if (now - player.lastXpTime >= 3000000) {
+                    player.lastXpTime = now; addXp(1);
+                    logHTML += `<div class="log-win">🏆 Победа! +15 грн, 🦷 1 зуб, ⭐ +1 XP!</div>`;
                 } else {
-                    const minutesLeft = Math.ceil((cooldownMs - (now - player.lastXpTime)) / 60000);
-                    xpLogMessage = `<br>⏳ <span style="color:#aaa;">Опыт появится через ${minutesLeft} мин</span>`;
+                    logHTML += `<div class="log-win">🏆 Победа! +15 грн, 🦷 1 зуб.</div>`;
                 }
-
-                logHTML += `<div class="log-win">🏆 Ты уложил соперника! Получено: +15 грн, 🦷 1 зуб.${xpLogMessage}</div>`;
             } else {
                 player.hp -= 10;
-                logHTML += `<div class="log-lose">❌ Ты проиграл бой и отступил (-10 ХП)</div>`;
+                logHTML += `<div class="log-lose">❌ Ты проиграл и отступил (-10 ХП)</div>`;
             }
 
             updateUI();
             logText.innerHTML = logHTML;
             fightLog.style.display = 'block';
-
             generateEnemies();
         }
 
-        // Запуск UI
+        function claimQuest(questId, amount) {
+            if (player.claimedQuests[questId]) return;
+            if (questId === 'q1' && player.fightsWon < 3) return;
+            if (questId === 'q2' && player.worksDone < 5) return;
+
+            player.claimedQuests[questId] = true;
+            player.samogon += amount;
+            updateUI();
+            tg.showAlert(`🎉 Задание выполнено! +${amount} 🍾 Сэма`);
+        }
+
+        function updateQuestsUI() {
+            document.getElementById('q1-progress').innerText = `${Math.min(player.fightsWon, 3)}/3`;
+            document.getElementById('q2-progress').innerText = `${Math.min(player.worksDone, 5)}/5`;
+        }
+
+        function buyStars(samogonAmount, stars) {
+            tg.showAlert(`Запрос на покупку ${samogonAmount} 🍾 Сэма за ${stars} Stars.`);
+        }
+
         updateUI();
     </script>
 </body>
