@@ -31,7 +31,7 @@
         }
 
         .user-info h2 { margin: 0; font-size: 16px; color: #fff; text-shadow: 1px 1px 2px black; }
-        .user-info span { font-size: 11px; color: #7cb342; font-weight: bold; }
+        .user-info span { font-size: 11px; color: #7cb342; font-weight: bold; cursor: pointer; }
 
         .main-stats { text-align: right; font-size: 11px; text-shadow: 1px 1px 2px black; line-height: 1.3; }
         .money { color: #ffd700; font-weight: bold; }
@@ -100,7 +100,7 @@
         .item-info div { font-weight: bold; font-size: 14px; }
         .item-info span { font-size: 11px; color: #aaa; }
         
-        .buy-btn, .equip-btn, .work-btn, .quest-btn, .star-upgrade-btn, .sell-btn {
+        .buy-btn, .equip-btn, .work-btn, .quest-btn, .star-upgrade-btn, .sell-btn, .select-village-btn {
             background: #4a633d; border: 1px solid #5a7a4a; color: white;
             padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
         }
@@ -172,7 +172,7 @@
         <div class="profile-header">
             <div class="user-info">
                 <h2 id="username">Миша</h2>
-                <span>🏡 Село: Ведильцы</span>
+                <span id="user-village-display" onclick="showPage('village-page')">🏡 Село: Ведильцы ✏️</span>
             </div>
             <div class="main-stats">
                 <div>⭐ Уровень: <b id="user-level" style="color:#d4e157;">1</b></div>
@@ -213,7 +213,15 @@
             </div>
         </div>
 
-        <!-- ================= 2. ЭКРАН ЗАДАНИЙ И ДОНАТА ================= -->
+        <!-- ================= 2. ЭКРАН ВЫБОРА СЕЛА ================= -->
+        <div id="village-page" class="page">
+            <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
+            <h3 style="margin: 0 0 10px 0; font-size: 15px; color: #7cb342;">🏡 Выбери свое родное Село:</h3>
+            
+            <div id="villages-list"></div>
+        </div>
+
+        <!-- ================= 3. ЭКРАН ЗАДАНИЙ И ДОНАТА ================= -->
         <div id="quests-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
@@ -246,7 +254,7 @@
             </div>
         </div>
 
-        <!-- ================= 3. ЭКРАН УЛИЦЫ ================= -->
+        <!-- ================= 4. ЭКРАН УЛИЦЫ ================= -->
         <div id="street-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
             <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #ffb3b3;">🥊 Поиск пацанов на Улице:</h3>
@@ -256,7 +264,7 @@
             <div id="fight-log" class="fight-log"><div class="log-title">📜 Ход махача:</div><div id="log-text"></div></div>
         </div>
 
-        <!-- ================= 4. ЭКРАН БАЗАРА ================= -->
+        <!-- ================= 5. ЭКРАН БАЗАРА ================= -->
         <div id="bazar-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
@@ -310,7 +318,7 @@
             </div>
         </div>
 
-        <!-- ================= 5. ЭКРАН ДОМА ================= -->
+        <!-- ================= 6. ЭКРАН ДОМА ================= -->
         <div id="home-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
@@ -336,7 +344,7 @@
             </div>
         </div>
 
-        <!-- ================= 6. ЭКРАН КОЛХОЗА ================= -->
+        <!-- ================= 7. ЭКРАН КОЛХОЗА ================= -->
         <div id="kolhoz-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
             <h3 style="margin: 0 0 10px 0; font-size: 14px; color: #7cb342;">🌾 Работа в Колхозе «Заря»:</h3>
@@ -354,6 +362,14 @@
 
         const xpRequirements = { 1: 3, 2: 8, 3: 24, 4: 50, 5: 85, 6: 150, 7: 200, 8: 230, 9: 270 };
 
+        // База сёл и кратких описаний
+        const villagesCatalog = [
+            { id: 'vediltsi', name: '🌾 Ведильцы', desc: 'Центральное село. Шумный базар, огромный колхоз и пацаны, держащие район.' },
+            { id: 'pakul', name: '🌲 Пакуль', desc: 'Лесной край. Окружён густыми лесами, славится самым крепким самогоном.' },
+            { id: 'kovpyta', name: '🚌 Ковпыта', desc: 'Транспортный узел. Шумная остановка, где вечерами собирается вся местная элита.' },
+            { id: 'karhovka', name: '🛠️ Карховка', desc: 'Рабочий хутор. Край суровых механизаторов, кузнецов и чистой силы.' }
+        ];
+
         let player = {
             level: 1,
             xp: 0,
@@ -367,7 +383,8 @@
             samogon: 1,
             teeth: 0,
             authority: 0,
-            winStreak: 0, // 🔥 Серия побед подряд
+            winStreak: 0,
+            village: 'vediltsi', // Родное село по умолчанию
             baseStr: 10,
             baseAgi: 10,
             inventory: [],
@@ -491,6 +508,9 @@
             document.getElementById('user-authority').innerText = player.authority;
             document.getElementById('user-win-streak').innerText = player.winStreak;
 
+            const currentVil = villagesCatalog.find(v => v.id === player.village);
+            document.getElementById('user-village-display').innerText = `🏡 Село: ${currentVil ? currentVil.name : 'Ведильцы'} ✏️`;
+
             const stats = getStats();
             document.getElementById('stat-str').innerText = stats.totalStr;
             document.getElementById('stat-agi').innerText = stats.totalAgi;
@@ -501,6 +521,7 @@
             renderCatalogs();
             renderInventory();
             renderFilipShop();
+            renderVillagesList();
             updateQuestsUI();
         }
 
@@ -545,6 +566,37 @@
             document.querySelectorAll('#quests-page .tab-btn').forEach(tb => tb.classList.remove('active'));
             document.getElementById('tab-' + tabName).style.display = 'block';
             event.target.classList.add('active');
+        }
+
+        // РЕНДЕР СПИСКА СЁЛ
+        function renderVillagesList() {
+            const container = document.getElementById('villages-list');
+            container.innerHTML = '';
+
+            villagesCatalog.forEach(v => {
+                const isCurrent = player.village === v.id;
+                let btnHtml = isCurrent 
+                    ? `<span style="font-size:12px; color:#81c784; font-weight:bold;">Твое село ✅</span>`
+                    : `<button class="select-village-btn" onclick="selectVillage('${v.id}')">Выбрать</button>`;
+
+                container.innerHTML += `
+                    <div class="item-card" style="${isCurrent ? 'border-color:#81c784; background:#223322;' : ''}">
+                        <div class="item-info">
+                            <div>${v.name}</div>
+                            <span>${v.desc}</span>
+                        </div>
+                        ${btnHtml}
+                    </div>
+                `;
+            });
+        }
+
+        function selectVillage(vId) {
+            player.village = vId;
+            const vil = villagesCatalog.find(v => v.id === vId);
+            updateUI();
+            tg.showAlert(`🏡 Ты прописался в селе ${vil.name}!`);
+            showPage('main-page');
         }
 
         function eatFood(id, hpBonus, price, currency, cooldownSec, targetMode) {
@@ -869,10 +921,9 @@
             currentEnemies = [];
 
             for (let i = 0; i < 3; i++) {
-                const isRealPlayer = Math.random() < 0.35; // 35% шанс встретить живого игрока
+                const isRealPlayer = Math.random() < 0.35;
                 let enemy = {};
 
-                // Масштабирование характеристик под уровень игрока
                 const baseStat = player.level * 8 + Math.floor(Math.random() * 6);
 
                 if (isRealPlayer) {
@@ -940,7 +991,6 @@
                 return;
             }
 
-            // РАСЧЕТ БОЯ, ЕСЛИ ЕСТЬ СНАРЯЖЕНИЕ
             let userDamage = Math.floor(stats.totalStr * 2.8 + Math.random() * 10);
             let rawEnemyDamage = Math.floor(enemy.str * 1.8 + Math.random() * 6);
             let defenseMultiplier = Math.max(0.2, 1 - (stats.totalAgi * 0.035));
@@ -957,7 +1007,7 @@
             if (isWin) {
                 player.teeth++; 
                 player.authority += 1; 
-                player.winStreak++; // 🔥 Увеличиваем серию побед!
+                player.winStreak++;
                 player.money += 15; 
                 player.fightsWon++;
 
@@ -970,7 +1020,7 @@
                 }
             } else {
                 player.hp -= 10;
-                player.winStreak = 0; // ❌ СБРОС СЕРИИ ПОБЕД ПРИ ПРОИГРЫШЕ
+                player.winStreak = 0;
                 logHTML += `<div class="log-lose">❌ Ты проиграл и отступил (-10 ХП). 🔥 Серия побед обнулилась!</div>`;
             }
 
