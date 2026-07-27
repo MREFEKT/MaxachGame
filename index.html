@@ -265,7 +265,7 @@
                 <div class="item-card">
                     <div class="item-info">
                         <div>🍾 Чекушка Сэма</div>
-                        <span>+5 Самогона для Деда Филипповича</span>
+                        <span>+5 Самогона</span>
                     </div>
                     <button class="buy-btn star-btn" onclick="buyStars(5, 50)">⭐ 50 Stars</button>
                 </div>
@@ -273,7 +273,7 @@
                 <div class="item-card">
                     <div class="item-info">
                         <div>🍾🍾 Бутыль Сэма</div>
-                        <span>+15 Самогона для Деда Филипповича</span>
+                        <span>+15 Самогона</span>
                     </div>
                     <button class="buy-btn star-btn" onclick="buyStars(15, 120)">⭐ 120 Stars</button>
                 </div>
@@ -281,7 +281,7 @@
                 <div class="item-card">
                     <div class="item-info">
                         <div>🛢️ Ящик Сэма</div>
-                        <span>+50 Самогона для Деда Филипповича</span>
+                        <span>+50 Самогона</span>
                     </div>
                     <button class="buy-btn star-btn" onclick="buyStars(50, 350)">⭐ 350 Stars</button>
                 </div>
@@ -367,15 +367,21 @@
                 </div>
             </div>
 
-            <!-- ЛАРЕК -->
+            <!-- ЛАРЕК (Расходники для Махача между Селами) -->
             <div id="tab-larec" class="tab-content" style="display:none;">
                 <div class="item-card">
-                    <div class="item-info"><div>🪵 Дубовая Доска</div><span>Убойное оружие (+15 Силы)</span></div>
-                    <button class="buy-btn" onclick="buyEquipmentSamogon('doska', '🪵 Дубовая Доска', 'str', 15, 5)">5 сэма</button>
+                    <div class="item-info">
+                        <div>🪵 Дубовая Доска</div>
+                        <span>💥 +80% урона в Махаче Сёла на Село (Одноразовый)</span>
+                    </div>
+                    <button class="buy-btn" onclick="buyConsumable('doska', '🪵 Дубовая Доска', 0.8, 5, 'samogon')">5 сэма</button>
                 </div>
                 <div class="item-card">
-                    <div class="item-info"><div>🚬 Пачка «Примы»</div><span>Дает уважение (+5 Ловкости)</span></div>
-                    <button class="buy-btn" onclick="buyEquipment('prima', '🚬 Пачка «Примы»', 'agi', 5, 20)">20 грн</button>
+                    <div class="item-info">
+                        <div>🌵 Кактус</div>
+                        <span>💥 +120% урона в Махаче Сёла на Село (Одноразовый)</span>
+                    </div>
+                    <button class="buy-btn" onclick="buyConsumable('kaktus', '🌵 Кактус', 1.2, 10, 'samogon')">10 сэма</button>
                 </div>
             </div>
 
@@ -404,21 +410,11 @@
                 </div>
             </div>
 
-            <!-- ФИЛИППОВИЧ -->
+            <!-- ФИЛИППОВИЧ (Заточка Оружия и Заплатки на Одежду) -->
             <div id="home-filip" class="home-tab-content" style="display:none;">
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>💪 Обучение Силе</div>
-                        <span>+2 к Базовой Силе навсегда</span>
-                    </div>
-                    <button class="buy-btn" onclick="upgradeBaseStat('str')">2 сэма</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>💨 Тренировка Ловкости</div>
-                        <span>+2 к Базовой Ловкости навсегда</span>
-                    </div>
-                    <button class="buy-btn" onclick="upgradeBaseStat('agi')">2 сэма</button>
+                <h4 style="margin: 5px 0 10px 0; font-size: 13px; color: #aaa;">Улучшение снаряжения (+2 стата):</h4>
+                <div id="filip-list">
+                    <div style="font-size: 12px; color: #666;">Купи оружие или одежду, чтобы Филиппович мог их заточить или заштопать!</div>
                 </div>
             </div>
 
@@ -481,6 +477,7 @@
             baseStr: 10,
             baseAgi: 10,
             inventory: [],
+            consumables: [], // Одноразовые предметы (Доска, Кактус)
             fightsWon: 0,
             worksDone: 0,
             claimedQuests: { q1: false, q2: false, q3: false }
@@ -504,12 +501,13 @@
                 player.xp -= player.maxXp;
                 player.level++;
                 player.maxXp = xpRequirements[player.level] || (270 + (player.level - 9) * 50);
-                player.maxHp += 10;
+                
+                // ХП не растёт при левелапе (только полная регенерация текущего ХП)
                 player.hp = player.maxHp;
                 const bonusMoney = player.level * 30;
                 player.money += bonusMoney;
 
-                tg.showAlert(`🎉 НОВЫЙ УРОВЕНЬ! Достигнут ${player.level} уровень!\n\n🎁 Бонусы:\n❤️ +10 к Макс. ХП (ХП восстановлено)\n💰 +${bonusMoney} грн премия!`);
+                tg.showAlert(`🎉 НОВЫЙ УРОВЕНЬ! Достигнут ${player.level} уровень!\n\n🎁 Бонусы:\n❤️ ХП полностью восстановлено\n💰 +${bonusMoney} грн премия!`);
             }
             updateUI();
         }
@@ -518,8 +516,9 @@
             let bonusStr = 0, bonusAgi = 0;
             player.inventory.forEach(item => {
                 if (item.equipped) {
-                    if (item.type === 'str') bonusStr += item.value;
-                    if (item.type === 'agi') bonusAgi += item.value;
+                    const upgradeBonus = item.upgrades ? item.upgrades * 2 : 0;
+                    if (item.type === 'str') bonusStr += (item.value + upgradeBonus);
+                    if (item.type === 'agi') bonusAgi += (item.value + upgradeBonus);
                 }
             });
             return { totalStr: player.baseStr + bonusStr, totalAgi: player.baseAgi + bonusAgi, bonusStr, bonusAgi };
@@ -539,6 +538,7 @@
 
             updateBars();
             renderInventory();
+            renderFilipShop();
             updateQuestsUI();
         }
 
@@ -665,49 +665,68 @@
                 return;
             }
             player.money -= price;
-            player.inventory.push({ id, name, type, value, equipped: false });
+            player.inventory.push({ id, name, type, value, upgrades: 0, equipped: false });
             updateUI();
             tg.showAlert(`🛍️ Покупка успешна: "${name}" отправлен в Дом.`);
         }
 
-        function buyEquipmentSamogon(id, name, type, value, priceSamogon) {
-            if (player.inventory.some(item => item.id === id)) {
-                tg.showAlert('⚠️ Этот предмет уже куплен!');
-                return;
-            }
+        function buyConsumable(id, name, bonusPercent, priceSamogon, currency) {
             if (player.samogon < priceSamogon) {
                 tg.showAlert('⚠️ Недостаточно Самогона!');
                 return;
             }
             player.samogon -= priceSamogon;
-            player.inventory.push({ id, name, type, value, equipped: false });
+            player.consumables.push({ id, name, bonusPercent });
             updateUI();
-            tg.showAlert(`🛍️ Обмен успешен: "${name}" отправлен в Дом.`);
+            tg.showAlert(`🛍️ Куплен расходник: "${name}"! Он лежит про запас для Махача Сёла на Село.`);
         }
 
         // --- ДОМ И ИНВЕНТАРЬ ---
         function renderInventory() {
             const container = document.getElementById('inventory-list');
-            if (player.inventory.length === 0) {
-                container.innerHTML = '<div style="font-size: 12px; color: #666;">Инвентарь пуст. Купи шмот на Базаре!</div>';
-                return;
+            
+            let html = '';
+            if (player.inventory.length > 0) {
+                player.inventory.forEach((item, index) => {
+                    const upgradeBonus = item.upgrades ? item.upgrades * 2 : 0;
+                    const totalVal = item.value + upgradeBonus;
+                    const statText = item.type === 'str' ? `+${totalVal} Сила` : `+${totalVal} Ловкость`;
+                    const upgradeLabel = item.upgrades > 0 ? ` (+${item.upgrades * 2} от Заточки)` : '';
+                    
+                    html += `
+                        <div class="item-card">
+                            <div class="item-info">
+                                <div>${item.name}</div>
+                                <span>${statText}${upgradeLabel} ${item.equipped ? '<b>(Экипировано)</b>' : ''}</span>
+                            </div>
+                            <button class="${item.equipped ? 'unequip-btn' : 'equip-btn'}" onclick="toggleEquip(${index})">
+                                ${item.equipped ? 'Снять' : 'Надеть'}
+                            </button>
+                        </div>
+                    `;
+                });
             }
 
-            container.innerHTML = '';
-            player.inventory.forEach((item, index) => {
-                const statText = item.type === 'str' ? `+${item.value} Сила` : `+${item.value} Ловкость`;
-                container.innerHTML += `
-                    <div class="item-card">
-                        <div class="item-info">
-                            <div>${item.name}</div>
-                            <span>${statText} ${item.equipped ? '<b>(Экипировано)</b>' : ''}</span>
+            if (player.consumables.length > 0) {
+                html += '<h4 style="margin: 10px 0 5px 0; font-size: 12px; color: #ffd700;">Расходники для Район на Район:</h4>';
+                player.consumables.forEach((c) => {
+                    html += `
+                        <div class="item-card" style="border-color: #5c4d1d; background: #242014;">
+                            <div class="item-info">
+                                <div>${c.name}</div>
+                                <span>Урон в махаче сел: +${c.bonusPercent * 100}%</span>
+                            </div>
+                            <span style="font-size: 11px; color: #888;">Одноразовый</span>
                         </div>
-                        <button class="${item.equipped ? 'unequip-btn' : 'equip-btn'}" onclick="toggleEquip(${index})">
-                            ${item.equipped ? 'Снять' : 'Надеть'}
-                        </button>
-                    </div>
-                `;
-            });
+                    `;
+                });
+            }
+
+            if (html === '') {
+                container.innerHTML = '<div style="font-size: 12px; color: #666;">Инвентарь пуст. Купи шмот на Базаре!</div>';
+            } else {
+                container.innerHTML = html;
+            }
         }
 
         function toggleEquip(index) {
@@ -715,16 +734,40 @@
             updateUI();
         }
 
-        function upgradeBaseStat(type) {
+        // Дед Филиппович качает ТОЛЬКО предметы (оружие/одежду)
+        function renderFilipShop() {
+            const container = document.getElementById('filip-list');
+            if (player.inventory.length === 0) {
+                container.innerHTML = '<div style="font-size: 12px; color: #666;">Купи оружие или одежду на Базаре, чтобы Филиппович мог их прокачать!</div>';
+                return;
+            }
+
+            container.innerHTML = '';
+            player.inventory.forEach((item, index) => {
+                const upgradeBonus = item.upgrades ? item.upgrades * 2 : 0;
+                const statName = item.type === 'str' ? 'Сила' : 'Ловкость';
+                container.innerHTML += `
+                    <div class="item-card">
+                        <div class="item-info">
+                            <div>Заточить/Заштопать: ${item.name}</div>
+                            <span>Текущий плюс: +${item.value + upgradeBonus} ${statName} (Уровень заточки: +${item.upgrades || 0})</span>
+                        </div>
+                        <button class="buy-btn" onclick="upgradeItemWithFilip(${index})">2 сэма</button>
+                    </div>
+                `;
+            });
+        }
+
+        function upgradeItemWithFilip(index) {
             if (player.samogon < 2) {
                 tg.showAlert('⚠️ У тебя нет 2 бутылок Сэма для Филипповича!');
                 return;
             }
             player.samogon -= 2;
-            if (type === 'str') player.baseStr += 2;
-            if (type === 'agi') player.baseAgi += 2;
+            if (!player.inventory[index].upgrades) player.inventory[index].upgrades = 0;
+            player.inventory[index].upgrades += 1;
             updateUI();
-            tg.showAlert('👴 Дед Филиппович провел тренировку! Базовые статы увеличены.');
+            tg.showAlert(`👴 Дед Филиппович отлично поработал! Предмет "${player.inventory[index].name}" получил +2 к статам!`);
         }
 
         // --- КОЛХОЗ ---
@@ -817,15 +860,11 @@
             const enemy = currentEnemies[index];
             const stats = getStats();
 
-            // Динамический урон игроков
             let userDamage = Math.floor(stats.totalStr * 2.5 + Math.random() * 8);
-            
-            // Ловкость снижает входящий урон (чем больше ловкость, тем меньше тебе сносят)
             let rawEnemyDamage = Math.floor(enemy.str * 2.2 + Math.random() * 8);
-            let defenseMultiplier = Math.max(0.3, 1 - (stats.totalAgi * 0.03)); // Каждая ед. ловкости режет 3% урона
+            let defenseMultiplier = Math.max(0.3, 1 - (stats.totalAgi * 0.03));
             let enemyDamage = Math.floor(rawEnemyDamage * defenseMultiplier);
 
-            // Шансы уклонения
             let enemyDodged = Math.random() * 100 < enemy.agi; 
             let playerDodged = Math.random() * 100 < (stats.totalAgi * 1.5);
 
