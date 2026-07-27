@@ -91,7 +91,7 @@
         .item-card {
             background: #1c241a; border: 1px solid #33442d; border-radius: 8px;
             padding: 10px; margin-bottom: 8px; display: flex;
-            justify-content: space-between; align-align: center; align-items: center;
+            justify-content: space-between; align-items: center;
         }
         .item-info div { font-weight: bold; font-size: 14px; }
         .item-info span { font-size: 11px; color: #888; }
@@ -384,14 +384,6 @@
                 <div>💨 Ловкость: <b id="stat-agi">10</b> <span style="color:#888;" id="bonus-agi">(+0 от шмота)</span></div>
             </div>
 
-            <div class="item-card" style="margin-bottom: 12px; background: #261f18; border-color: #59432d;">
-                <div class="item-info">
-                    <div>🛌 Поспать на печи</div>
-                    <span>Мгновенно сбросить всю Усталость</span>
-                </div>
-                <button class="buy-btn" onclick="sleepAtHome()">Поспать</button>
-            </div>
-
             <div class="tabs">
                 <div class="tab-btn active" onclick="switchHomeTab('inventory', event)">🎒 Инвентарь</div>
                 <div class="tab-btn" onclick="switchHomeTab('filip', event)">👴 Дед Филиппович</div>
@@ -627,7 +619,6 @@
 
         function buyStars(samogonAmount, stars) {
             tg.showAlert(`Покупка ${samogonAmount} 🍾 Сэма за ${stars} Telegram Stars!\n(Подключи обработку счетов через бота)`);
-            // Здесь вызывается tg.openInvoice() при интеграции с ботом
         }
 
         // --- БАЗАР ---
@@ -677,16 +668,6 @@
         }
 
         // --- ДОМ ---
-        function sleepAtHome() {
-            if (player.fatigue === 0) {
-                tg.showAlert('Ты и так свеж и полон сил!');
-                return;
-            }
-            player.fatigue = 0;
-            updateUI();
-            tg.showAlert('🛌 Выспался на печи! Усталость полностью снята.');
-        }
-
         function renderInventory() {
             const container = document.getElementById('inventory-list');
             if (player.inventory.length === 0) {
@@ -734,7 +715,7 @@
 
             if (workType === 'barn') {
                 if (player.fatigue + 15 > player.maxFatigue) {
-                    tg.showAlert('⚠️ Ты слишком устал! Иди отдохни или поспи в Доме!');
+                    tg.showAlert('⚠️ Ты слишком устал! Подожди, пока восстановится усталость.');
                     return;
                 }
                 player.fatigue += 15;
@@ -744,7 +725,7 @@
             } 
             else if (workType === 'potatoes') {
                 if (player.fatigue + 25 > player.maxFatigue) {
-                    tg.showAlert('⚠️ Ты слишком устал! Поспи на печи в Доме!');
+                    tg.showAlert('⚠️ Ты слишком устал! Подожди восстановления сил.');
                     return;
                 }
                 player.fatigue += 25;
@@ -758,7 +739,7 @@
                     return;
                 }
                 if (player.fatigue + 40 > player.maxFatigue) {
-                    tg.showAlert('⚠️ Ты валишься с ног от усталости!');
+                    tg.showAlert('⚠️ Ты валишься с ног от усталости! Передохни немного.');
                     return;
                 }
                 player.fatigue += 40;
@@ -811,7 +792,7 @@
 
         function attackEnemy(index) {
             if (player.hp <= 15) {
-                tg.showAlert('⚠️ У тебя слишком мало ХП! Поешь в Столовке на Базаре или отдохни!');
+                tg.showAlert('⚠️ У тебя слишком мало ХП! Поешь в Столовке на Базаре!');
                 return;
             }
 
