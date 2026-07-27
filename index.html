@@ -15,25 +15,19 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Баннер */
+        /* Шапка-баннер */
         .banner {
-            width: 100%;
-            height: 120px;
+            width: 100%; height: 110px;
             background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop');
-            background-size: cover;
-            background-position: center;
-            border-bottom: 2px solid #3e5035;
-            position: relative;
+            background-size: cover; background-position: center;
+            border-bottom: 2px solid #3e5035; position: relative;
         }
 
         .profile-header {
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-            padding: 8px 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-end;
+            position: absolute; bottom: 0; left: 0; right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
+            padding: 8px 12px; display: flex;
+            justify-content: space-between; align-items: flex-end;
         }
 
         .user-info h2 { margin: 0; font-size: 16px; color: #fff; text-shadow: 1px 1px 2px black; }
@@ -45,14 +39,13 @@
 
         .content { padding: 12px; }
 
-        /* Полоски ХП и Усталости */
+        /* Полоски статов */
         .bar-container { margin-bottom: 8px; }
         .bar-label { font-size: 11px; margin-bottom: 2px; display: flex; justify-content: space-between; }
         
         .bar-bg {
             width: 100%; height: 9px;
-            background-color: #222;
-            border-radius: 4px; overflow: hidden;
+            background-color: #222; border-radius: 4px; overflow: hidden;
             border: 1px solid #333;
         }
 
@@ -61,40 +54,30 @@
         .fatigue-bar { background: linear-gradient(to right, #f57c00, #ffb74d); width: 20%; }
 
         /* Сетка Меню */
-        .grid-menu {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 10px;
-        }
+        .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
 
         .menu-btn {
             background: linear-gradient(to bottom, #2e3d28, #222e1e);
-            border: 1px solid #435a3a;
-            border-radius: 8px;
-            color: white;
-            padding: 12px 8px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            border: 1px solid #435a3a; border-radius: 8px; color: white;
+            padding: 12px 8px; text-align: center; font-size: 13px;
+            font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.5);
         }
 
         .menu-btn:active { background: #1a2417; transform: translateY(1px); }
         .full-btn { grid-column: span 2; }
         .danger-btn { background: linear-gradient(to bottom, #8b2d2d, #5c1d1d); border-color: #a33e3e; }
 
-        /* Стили экранов и Вкладок Базара */
+        /* Навигация страниц */
         .page { display: none; }
         .active-page { display: block; }
 
         .back-btn {
-            background: #333; border: 1px solid #555; color: white;
-            padding: 8px 15px; border-radius: 6px; font-weight: bold;
+            background: #2a3327; border: 1px solid #435a3a; color: white;
+            padding: 8px 14px; border-radius: 6px; font-weight: bold; font-size: 12px;
             margin-bottom: 12px; cursor: pointer; display: inline-block;
         }
 
+        /* Вкладки Базара */
         .tabs { display: flex; gap: 4px; margin-bottom: 12px; }
         .tab-btn {
             flex: 1; background: #222; border: 1px solid #444; color: #aaa;
@@ -103,20 +86,49 @@
         }
         .tab-btn.active { background: #4a633d; color: white; border-color: #628252; }
 
-        /* Карточка товара */
+        /* Карточка Товара на Базаре */
         .item-card {
-            background: #1c241a; border: 1px solid #33442d;
-            border-radius: 8px; padding: 10px; margin-bottom: 8px;
-            display: flex; justify-content: space-between; align-items: center;
+            background: #1c241a; border: 1px solid #33442d; border-radius: 8px;
+            padding: 10px; margin-bottom: 8px; display: flex;
+            justify-content: space-between; align-items: center;
         }
         .item-info div { font-weight: bold; font-size: 14px; }
         .item-info span { font-size: 11px; color: #888; }
         .buy-btn {
             background: #4a633d; border: 1px solid #5a7a4a; color: white;
-            padding: 6px 12px; border-radius: 5px; font-weight: bold; font-size: 12px;
-            cursor: pointer;
+            padding: 6px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
         }
-        .buy-btn:active { background: #36492c; }
+
+        /* Карточка Противника на Улице */
+        .enemy-card {
+            background: linear-gradient(to right, #241c1c, #1a1515);
+            border: 1px solid #4a2d2d; border-radius: 8px;
+            padding: 10px; margin-bottom: 10px;
+            display: flex; align-items: center; justify-content: space-between;
+        }
+
+        .enemy-left { display: flex; align-items: center; gap: 10px; }
+        .enemy-avatar {
+            width: 42px; height: 42px; background: #3a2222; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 20px; border: 1px solid #633333;
+        }
+        .enemy-details h4 { margin: 0; font-size: 14px; color: #ffb3b3; }
+        .enemy-details span { font-size: 11px; color: #aaa; }
+
+        .hit-btn {
+            background: linear-gradient(to bottom, #a83232, #782222);
+            border: 1px solid #c44343; color: white;
+            padding: 8px 14px; border-radius: 6px; font-weight: bold;
+            font-size: 12px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+        .hit-btn:active { background: #5e1a1a; }
+
+        .refresh-btn {
+            width: 100%; background: #2a3327; border: 1px solid #435a3a;
+            color: #7cb342; padding: 12px; border-radius: 8px; font-weight: bold;
+            font-size: 14px; cursor: pointer; margin-top: 5px; text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -129,17 +141,17 @@
                 <span>🏡 Село: Ведильцы</span>
             </div>
             <div class="main-stats">
-                <div>⭐ Уровень: <b>1</b> | 🦷 Выбито зубов: <b>0</b></div>
-                <div><span class="money">💰 100 грн</span> | <span class="samogon">🍾 0 сэма</span></div>
+                <div>⭐ Уровень: <b id="user-level">1</b> | 🦷 Зубов: <b id="user-teeth">0</b></div>
+                <div><span class="money">💰 <span id="user-money">100</span> грн</span> | <span class="samogon">🍾 <span id="user-samogon">0</span> сэма</span></div>
             </div>
         </div>
     </div>
 
     <div class="content">
-        <!-- Полоски ХП и Усталости -->
+        <!-- Полоски статов -->
         <div class="bar-container">
-            <div class="bar-label"><span>❤️ Здоровье</span><span>100 / 100</span></div>
-            <div class="bar-bg"><div class="bar-fill hp-bar"></div></div>
+            <div class="bar-label"><span>❤️ Здоровье</span><span id="hp-text">100 / 100</span></div>
+            <div class="bar-bg"><div class="bar-fill hp-bar" id="hp-bar"></div></div>
         </div>
         
         <div class="bar-container" style="margin-bottom: 12px;">
@@ -147,10 +159,10 @@
             <div class="bar-bg"><div class="bar-fill fatigue-bar"></div></div>
         </div>
 
-        <!-- ================= ГЛАВНОЕ МЕНЮ ================= -->
+        <!-- ================= 1. ГЛАВНОЕ МЕНЮ ================= -->
         <div id="main-page" class="page active-page">
             <div class="grid-menu">
-                <button class="menu-btn full-btn" onclick="tg.showAlert('Выходим на Улицу искать гопников...')">
+                <button class="menu-btn full-btn" onclick="showPage('street-page')">
                     🥊 УЛИЦА (Поиск Махача)
                 </button>
 
@@ -176,11 +188,22 @@
             </div>
         </div>
 
-        <!-- ================= ЭКРАН БАЗАРА ================= -->
-        <div id="bazar-page" class="page">
-            <div class="back-btn" onclick="showPage('main-page')">⬅️ В Село</div>
+        <!-- ================= 2. ЭКРАН УЛИЦЫ (ПОИСК БОЯ) ================= -->
+        <div id="street-page" class="page">
+            <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
+            <h3 style="margin: 0 0 10px 0; font-size: 15px; color: #ffb3b3;">🥊 Поиск пацанов на Улице:</h3>
 
-            <!-- Вкладки раздела Базара -->
+            <div id="enemies-list">
+                <!-- Карточки 3-х противников генерируются скриптом -->
+            </div>
+
+            <button class="refresh-btn" onclick="generateEnemies()">🔍 ИСКАТЬ ЕЩЁ ПРОТИВНИКОВ</button>
+        </div>
+
+        <!-- ================= 3. ЭКРАН БАЗАРА ================= -->
+        <div id="bazar-page" class="page">
+            <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
+
             <div class="tabs">
                 <div class="tab-btn active" onclick="switchTab('stolovka')">🥗 Столовка</div>
                 <div class="tab-btn" onclick="switchTab('second')">👕 Секонд</div>
@@ -188,139 +211,42 @@
                 <div class="tab-btn" onclick="switchTab('larec')">🏪 Ларек</div>
             </div>
 
-            <!-- 1. СТОЛОВКА -->
+            <!-- СТОЛОВКА -->
             <div id="tab-stolovka" class="tab-content">
                 <div class="item-card">
-                    <div class="item-info">
-                        <div>🥣 Борщ</div>
-                        <span>+50 ХП (Улица) | КД: 30 мин</span>
-                    </div>
+                    <div class="item-info"><div>🥣 Борщ</div><span>+50 ХП (Улица) | КД: 30 мин</span></div>
                     <button class="buy-btn" onclick="tg.showAlert('Куплен Борщ!')">15 грн</button>
                 </div>
                 <div class="item-card">
-                    <div class="item-info">
-                        <div>🥪 Бутерброд</div>
-                        <span>+100 ХП (Улица) | КД: 1 час</span>
-                    </div>
+                    <div class="item-info"><div>🥪 Бутерброд</div><span>+100 ХП (Улица) | КД: 1 час</span></div>
                     <button class="buy-btn" onclick="tg.showAlert('Куплен Бутерброд!')">30 грн</button>
                 </div>
                 <div class="item-card">
-                    <div class="item-info">
-                        <div>🥓 Сало</div>
-                        <span>+50 ХП (Махач) | КД: 2 мин</span>
-                    </div>
+                    <div class="item-info"><div>🥓 Сало</div><span>+50 ХП (Махач) | КД: 2 мин</span></div>
                     <button class="buy-btn" onclick="tg.showAlert('Куплено Сало!')">25 грн</button>
                 </div>
                 <div class="item-card">
-                    <div class="item-info">
-                        <div>🍫 Батончик Рошен</div>
-                        <span>+100 ХП (Махач) | КД: 4 мин</span>
-                    </div>
+                    <div class="item-info"><div>🍫 Батончик Рошен</div><span>+100 ХП (Махач) | КД: 4 мин</span></div>
                     <button class="buy-btn" onclick="tg.showAlert('Куплен Батончик!')">45 грн</button>
                 </div>
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>☕ Капучино</div>
-                        <span>-100 Усталости | КД: 3 часа</span>
-                    </div>
-                    <button class="buy-btn" onclick="tg.showAlert('Выпит Капучино!')">50 грн</button>
-                </div>
             </div>
 
-            <!-- 2. СЕКОНД-ХЕНД -->
+            <!-- СЕКОНД -->
             <div id="tab-second" class="tab-content" style="display:none;">
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>🎽 Майка «BMW»</div>
-                        <span>+4 Ловкость (с 3 ур.)</span>
-                    </div>
-                    <button class="buy-btn">80 грн</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>🐘 Стринги со слоником</div>
-                        <span>+7 Ловкость (с 5 ур.)</span>
-                    </div>
-                    <button class="buy-btn">150 грн</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>👟 Олимпийка Абибас</div>
-                        <span>+12 Ловкость (с 6 ур.)</span>
-                    </div>
-                    <button class="buy-btn">300 грн</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>🧥 Кофта Stone Island</div>
-                        <span>+17 Ловкость (с 7 ур.)</span>
-                    </div>
-                    <button class="buy-btn">500 грн</button>
-                </div>
+                <div class="item-card"><div class="item-info"><div>🎽 Майка «BMW»</div><span>+4 Ловкость (с 3 ур.)</span></div><button class="buy-btn">80 грн</button></div>
+                <div class="item-card"><div class="item-info"><div>🐘 Стринги со слоником</div><span>+7 Ловкость (с 5 ур.)</span></div><button class="buy-btn">150 грн</button></div>
             </div>
 
-            <!-- 3. ЦЫГАНКА С ОРУЖИЕМ -->
+            <!-- ЦЫГАНКА -->
             <div id="tab-gypsy" class="tab-content" style="display:none;">
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>📍 Гвоздь</div>
-                        <span>+3 Сила (с 2 ур.)</span>
-                    </div>
-                    <button class="buy-btn">50 грн</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>🪵 Палка</div>
-                        <span>+5 Сила (с 3 ур.)</span>
-                    </div>
-                    <button class="buy-btn">100 грн</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>🏏 Пластиковая бита</div>
-                        <span>+10 Сила (с 5 ур.)</span>
-                    </div>
-                    <button class="buy-btn">250 грн</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>🥊 Самодельный кастет</div>
-                        <span>+14 Сила (с 6 ур.)</span>
-                    </div>
-                    <button class="buy-btn">450 грн</button>
-                </div>
+                <div class="item-card"><div class="item-info"><div>📍 Гвоздь</div><span>+3 Сила (с 2 ур.)</span></div><button class="buy-btn">50 грн</button></div>
+                <div class="item-card"><div class="item-info"><div>🪵 Палка</div><span>+5 Сила (с 3 ур.)</span></div><button class="buy-btn">100 грн</button></div>
             </div>
 
-            <!-- 4. ЛАРЕК (За Самогон) -->
+            <!-- ЛАРЕК -->
             <div id="tab-larec" class="tab-content" style="display:none;">
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>🪵 Доска (Махач)</div>
-                        <span>Удар доской (120 злости)</span>
-                    </div>
-                    <button class="buy-btn">5 сэма</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>🌵 Кактус</div>
-                        <span>Расходник для Махача</span>
-                    </div>
-                    <button class="buy-btn">8 сэма</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>🍾 Чекушка</div>
-                        <span>+150 Ярости на 5 минут</span>
-                    </div>
-                    <button class="buy-btn">15 сэма</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info">
-                        <div>🧪 Чистый спирт</div>
-                        <span>+200 Ярости на 2 минуты</span>
-                    </div>
-                    <button class="buy-btn">25 сэма</button>
-                </div>
+                <div class="item-card"><div class="item-info"><div>🪵 Доска</div><span>Удар доской (120 злости)</span></div><button class="buy-btn">5 сэма</button></div>
+                <div class="item-card"><div class="item-info"><div>🍾 Чекушка</div><span>+150 Ярости на 5 минут</span></div><button class="buy-btn">15 сэма</button></div>
             </div>
 
         </div>
@@ -340,15 +266,51 @@
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.getElementById(pageId).classList.add('active-page');
+            if(pageId === 'street-page') generateEnemies();
         }
 
         // Переключение Вкладок Базара
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
             document.querySelectorAll('.tab-btn').forEach(tb => tb.classList.remove('active'));
-            
             document.getElementById('tab-' + tabName).style.display = 'block';
             event.target.classList.add('active');
+        }
+
+        // --- ЛОГИКА УЛИЦЫ ---
+        const enemyNames = ["Васька Алкаш", "Коля Лысый", "Петька Тракторист", "Серега Злой", "Толик Шофер", "Димон Качок"];
+        const avatars = ["🧢", "👨‍🌾", "🧔", "🕶️", "👴", "🧟‍♂️"];
+
+        function generateEnemies() {
+            const container = document.getElementById('enemies-list');
+            container.innerHTML = '';
+
+            for (let i = 0; i < 3; i++) {
+                const randomName = enemyNames[Math.floor(Math.random() * enemyNames.length)];
+                const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)];
+                const hp = Math.floor(Math.random() * 40) + 60; // 60-100 HP
+
+                container.innerHTML += `
+                    <div class="enemy-card">
+                        <div class="enemy-left">
+                            <div class="enemy-avatar">${randomAvatar}</div>
+                            <div class="enemy-details">
+                                <h4>${randomName}</h4>
+                                <span>Уровень: 1 | ❤️ HP: ${hp}/100</span>
+                            </div>
+                        </div>
+                        <button class="hit-btn" onclick="attackEnemy('${randomName}', ${hp})">👊 УДАРИТЬ</button>
+                    </div>
+                `;
+            }
+        }
+
+        let teethCount = 0;
+        function attackEnemy(name, hp) {
+            teethCount++;
+            document.getElementById('user-teeth').innerText = teethCount;
+            tg.showAlert(`👊 Ты вырубил ${name}!\nПолучено: +1 Репутация!\n(Всего зубов выбито: ${teethCount} 🦷)`);
+            generateEnemies(); // Обновляем список
         }
     </script>
 </body>
