@@ -52,6 +52,7 @@
         .bar-fill { height: 100%; border-radius: 3px; transition: width 0.3s ease; }
         .hp-bar { background: linear-gradient(to right, #8b3a3a, #ff4d4d); width: 100%; }
         .fatigue-bar { background: linear-gradient(to right, #f57c00, #ffb74d); width: 0%; }
+        .xp-bar { background: linear-gradient(to right, #afb42b, #d4e157); width: 0%; }
 
         /* Сетка Меню */
         .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
@@ -87,7 +88,7 @@
         }
         .tab-btn.active { background: #4a633d; color: white; border-color: #628252; }
 
-        /* Карточка Товара / Работы / Квеста */
+        /* Карточки */
         .item-card {
             background: #1c241a; border: 1px solid #33442d; border-radius: 8px;
             padding: 10px; margin-bottom: 8px; display: flex;
@@ -141,7 +142,7 @@
         .fight-log {
             background: #111610; border: 1px solid #33442d; border-radius: 8px;
             padding: 10px; margin-top: 10px; font-size: 12px; line-height: 1.4;
-            max-height: 140px; overflow-y: auto; display: none;
+            max-height: 150px; overflow-y: auto; display: none;
         }
         .log-title { font-weight: bold; color: #ffb3b3; margin-bottom: 5px; border-bottom: 1px solid #333; padding-bottom: 3px; }
         .log-hit-user { color: #81c784; }
@@ -167,7 +168,7 @@
                 <span>🏡 Село: Ведильцы</span>
             </div>
             <div class="main-stats">
-                <div>⭐ Уровень: <b id="user-level">1</b> | 🦷 Зубов: <b id="user-teeth">0</b></div>
+                <div>⭐ Уровень: <b id="user-level" style="color:#d4e157;">1</b> | 🦷 Зубов: <b id="user-teeth">0</b></div>
                 <div><span class="money">💰 <span id="user-money">100</span> грн</span> | <span class="samogon">🍾 <span id="user-samogon">1</span> сэма</span></div>
             </div>
         </div>
@@ -175,6 +176,11 @@
 
     <div class="content">
         <!-- Полоски статов -->
+        <div class="bar-container">
+            <div class="bar-label"><span>⭐ Опыт</span><span id="xp-text">0 / 100</span></div>
+            <div class="bar-bg"><div class="bar-fill xp-bar" id="xp-bar"></div></div>
+        </div>
+
         <div class="bar-container">
             <div class="bar-label"><span>❤️ Здоровье</span><span id="hp-text">100 / 100</span></div>
             <div class="bar-bg"><div class="bar-fill hp-bar" id="hp-bar"></div></div>
@@ -285,7 +291,8 @@
         <!-- ================= 3. ЭКРАН УЛИЦЫ ================= -->
         <div id="street-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
-            <h3 style="margin: 0 0 10px 0; font-size: 14px; color: #ffb3b3;">🥊 Поиск пацанов на Улице:</h3>
+            <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #ffb3b3;">🥊 Поиск пацанов на Улице:</h3>
+            <p style="margin: 0 0 10px 0; font-size: 11px; color: #aaa;">⭐ Опыт даётся ТОЛЬКО за победу (раз в 50 минут).</p>
 
             <div id="enemies-list"></div>
 
@@ -457,6 +464,10 @@
 
         // Данные игрока
         let player = {
+            level: 1,
+            xp: 0,
+            maxXp: 100,
+            lastXpTime: 0, // Время последнего получения XP
             hp: 100,
             maxHp: 100,
             fatigue: 0,
@@ -477,7 +488,7 @@
             document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
         }
 
-        // --- АВТОРЕГЕНЕРАЦИЯ ХП (+1 ХП каждые 36 сек = 100 ХП за 60 мин) ---
+        // --- АВТОРЕГЕНЕРАЦИЯ ХП ---
         setInterval(() => {
             if (player.hp < player.maxHp) {
                 player.hp += 1;
@@ -485,13 +496,30 @@
             }
         }, 36000);
 
-        // --- АВТО-ОТДЫХ (-1 Усталость каждые 36 сек = 100 Усталости за 60 мин) ---
+        // --- АВТО-ОТДЫХ ---
         setInterval(() => {
             if (player.fatigue > 0) {
                 player.fatigue -= 1;
                 updateBars();
             }
         }, 36000);
+
+        // --- ЛЕВИЛАП И XP ---
+        function addXp(amount) {
+            player.xp += amount;
+            while (player.xp >= player.maxXp) {
+                player.xp -= player.maxXp;
+                player.level++;
+                player.maxXp = Math.floor(player.maxXp * 1.5); // Каждому уровню нужно чуть больше XP
+                player.maxHp += 10;
+                player.hp = player.maxHp;
+                const bonusMoney = player.level * 30;
+                player.money += bonusMoney;
+
+                tg.showAlert(`🎉 НОВЫЙ УРОВЕНЬ! Поздравляем, ты достиг ${player.level} уровня!\n\n🎁 Награда:\n❤️ +10 к Макс. ХП (ХП полностью восстановлено!)\n💰 +${bonusMoney} грн!`);
+            }
+            updateUI();
+        }
 
         function getStats() {
             let bonusStr = 0;
@@ -512,6 +540,7 @@
         }
 
         function updateUI() {
+            document.getElementById('user-level').innerText = player.level;
             document.getElementById('user-money').innerText = player.money;
             document.getElementById('user-samogon').innerText = player.samogon;
             document.getElementById('user-teeth').innerText = player.teeth;
@@ -528,11 +557,17 @@
         }
 
         function updateBars() {
+            // Опыт
+            document.getElementById('xp-text').innerText = `${player.xp} / ${player.maxXp}`;
+            document.getElementById('xp-bar').style.width = Math.min(100, ((player.xp / player.maxXp) * 100)) + '%';
+
+            // Здоровье
             if(player.hp < 0) player.hp = 0;
             if(player.hp > player.maxHp) player.hp = player.maxHp;
             document.getElementById('hp-text').innerText = `${player.hp} / ${player.maxHp}`;
             document.getElementById('hp-bar').style.width = ((player.hp / player.maxHp) * 100) + '%';
 
+            // Усталость
             if(player.fatigue < 0) player.fatigue = 0;
             if(player.fatigue > player.maxFatigue) player.fatigue = player.maxFatigue;
             document.getElementById('fatigue-text').innerText = `${player.fatigue} / ${player.maxFatigue}`;
@@ -721,7 +756,7 @@
                 player.fatigue += 15;
                 player.money += 15;
                 player.worksDone++;
-                tg.showAlert('🧹 Вычистил коровник! Заработано: 15 грн.');
+                tg.showAlert('🧹 Вычистил коровник! Заработано: 15 грн');
             } 
             else if (workType === 'potatoes') {
                 if (player.fatigue + 25 > player.maxFatigue) {
@@ -731,7 +766,7 @@
                 player.fatigue += 25;
                 player.money += 35;
                 player.worksDone++;
-                tg.showAlert('🥔 Собрал мешки картохи! Заработано: 35 грн.');
+                tg.showAlert('🥔 Собрал мешки картохи! Заработано: 35 грн');
             } 
             else if (workType === 'tractor') {
                 if (stats.totalStr < 15) {
@@ -745,7 +780,7 @@
                 player.fatigue += 40;
                 player.money += 70;
                 player.worksDone++;
-                tg.showAlert('🚜 Починил трактор! Заработано: 70 грн.');
+                tg.showAlert('🚜 Починил трактор! Заработано: 70 грн');
             }
 
             updateUI();
@@ -835,7 +870,22 @@
                 player.teeth++;
                 player.money += 15;
                 player.fightsWon++;
-                logHTML += `<div class="log-win">🏆 Ты вырубил соперника! Получено: +15 грн и 🦷 1 зуб</div>`;
+
+                // ПРОВЕРКА КУЛДАУНА НА ПОЛУЧЕНИЕ ОПЫТА (50 МИНУТ)
+                const now = Date.now();
+                const cooldownMs = 50 * 60 * 1000; // 50 минут в миллисекундах
+                let xpLogMessage = "";
+
+                if (now - player.lastXpTime >= cooldownMs) {
+                    player.lastXpTime = now;
+                    addXp(50); // Награждаем 50 XP за победу
+                    xpLogMessage = "<br>⭐ <b>Получено +50 XP!</b>";
+                } else {
+                    const minutesLeft = Math.ceil((cooldownMs - (now - player.lastXpTime)) / 60000);
+                    xpLogMessage = `<br>⏳ <span style="color:#aaa;">Опыт на перезарядке (следующий доступен через ${minutesLeft} мин)</span>`;
+                }
+
+                logHTML += `<div class="log-win">🏆 Ты вырубил соперника! Получено: +15 грн, 🦷 1 зуб.${xpLogMessage}</div>`;
             } else {
                 player.hp -= 15;
                 logHTML += `<div class="log-lose">❌ Ты проиграл махач! ${enemy.name} заставил тебя отступить! (-15 ХП)</div>`;
