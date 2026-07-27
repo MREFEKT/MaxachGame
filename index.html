@@ -177,7 +177,7 @@
     <div class="content">
         <!-- Полоски статов -->
         <div class="bar-container">
-            <div class="bar-label"><span>⭐ Опыт</span><span id="xp-text">0 / 100</span></div>
+            <div class="bar-label"><span>⭐ Опыт</span><span id="xp-text">0 / 3</span></div>
             <div class="bar-bg"><div class="bar-fill xp-bar" id="xp-bar"></div></div>
         </div>
 
@@ -292,7 +292,7 @@
         <div id="street-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
             <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #ffb3b3;">🥊 Поиск пацанов на Улице:</h3>
-            <p style="margin: 0 0 10px 0; font-size: 11px; color: #aaa;">⭐ Опыт даётся ТОЛЬКО за победу (раз в 50 минут).</p>
+            <p style="margin: 0 0 10px 0; font-size: 11px; color: #aaa;">⭐ Даётся +1 XP за победу (раз в 50 минут).</p>
 
             <div id="enemies-list"></div>
 
@@ -462,11 +462,24 @@
         tg.ready();
         tg.setHeaderColor('#121711');
 
+        // Таблица требований XP для каждого уровня
+        const xpRequirements = {
+            1: 3,
+            2: 8,
+            3: 24,
+            4: 50,
+            5: 85,
+            6: 150,
+            7: 200,
+            8: 230,
+            9: 270
+        };
+
         // Данные игрока
         let player = {
             level: 1,
             xp: 0,
-            maxXp: 100,
+            maxXp: xpRequirements[1],
             lastXpTime: 0, // Время последнего получения XP
             hp: 100,
             maxHp: 100,
@@ -510,7 +523,10 @@
             while (player.xp >= player.maxXp) {
                 player.xp -= player.maxXp;
                 player.level++;
-                player.maxXp = Math.floor(player.maxXp * 1.5); // Каждому уровню нужно чуть больше XP
+                
+                // Устанавливаем порог опыта из таблицы или делаем +50 для уровня > 9
+                player.maxXp = xpRequirements[player.level] || (270 + (player.level - 9) * 50);
+                
                 player.maxHp += 10;
                 player.hp = player.maxHp;
                 const bonusMoney = player.level * 30;
@@ -878,8 +894,8 @@
 
                 if (now - player.lastXpTime >= cooldownMs) {
                     player.lastXpTime = now;
-                    addXp(50); // Награждаем 50 XP за победу
-                    xpLogMessage = "<br>⭐ <b>Получено +50 XP!</b>";
+                    addXp(1); // Награждаем ровно 1 XP за победу
+                    xpLogMessage = "<br>⭐ <b>Получено +1 XP!</b>";
                 } else {
                     const minutesLeft = Math.ceil((cooldownMs - (now - player.lastXpTime)) / 60000);
                     xpLogMessage = `<br>⏳ <span style="color:#aaa;">Опыт на перезарядке (следующий доступен через ${minutesLeft} мин)</span>`;
