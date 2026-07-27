@@ -70,7 +70,6 @@
         .menu-btn:active { background: #1a2417; transform: translateY(1px); }
         .full-btn { grid-column: span 2; }
         .danger-btn { background: linear-gradient(to bottom, #8b2d2d, #5c1d1d); border-color: #a33e3e; }
-        .donate-btn { background: linear-gradient(to bottom, #2d588b, #1d395c); border-color: #3e73a3; }
 
         /* Экран и Навигация */
         .page { display: none; }
@@ -100,15 +99,8 @@
         .item-info div { font-weight: bold; font-size: 14px; }
         .item-info span { font-size: 11px; color: #aaa; }
         
-        .buy-btn, .equip-btn, .work-btn, .quest-btn, .star-upgrade-btn, .sell-btn, .select-village-btn {
+        .buy-btn, .equip-btn, .work-btn, .select-village-btn {
             background: #4a633d; border: 1px solid #5a7a4a; color: white;
-            padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
-        }
-        .sell-btn { background: #d84315; border-color: #ff7043; }
-        .buy-btn.locked { background: #333; border-color: #555; color: #777; cursor: not-allowed; }
-        .star-upgrade-btn { background: linear-gradient(to bottom, #00838f, #004d40); border-color: #80deea; }
-        .unequip-btn {
-            background: #8b3a3a; border: 1px solid #a34a4a; color: white;
             padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
         }
 
@@ -120,34 +112,53 @@
         .char-choice-card.selected { border-color: #81d4fa; background: #1a2a2e; }
         .char-avatar-big { font-size: 32px; width: 50px; text-align: center; }
 
-        /* Карточка соперника */
-        .enemy-card {
-            background: linear-gradient(to right, #241c1c, #1a1515);
-            border: 1px solid #4a2d2d; border-radius: 8px;
-            padding: 10px; margin-bottom: 8px;
-            display: flex; align-items: center; justify-content: space-between;
+        /* ================= ЭКРАН УЛИЦЫ (СТИЛЬ ХУЛИГАНЫ) ================= */
+        .street-header-info {
+            background: linear-gradient(to bottom, #d89635, #b0721c);
+            border: 1px solid #e0a346; border-radius: 6px;
+            padding: 8px 10px; margin-bottom: 8px; color: #111;
+            font-size: 11px; font-weight: bold; text-align: center; line-height: 1.4;
         }
 
-        .enemy-left { display: flex; align-items: center; gap: 10px; }
-        .enemy-avatar {
-            width: 42px; height: 42px; background: #3a2222; border-radius: 50%;
+        .street-sub-btn {
+            background: #3e5233; border: 1px solid #577348; color: #fff;
+            padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: bold;
+            margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+        }
+
+        .street-enemy-card {
+            background: #9ab382; border: 1px solid #b2c99b; border-radius: 6px;
+            padding: 8px; margin-bottom: 8px; display: flex; gap: 10px; align-items: center;
+            color: #121711;
+        }
+
+        .street-enemy-avatar {
+            width: 50px; height: 50px; background: #cfdcb6; border-radius: 6px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 20px; border: 1px solid #633333;
-        }
-        .enemy-details h4 { margin: 0; font-size: 14px; color: #ffb3b3; }
-        .enemy-details span { font-size: 11px; color: #aaa; }
-
-        .hit-btn {
-            background: linear-gradient(to bottom, #a83232, #782222);
-            border: 1px solid #c44343; color: white;
-            padding: 8px 14px; border-radius: 6px; font-weight: bold;
-            font-size: 12px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+            font-size: 26px; border: 1px solid #a3b88c; flex-shrink: 0;
         }
 
-        .refresh-btn {
-            width: 100%; background: #2a3327; border: 1px solid #435a3a;
-            color: #7cb342; padding: 10px; border-radius: 8px; font-weight: bold;
-            font-size: 13px; cursor: pointer; margin-top: 5px; text-align: center;
+        .street-enemy-info { flex-grow: 1; }
+        .street-enemy-info h4 { margin: 0; font-size: 13px; color: #7a221e; font-weight: bold; }
+        .street-enemy-info .type-tag { font-size: 10px; color: #333; }
+        .street-enemy-info .phrase { font-size: 11px; color: #2b3d22; font-style: italic; margin: 2px 0 4px 0; }
+        
+        .enemy-hp-mini {
+            font-size: 10px; font-weight: bold; color: #8b0000; display: flex; align-items: center; gap: 4px;
+        }
+
+        .hit-actions { display: flex; gap: 6px; flex-shrink: 0; }
+        .action-fist-btn {
+            background: #628252; border: 1px solid #7ea869; border-radius: 6px;
+            padding: 6px 10px; font-size: 16px; cursor: pointer; box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+        }
+        .action-fist-btn:active { background: #4a633d; }
+
+        .search-more-btn {
+            background: #3e5233; border: 1px solid #5a784b; color: #a4d984;
+            padding: 12px; border-radius: 6px; font-size: 14px; font-weight: bold;
+            text-align: center; cursor: pointer; margin-top: 6px; display: flex;
+            align-items: center; justify-content: center; gap: 8px;
         }
 
         .fight-log {
@@ -155,9 +166,8 @@
             padding: 10px; margin-top: 10px; font-size: 12px; line-height: 1.4;
             max-height: 150px; overflow-y: auto; display: none;
         }
-        .log-title { font-weight: bold; color: #ffb3b3; margin-bottom: 5px; border-bottom: 1px solid #333; padding-bottom: 3px; }
-        .log-win { color: #ffd700; font-weight: bold; margin-top: 4px; }
-        .log-lose { color: #ff5252; font-weight: bold; margin-top: 4px; }
+        .log-win { color: #ffd700; font-weight: bold; }
+        .log-lose { color: #ff5252; font-weight: bold; }
 
         .stats-panel {
             background: #182216; border: 1px solid #33442d; border-radius: 8px;
@@ -171,7 +181,7 @@
     <!-- ================= ЭКРАН СОЗДАНИЯ ПЕРСОНАЖА (СТАРТ) ================= -->
     <div id="create-char-page" class="page" style="padding: 16px;">
         <h2 style="color: #7cb342; text-align: center; margin-top: 10px;">👤 Создание Персонажа</h2>
-        <p style="font-size: 12px; color: #aaa; text-align: center; margin-bottom: 15px;">Выбери своего бойца и родное село. Выбор фиксируется за тобой!</p>
+        <p style="font-size: 12px; color: #aaa; text-align: center; margin-bottom: 15px;">Выбери своего бойца и родное село.</p>
 
         <div style="margin-bottom: 12px;">
             <label style="font-size:12px; color:#ffd700; font-weight:bold;">Твое Кличка / Имя:</label>
@@ -211,7 +221,7 @@
         </div>
 
         <div class="content">
-            <!-- Компактные Полоски Статуса -->
+            <!-- Компактные прогресс-бары -->
             <div class="bar-container">
                 <div class="bar-label"><span>⭐ Опыт</span><span id="xp-text">0 / 3</span></div>
                 <div class="bar-bg"><div class="bar-fill xp-bar" id="xp-bar"></div></div>
@@ -242,18 +252,35 @@
             <div id="change-village-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
                 <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #81d4fa;">🗺️ Переезд в другое Село:</h3>
-                <p style="margin: 0 0 12px 0; font-size: 11px; color: #aaa;">Официальная переписка и прописка стоит **300 бутылок Самогона** 🍾.</p>
+                <p style="margin: 0 0 12px 0; font-size: 11px; color: #aaa;">Официальная прописка стоит **300 бутылок Самогона** 🍾.</p>
                 <div id="change-village-list"></div>
             </div>
 
-            <!-- ================= 3. ЭКРАН УЛИЦЫ ================= -->
+            <!-- ================= 3. ЭКРАН УЛИЦЫ (СТИЛЬ ХУЛИГАНЫ) ================= -->
             <div id="street-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
-                <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #ffb3b3;">🥊 Поиск пацанов на Улице:</h3>
-                <p style="margin: 0 0 10px 0; font-size: 11px; color: #aaa;">⚠️ Без Одежды или Оружия победить невозможно!</p>
+
+                <!-- Информационное табло Улицы -->
+                <div class="street-header-info">
+                    <div style="font-size: 14px; font-weight: bold; margin-bottom: 2px;">🥊 Улица</div>
+                    <div>Лучшее место для заработка и проверки твоих боевых навыков. Онлайн: <span id="street-online">48</span></div>
+                    <div style="margin-top: 3px;">Гроза района (село): <b id="top-village">🌾 Ведильцы</b> | У тебя выбито зубов: <b id="street-teeth">0</b> 🦷</div>
+                </div>
+
+                <!-- Быстрый переход в Дом/Качалку -->
+                <div class="street-sub-btn" onclick="showPage('home-page')">
+                    🏋️‍♂️ Качалка / Характеристики
+                </div>
+
+                <!-- Список соперников на улице -->
                 <div id="enemies-list"></div>
-                <button class="refresh-btn" onclick="generateEnemies()">🔍 ИСКАТЬ ЕЩЁ ПРОТИВНИКОВ</button>
-                <div id="fight-log" class="fight-log"><div class="log-title">📜 Ход махача:</div><div id="log-text"></div></div>
+
+                <!-- Кнопка обновить -->
+                <div class="search-more-btn" onclick="generateEnemies()">
+                    🥔 Искать ещё пацанов
+                </div>
+
+                <div id="fight-log" class="fight-log"><div id="log-text"></div></div>
             </div>
 
             <!-- ================= 4. ЭКРАН БАЗАРА ================= -->
@@ -490,6 +517,11 @@
             document.getElementById('bonus-str').innerText = `(+${stats.bonusStr} от снаряжения)`;
             document.getElementById('bonus-agi').innerText = `(+${stats.bonusAgi} от снаряжения)`;
 
+            // Показ информации в табло Улицы
+            if (document.getElementById('street-teeth')) {
+                document.getElementById('street-teeth').innerText = player.teeth;
+            }
+
             updateBars();
             renderCatalogs();
             renderInventory();
@@ -547,7 +579,6 @@
             player.samogon -= 300; player.village = vId; updateUI(); showPage('main-page');
         }
 
-        /* --- СТОЛОВКА: ОБЫЧНАЯ ЕДА (СЪЕДАЕТСЯ СРАЗУ) --- */
         function eatStreetFood(id, hpBonus, priceGrn, cooldownSec) {
             const now = Date.now();
             if (foodCooldowns[id] && now < foodCooldowns[id]) { tg.showAlert('⏳ Блюдо еще готовится!'); return; }
@@ -561,7 +592,6 @@
             tg.showAlert(`😋 Восстановлено +${hpBonus} ХП!`);
         }
 
-        /* --- СТОЛОВКА: БОЕВАЯ ЕДА (ПОКУПАЕТСЯ В ИНВЕНТАРЬ) --- */
         function buyFightFood(id, name, hpBonus, priceSamogon) {
             if (player.samogon < priceSamogon) { tg.showAlert('⚠️ Недостаточно Самогона!'); return; }
             player.samogon -= priceSamogon;
@@ -639,18 +669,30 @@
             updateUI();
         }
 
-        const botNames = ["Васька Алкаш", "Коля Лысый", "Петька Тракторист", "Серега Злой"];
+        /* --- ГЕНЕРАЦИЯ СОПЕРНИКОВ В СТИЛЕ «ХУЛИГАНЫ» --- */
+        const streetBots = [
+            { name: "Копченый", type: "бот", lvl: 1, phrase: "Чё нна?! Иди сюда нна!", avatar: "🧢" },
+            { name: "Егор", type: "бот", lvl: 1, phrase: "Давай решим вопрос мирно.", avatar: "🧔‍♂️" },
+            { name: "Васька", type: "игрок", lvl: 2, phrase: "Чужак на районе. Проучи!", avatar: "😎" }
+        ];
+
         function generateEnemies() {
             const container = document.getElementById('enemies-list');
             container.innerHTML = '';
-            botNames.forEach((name, i) => {
+            
+            streetBots.forEach((enemy, i) => {
                 container.innerHTML += `
-                    <div class="enemy-card">
-                        <div class="enemy-left">
-                            <div class="enemy-avatar">🧢</div>
-                            <div class="enemy-details"><h4>${name}</h4><span>Сила: 10</span></div>
+                    <div class="street-enemy-card">
+                        <div class="street-enemy-avatar">${enemy.avatar}</div>
+                        <div class="street-enemy-info">
+                            <h4>${enemy.name} <span class="type-tag">• ${enemy.type} (ур.${enemy.lvl})</span></h4>
+                            <div class="phrase">${enemy.phrase}</div>
+                            <div class="enemy-hp-mini">❤️ 100</div>
                         </div>
-                        <button class="hit-btn" onclick="attackEnemy(${i})">👊 УДАРИТЬ</button>
+                        <div class="hit-actions">
+                            <button class="action-fist-btn" onclick="attackEnemy(${i})">🥊</button>
+                            <button class="action-fist-btn" onclick="attackEnemy(${i})">👊</button>
+                        </div>
                     </div>
                 `;
             });
@@ -663,7 +705,7 @@
                 return;
             }
             player.teeth++; player.winStreak++; player.money += 15; updateUI();
-            tg.showAlert('🏆 Победа над противником!');
+            tg.showAlert('🏆 Победа над противником на улице!');
         }
     </script>
 </body>
