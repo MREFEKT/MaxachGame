@@ -49,7 +49,7 @@
             border: 1px solid #333;
         }
 
-        .bar-fill { height: 100%; border-radius: 3px; }
+        .bar-fill { height: 100%; border-radius: 3px; transition: width 0.3s ease; }
         .hp-bar { background: linear-gradient(to right, #8b3a3a, #ff4d4d); width: 100%; }
         .fatigue-bar { background: linear-gradient(to right, #f57c00, #ffb74d); width: 20%; }
 
@@ -103,7 +103,7 @@
         .enemy-card {
             background: linear-gradient(to right, #241c1c, #1a1515);
             border: 1px solid #4a2d2d; border-radius: 8px;
-            padding: 10px; margin-bottom: 10px;
+            padding: 10px; margin-bottom: 8px;
             display: flex; align-items: center; justify-content: space-between;
         }
 
@@ -126,9 +126,21 @@
 
         .refresh-btn {
             width: 100%; background: #2a3327; border: 1px solid #435a3a;
-            color: #7cb342; padding: 12px; border-radius: 8px; font-weight: bold;
-            font-size: 14px; cursor: pointer; margin-top: 5px; text-align: center;
+            color: #7cb342; padding: 10px; border-radius: 8px; font-weight: bold;
+            font-size: 13px; cursor: pointer; margin-top: 5px; text-align: center;
         }
+
+        /* Окно с описанием Боя */
+        .fight-log {
+            background: #111610; border: 1px solid #33442d; border-radius: 8px;
+            padding: 10px; margin-top: 10px; font-size: 12px; line-height: 1.4;
+            max-height: 140px; overflow-y: auto; display: none;
+        }
+        .log-title { font-weight: bold; color: #ffb3b3; margin-bottom: 5px; border-bottom: 1px solid #333; padding-bottom: 3px; }
+        .log-hit-user { color: #81c784; }
+        .log-hit-enemy { color: #e57373; }
+        .log-win { color: #ffd700; font-weight: bold; margin-top: 4px; }
+        .log-lose { color: #ff5252; font-weight: bold; margin-top: 4px; }
     </style>
 </head>
 <body>
@@ -191,13 +203,19 @@
         <!-- ================= 2. ЭКРАН УЛИЦЫ (ПОИСК БОЯ) ================= -->
         <div id="street-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
-            <h3 style="margin: 0 0 10px 0; font-size: 15px; color: #ffb3b3;">🥊 Поиск пацанов на Улице:</h3>
+            <h3 style="margin: 0 0 10px 0; font-size: 14px; color: #ffb3b3;">🥊 Поиск пацанов на Улице:</h3>
 
             <div id="enemies-list">
-                <!-- Карточки 3-х противников генерируются скриптом -->
+                <!-- Противники тут -->
             </div>
 
             <button class="refresh-btn" onclick="generateEnemies()">🔍 ИСКАТЬ ЕЩЁ ПРОТИВНИКОВ</button>
+
+            <!-- Описание Драки -->
+            <div id="fight-log" class="fight-log">
+                <div class="log-title">📜 Подробности махача:</div>
+                <div id="log-text"></div>
+            </div>
         </div>
 
         <!-- ================= 3. ЭКРАН БАЗАРА ================= -->
@@ -215,38 +233,31 @@
             <div id="tab-stolovka" class="tab-content">
                 <div class="item-card">
                     <div class="item-info"><div>🥣 Борщ</div><span>+50 ХП (Улица) | КД: 30 мин</span></div>
-                    <button class="buy-btn" onclick="tg.showAlert('Куплен Борщ!')">15 грн</button>
+                    <button class="buy-btn" onclick="healPlayer(50, 'Борщ')">15 грн</button>
                 </div>
                 <div class="item-card">
                     <div class="item-info"><div>🥪 Бутерброд</div><span>+100 ХП (Улица) | КД: 1 час</span></div>
-                    <button class="buy-btn" onclick="tg.showAlert('Куплен Бутерброд!')">30 грн</button>
+                    <button class="buy-btn" onclick="healPlayer(100, 'Бутерброд')">30 грн</button>
                 </div>
                 <div class="item-card">
                     <div class="item-info"><div>🥓 Сало</div><span>+50 ХП (Махач) | КД: 2 мин</span></div>
                     <button class="buy-btn" onclick="tg.showAlert('Куплено Сало!')">25 грн</button>
-                </div>
-                <div class="item-card">
-                    <div class="item-info"><div>🍫 Батончик Рошен</div><span>+100 ХП (Махач) | КД: 4 мин</span></div>
-                    <button class="buy-btn" onclick="tg.showAlert('Куплен Батончик!')">45 грн</button>
                 </div>
             </div>
 
             <!-- СЕКОНД -->
             <div id="tab-second" class="tab-content" style="display:none;">
                 <div class="item-card"><div class="item-info"><div>🎽 Майка «BMW»</div><span>+4 Ловкость (с 3 ур.)</span></div><button class="buy-btn">80 грн</button></div>
-                <div class="item-card"><div class="item-info"><div>🐘 Стринги со слоником</div><span>+7 Ловкость (с 5 ур.)</span></div><button class="buy-btn">150 грн</button></div>
             </div>
 
             <!-- ЦЫГАНКА -->
             <div id="tab-gypsy" class="tab-content" style="display:none;">
                 <div class="item-card"><div class="item-info"><div>📍 Гвоздь</div><span>+3 Сила (с 2 ур.)</span></div><button class="buy-btn">50 грн</button></div>
-                <div class="item-card"><div class="item-info"><div>🪵 Палка</div><span>+5 Сила (с 3 ур.)</span></div><button class="buy-btn">100 грн</button></div>
             </div>
 
             <!-- ЛАРЕК -->
             <div id="tab-larec" class="tab-content" style="display:none;">
                 <div class="item-card"><div class="item-info"><div>🪵 Доска</div><span>Удар доской (120 злости)</span></div><button class="buy-btn">5 сэма</button></div>
-                <div class="item-card"><div class="item-info"><div>🍾 Чекушка</div><span>+150 Ярости на 5 минут</span></div><button class="buy-btn">15 сэма</button></div>
             </div>
 
         </div>
@@ -258,18 +269,33 @@
         tg.ready();
         tg.setHeaderColor('#121711');
 
+        // Характеристики игрока
+        let player = {
+            hp: 100,
+            maxHp: 100,
+            strength: 10,   // Сила
+            agility: 10,    // Ловкость
+            teeth: 0
+        };
+
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             document.getElementById('username').innerText = tg.initDataUnsafe.user.first_name;
         }
 
-        // Переключение Экранов
+        // --- АВТОРЕГЕНЕРАЦИЯ ХП (100 ХП за 60 мин = +1 ХП каждые 36 сек) ---
+        setInterval(() => {
+            if (player.hp < player.maxHp) {
+                player.hp += 1;
+                updateHpBar();
+            }
+        }, 36000);
+
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
             document.getElementById(pageId).classList.add('active-page');
             if(pageId === 'street-page') generateEnemies();
         }
 
-        // Переключение Вкладок Базара
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(tc => tc.style.display = 'none');
             document.querySelectorAll('.tab-btn').forEach(tb => tb.classList.remove('active'));
@@ -277,40 +303,123 @@
             event.target.classList.add('active');
         }
 
-        // --- ЛОГИКА УЛИЦЫ ---
-        const enemyNames = ["Васька Алкаш", "Коля Лысый", "Петька Тракторист", "Серега Злой", "Толик Шофер", "Димон Качок"];
-        const avatars = ["🧢", "👨‍🌾", "🧔", "🕶️", "👴", "🧟‍♂️"];
+        function updateHpBar() {
+            if(player.hp < 0) player.hp = 0;
+            if(player.hp > player.maxHp) player.hp = player.maxHp;
+            
+            document.getElementById('hp-text').innerText = `${player.hp} / ${player.maxHp}`;
+            const percent = (player.hp / player.maxHp) * 100;
+            document.getElementById('hp-bar').style.width = percent + '%';
+        }
+
+        function healPlayer(amount, item) {
+            if (player.hp >= player.maxHp) {
+                tg.showAlert('Ты и так полностью здоров!');
+                return;
+            }
+            player.hp += amount;
+            updateHpBar();
+            tg.showAlert(`😋 Скушал ${item}! Здоровье восстановлено: +${amount} ХП`);
+        }
+
+        // --- УЛИЦА И СИСТЕМА ДРАК ---
+        const enemyData = [
+            { name: "Васька Алкаш", avatar: "🧢", str: 5, agi: 5 },
+            { name: "Коля Лысый", avatar: "👨‍🌾", str: 8, agi: 12 },
+            { name: "Петька Тракторист", avatar: "🧔", str: 15, agi: 6 },
+            { name: "Серега Злой", avatar: "🕶️", str: 18, agi: 14 },
+            { name: "Толик Шофер", avatar: "👴", str: 10, agi: 10 },
+            { name: "Димон Качок", avatar: "🧟‍♂️", str: 22, agi: 8 }
+        ];
+
+        const hitTypesUser = ["прописал лоу-кик", "дал с правой в челюсть", "ввалил двойку", "заехал джебом"];
+        const hitTypesEnemy = ["дал ответку с локтя", "зацепил по уху", "ударил с пыра в живот", "заехал с ноги"];
+
+        let currentEnemies = [];
 
         function generateEnemies() {
             const container = document.getElementById('enemies-list');
             container.innerHTML = '';
+            currentEnemies = [];
 
             for (let i = 0; i < 3; i++) {
-                const randomName = enemyNames[Math.floor(Math.random() * enemyNames.length)];
-                const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)];
-                const hp = Math.floor(Math.random() * 40) + 60; // 60-100 HP
+                const randomEnemy = enemyData[Math.floor(Math.random() * enemyData.length)];
+                currentEnemies.push(randomEnemy);
 
                 container.innerHTML += `
                     <div class="enemy-card">
                         <div class="enemy-left">
-                            <div class="enemy-avatar">${randomAvatar}</div>
+                            <div class="enemy-avatar">${randomEnemy.avatar}</div>
                             <div class="enemy-details">
-                                <h4>${randomName}</h4>
-                                <span>Уровень: 1 | ❤️ HP: ${hp}/100</span>
+                                <h4>${randomEnemy.name}</h4>
+                                <span>Сила: ${randomEnemy.str} | Ловкость: ${randomEnemy.agi}</span>
                             </div>
                         </div>
-                        <button class="hit-btn" onclick="attackEnemy('${randomName}', ${hp})">👊 УДАРИТЬ</button>
+                        <button class="hit-btn" onclick="attackEnemy(${i})">👊 УДАРИТЬ</button>
                     </div>
                 `;
             }
         }
 
-        let teethCount = 0;
-        function attackEnemy(name, hp) {
-            teethCount++;
-            document.getElementById('user-teeth').innerText = teethCount;
-            tg.showAlert(`👊 Ты вырубил ${name}!\nПолучено: +1 Репутация!\n(Всего зубов выбито: ${teethCount} 🦷)`);
-            generateEnemies(); // Обновляем список
+        function attackEnemy(index) {
+            if (player.hp <= 15) {
+                tg.showAlert('⚠️ У тебя слишком мало ХП! Сходи в Столовку на Базаре за Борщом или подожди восстановления!');
+                return;
+            }
+
+            const enemy = currentEnemies[index];
+
+            // Расчет урона на основе характеристик (Силы)
+            let userDamage = Math.floor(player.strength * 2.5 + Math.random() * 10);
+            let enemyDamage = Math.floor(enemy.str * 2.2 + Math.random() * 10);
+
+            // Проверка на уклонение на основе Ловкости
+            let enemyDodged = Math.random() * 100 < enemy.agi; 
+            let playerDodged = Math.random() * 100 < player.agility;
+
+            if (enemyDodged) userDamage = 0;
+            if (playerDodged) enemyDamage = 0;
+
+            // Кто победил в раунде
+            const isWin = (player.strength + player.agility + Math.random() * 15) >= (enemy.str + enemy.agi);
+
+            const userHit = hitTypesUser[Math.floor(Math.random() * hitTypesUser.length)];
+            const enemyHit = hitTypesEnemy[Math.floor(Math.random() * hitTypesEnemy.length)];
+
+            const fightLog = document.getElementById('fight-log');
+            const logText = document.getElementById('log-text');
+
+            let logHTML = "";
+
+            if (enemyDodged) {
+                logHTML += `<div class="log-hit-enemy">💨 ${enemy.name} уклонился от твоего удара!</div>`;
+            } else {
+                logHTML += `<div class="log-hit-user">💥 Ты ${userHit} по ${enemy.name} (-${userDamage} ХП)</div>`;
+            }
+
+            if (playerDodged) {
+                logHTML += `<div class="log-hit-user">🛡️ Ты увернулся от ответного удара!</div>`;
+            } else {
+                logHTML += `<div class="log-hit-enemy">🔻 ${enemy.name} ${enemyHit} в ответ (-${enemyDamage} ХП)</div>`;
+                player.hp -= enemyDamage;
+            }
+
+            updateHpBar();
+
+            if (isWin) {
+                player.teeth++;
+                document.getElementById('user-teeth').innerText = player.teeth;
+                logHTML += `<div class="log-win">🏆 Ты вырубил соперника! Получено: +1 Репутация (🦷 Выбит 1 зуб)</div>`;
+            } else {
+                player.hp -= 15; // Дополнительный урон при поражении
+                updateHpBar();
+                logHTML += `<div class="log-lose">❌ Ты проиграл махач! ${enemy.name} оказался сильнее и заставил тебя отступить! (-15 ХП)</div>`;
+            }
+
+            logText.innerHTML = logHTML;
+            fightLog.style.display = 'block';
+
+            generateEnemies(); // Обновляем список противников
         }
     </script>
 </body>
