@@ -484,8 +484,7 @@ async function loadUserProfile() {
         document.getElementById('game-main-wrap').style.display = 'none';
     }
 }
-
-// ===== БОЙ С ЭКРАНОМ ХУЛИГАНОВ =====
+// ===== ОБРАБОТКА БОЯ С НОВОЙ ЛОГИКОЙ =====
 async function attackEnemy(index) {
     const tg_id = getUserId();
     const enemy = streetEnemiesCatalog[index % streetEnemiesCatalog.length];
@@ -493,9 +492,13 @@ async function attackEnemy(index) {
     try {
         const response = await fetch(`${API_URL}/api/fight/${tg_id}?enemy_index=${index}`);
         const data = await response.json();
-        if (data.error) { tg.showAlert(data.error); return; }
+        
+        if (data.error) { 
+            tg.showAlert(data.error); 
+            return; 
+        }
 
-        // Показываем красивый блок боя
+        // Прячем список и открываем стильное окно боя (VS)
         document.getElementById('enemies-list').style.display = 'none';
         document.getElementById('search-more-btn-box').style.display = 'none';
         
@@ -512,28 +515,43 @@ async function attackEnemy(index) {
         if (data.win) {
             header.innerText = "Ты победил";
             header.className = "fight-result-header win";
-            rewardBanner.innerText = data.text;
-            player.winStreak++;
-            player.teeth++;
-            player.authority++;
-
-            logContent.innerHTML = `
-                <div><b>${player.name}</b>, зажав барсетку под мышкой, правой рукой ударил <b>${enemy.name}</b> в нос (-13.5 ❤️).</div>
-                <div style="margin-top:4px;"><b>${enemy.name}</b> попытался ответит, но <b>${player.name}</b> проведение применил сельский прием!</div>
-                <div style="margin-top:4px;"><b>${player.name}</b> одержал чистую победу над <b>${enemy.name}</b>!</div>
-            `;
         } else {
             header.innerText = "Ты проиграл";
             header.className = "fight-result-header";
-            rewardBanner.innerText = data.text;
-            player.winStreak = 0;
-
-            logContent.innerHTML = `
-                <div><b>${enemy.name}</b> совершил обманный манёвр и потянул <b>${player.name}</b> за ухо (-15.0 ❤️).</div>
-                <div style="margin-top:4px;"><b>${player.name}</b> споткнулся и отступил с поля боя...</div>
-            `;
         }
 
+        rewardBanner.innerText = data.text;
+
+        logContent.innerHTML = `
+            <div><b>${player.name}</b>, зажав барсетку под мышкой, правой рукой ударил <b>${enemy.name}</b> в нос (-${data.my_dmg} ❤️).</div>
+            <div style="margin-top:4px;"><b>${enemy.name}</b> огрызнулся и нанёс ответный урон (-${data.enemy_dmg} ❤️).</div>
+            <div class="fight-damage-summary">
+                <b>${player.name}</b> снёс ${data.my_dmg} ❤️<br>
+                <b>${enemy.name}</b> снёс ${data.enemy_dmg} ❤️
+            </div>
+        `;
+
+        // Обновляем статы в памяти
+        if (data.money !== undefined) player.money = data.money;
+        if (data.hp !== undefined) player.hp = data.hp;
+        if (data.teeth !== undefined) player.teeth = data.teeth;
+        if (data.authority !== undefined) player.authority = data.authority;
+        if (data.win_streak !== undefined) player.winStreak = data.win_streak;
+        if (data.level !== undefined) player.level = data.level;
+        if (data.xp !== undefined) player.xp = data.xp;
+        if (data.max_xp !== undefined) player.maxXp = data.max_xp;
+
+        updateUI();
+
+        if (data.level_up) {
+            tg.showAlert('🎉 НОВЫЙ УРОВЕНЬ! ХП полностью восстановлено!');
+        }
+
+    } catch (error) {
+        console.error('Ошибка боя:', error);
+        tg.showAlert('⚠️ Ошибка сервера!');
+    }
+}
         // Обновляем данные персонажа
         if (data.money !== undefined) player.money = data.money;
         if (data.level !== undefined) player.level = data.level;
