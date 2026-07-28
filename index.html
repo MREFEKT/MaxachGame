@@ -64,6 +64,37 @@
         .status-msg.err{color:#ff6b6b}
         .status-msg.wait{color:#ffd700}
         #create-char-page{padding:16px}
+
+        /* ===== СТИЛЬ ЭКРАНА БОЯ (ХУЛИГАНЫ) ===== */
+        .fight-screen {
+            background: #8fa778; border: 1px solid #738a5e; border-radius: 8px;
+            padding: 10px; color: #121711; font-size: 13px; font-family: monospace, sans-serif;
+        }
+        .fight-result-header {
+            text-align: center; font-size: 16px; font-weight: bold; color: #8b1e1e;
+            margin-bottom: 8px; text-transform: uppercase;
+        }
+        .fight-result-header.win { color: #1c5218; }
+        .fight-reward-banner {
+            background: #f0e2b1; border: 1px solid #d4c185; border-radius: 6px;
+            padding: 6px 10px; text-align: center; font-weight: bold; margin-bottom: 12px;
+            font-size: 12px; color: #423512;
+        }
+        .fight-vs-box {
+            display: flex; justify-content: center; align-items: center; gap: 15px; margin-bottom: 12px;
+        }
+        .fight-avatar {
+            width: 55px; height: 55px; border-radius: 8px; display: flex;
+            align-items: center; justify-content: center; font-size: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .fight-avatar.me { background: #b03a3a; border: 2px solid #852222; }
+        .fight-avatar.enemy { background: #e0ab3e; border: 2px solid #b38222; }
+        .fight-vs-title { font-size: 16px; font-weight: bold; color: #6e2a14; }
+        .fight-log-text {
+            background: #9ab382; border: 1px solid #829a6c; border-radius: 6px;
+            padding: 10px; margin-bottom: 12px; font-size: 11px; line-height: 1.5; color: #1a2414;
+        }
     </style>
 </head>
 <body>
@@ -91,6 +122,7 @@
     <button class="menu-btn full-btn" style="background:linear-gradient(to bottom,#4a633d,#2e3d28);padding:14px;font-size:15px;" onclick="finishCharacterCreation()">🚀 ВОРВАТЬСЯ В РАЙОН</button>
     <div id="register-status" class="status-msg"></div>
 </div>
+
 <!-- ===== ОСНОВНАЯ ИГРА ===== -->
 <div id="game-main-wrap" style="display:none;">
     <div class="banner">
@@ -132,13 +164,15 @@
                 <button class="menu-btn danger-btn" onclick="tg.showAlert('Режим «Махач Сёла на Село» находится в разработке!')">⚔️ МАХАЧ СЁЛА НА СЕЛО</button>
             </div>
         </div>
-                <div id="change-village-page" class="page">
+
+        <div id="change-village-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
             <h3 style="margin:0 0 5px 0;font-size:14px;color:#81d4fa;">🗺️ Переезд в другое Село:</h3>
             <p style="margin:0 0 12px 0;font-size:11px;color:#aaa;">Официальная прописка стоит **300 бутылок Самогона** 🍾.</p>
             <div id="change-village-list"></div>
         </div>
 
+        <!-- УЛИЦА С ОКНОМ БОЯ -->
         <div id="street-page" class="page">
             <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
             <div class="street-header-info">
@@ -147,8 +181,27 @@
                 <div style="margin-top:3px;">Гроза района: <b>🌾 Ведильцы</b> | Твои зубы: <b id="street-teeth">0</b> 🦷</div>
             </div>
             <div class="street-sub-btn" onclick="showPage('home-page')">🏋️‍♂️ Качалка / Инвентарь</div>
+            
+            <!-- СПИСОК ВРАГОВ -->
             <div id="enemies-list"></div>
-            <div class="search-more-btn" onclick="generateEnemies()">🥔 Искать ещё пацанов</div>
+            <div id="search-more-btn-box" class="search-more-btn" onclick="generateEnemies()">🥔 Искать ещё пацанов</div>
+
+            <!-- ОКНО РЕЗУЛЬТАТА БОЯ (ХУЛИГАНЫ) -->
+            <div id="fight-screen-box" class="fight-screen" style="display:none; margin-top: 10px;">
+                <div id="fight-result-header" class="fight-result-header">Ты победил</div>
+                <div id="fight-reward-banner" class="fight-reward-banner">Результат махача</div>
+
+                <div class="fight-vs-box">
+                    <div id="fight-my-avatar" class="fight-avatar me">🧢</div>
+                    <div class="fight-vs-title">VS</div>
+                    <div id="fight-enemy-avatar" class="fight-avatar enemy">🧔‍♂️</div>
+                </div>
+
+                <div id="fight-log-content" class="fight-log-text"></div>
+
+                <div class="street-sub-btn" style="margin-bottom: 6px;" onclick="showPage('home-page')">🚀 Качалка / Инвентарь</div>
+                <div class="search-more-btn" style="margin-top: 0;" onclick="hideFightLog(); generateEnemies();">🥔 Искать ещё</div>
+            </div>
         </div>
 
         <div id="bazar-page" class="page">
@@ -203,6 +256,7 @@
         </div>
     </div>
 </div>
+
 <script>
 // ===== ПОДКЛЮЧЕНИЕ К СЕРВЕРУ =====
 const API_URL = "https://maxachgame.onrender.com";
@@ -237,6 +291,12 @@ const charPrototypes = [
     { avatar: '😎', title: 'Блатной пацан' },
     { avatar: '🤠', title: 'Местный тракторист' },
     { avatar: '🥷', title: 'Ночной хулиган' }
+];
+
+const streetEnemiesCatalog = [
+    { name: "Копченый", avatar: "🧢", phrase: "Чё нна?! Иди сюда нна!", level: 1 },
+    { name: "Егор", avatar: "🧔‍♂️", phrase: "Давай решим вопрос мирно.", level: 1 },
+    { name: "Васька", avatar: "😎", phrase: "Чужак на районе. Проучи!", level: 2 }
 ];
 
 let selectedAvatar = '🧢';
@@ -281,17 +341,22 @@ function updateUI() {
     document.getElementById('user-village-display').innerText = `🏡 Село: ${currentVil ? currentVil.name : 'Ведильцы'} (Сменить за 300 🍾)`;
 
     document.getElementById('xp-text').innerText = player.xp + ' / ' + player.maxXp;
-    document.getElementById('xp-bar').style.width = ((player.xp / player.maxXp) * 100) + '%';
+    document.getElementById('xp-bar').style.width = Math.min(100, ((player.xp / player.maxXp) * 100)) + '%';
     document.getElementById('hp-text').innerText = Math.floor(player.hp) + ' / ' + player.maxHp;
-    document.getElementById('hp-bar').style.width = ((player.hp / player.maxHp) * 100) + '%';
+    document.getElementById('hp-bar').style.width = Math.min(100, ((player.hp / player.maxHp) * 100)) + '%';
     document.getElementById('fatigue-text').innerText = Math.floor(player.fatigue) + ' / ' + player.maxFatigue;
-    document.getElementById('fatigue-bar').style.width = ((player.fatigue / player.maxFatigue) * 100) + '%';
+    document.getElementById('fatigue-bar').style.width = Math.min(100, ((player.fatigue / player.maxFatigue) * 100)) + '%';
+
+    renderInventory();
 }
 
 function showPage(pageId) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
     document.getElementById(pageId).classList.add('active-page');
-    if (pageId === 'street-page') generateEnemies();
+    if (pageId === 'street-page') {
+        hideFightLog();
+        generateEnemies();
+    }
     updateUI();
 }
 
@@ -310,14 +375,9 @@ function switchHomeTab(tabName, event) {
 }
 
 function generateEnemies() {
-    const enemies = [
-        { name: "Копченый", avatar: "🧢", phrase: "Чё нна?! Иди сюда нна!", level: 1 },
-        { name: "Егор", avatar: "🧔‍♂️", phrase: "Давай решим вопрос мирно.", level: 1 },
-        { name: "Васька", avatar: "😎", phrase: "Чужак на районе. Проучи!", level: 2 }
-    ];
     const container = document.getElementById('enemies-list');
     container.innerHTML = '';
-    enemies.forEach((enemy, i) => {
+    streetEnemiesCatalog.forEach((enemy, i) => {
         container.innerHTML += `
             <div class="street-enemy-card">
                 <div class="street-enemy-avatar">${enemy.avatar}</div>
@@ -332,6 +392,27 @@ function generateEnemies() {
             </div>
         `;
     });
+}
+
+function hideFightLog() {
+    document.getElementById('fight-screen-box').style.display = 'none';
+    document.getElementById('enemies-list').style.display = 'block';
+    document.getElementById('search-more-btn-box').style.display = 'flex';
+}
+
+function renderInventory() {
+    const container = document.getElementById('inventory-list');
+    if (!container) return;
+    let html = '';
+    player.consumables.forEach((c) => {
+        html += `
+            <div class="item-card" style="background:#242014;">
+                <div class="item-info"><div>${c.name}</div><span>${c.isFood ? '+' + c.hpBonus + ' ХП в Махаче' : '+' + (c.bonusPercent * 100) + '% урона'}</span></div>
+                <span style="font-size:10px; color:#aaa;">Для Махача Сёл</span>
+            </div>
+        `;
+    });
+    container.innerHTML = html || '<div style="color:#666; font-size:12px;">Инвентарь пуст</div>';
 }
 
 // ===== РЕГИСТРАЦИЯ =====
@@ -353,7 +434,6 @@ async function finishCharacterCreation() {
         if (data.success) {
             statusEl.className = 'status-msg ok';
             statusEl.textContent = '✅ Успешно!';
-            // Загружаем профиль (она сама покажет игру)
             await loadUserProfile();
         } else {
             statusEl.className = 'status-msg err';
@@ -367,7 +447,7 @@ async function finishCharacterCreation() {
     }
 }
 
-// ===== ЗАГРУЗКА ПРОФИЛЯ (ОСНОВНАЯ ФУНКЦИЯ!) =====
+// ===== ЗАГРУЗКА ПРОФИЛЯ =====
 async function loadUserProfile() {
     const tg_id = getUserId();
     try {
@@ -375,13 +455,11 @@ async function loadUserProfile() {
         const data = await response.json();
         
         if (data.error) {
-            // Пользователь НЕ зарегистрирован — показываем экран создания
             document.getElementById('create-char-page').style.display = 'block';
             document.getElementById('game-main-wrap').style.display = 'none';
             return;
         }
         
-        // Пользователь есть — показываем игру
         player.name = data.nickname || 'Миша';
         player.level = data.level || 1;
         player.xp = data.xp || 0;
@@ -407,70 +485,88 @@ async function loadUserProfile() {
     }
 }
 
-// ===== БОЙ =====
+// ===== БОЙ С ЭКРАНОМ ХУЛИГАНОВ =====
 async function attackEnemy(index) {
     const tg_id = getUserId();
+    const enemy = streetEnemiesCatalog[index % streetEnemiesCatalog.length];
+
     try {
         const response = await fetch(`${API_URL}/api/fight/${tg_id}?enemy_index=${index}`);
         const data = await response.json();
         if (data.error) { tg.showAlert(data.error); return; }
+
+        // Показываем красивый блок боя
+        document.getElementById('enemies-list').style.display = 'none';
+        document.getElementById('search-more-btn-box').style.display = 'none';
         
-        tg.showAlert(data.text);
-        if (data.level_up) tg.showAlert('🎉 НОВЫЙ УРОВЕНЬ!');
-        
-        if (data.money !== undefined) {
-            player.money = data.money;
-            document.getElementById('user-money').innerText = data.money;
+        const fightBox = document.getElementById('fight-screen-box');
+        fightBox.style.display = 'block';
+
+        document.getElementById('fight-my-avatar').innerText = player.avatar;
+        document.getElementById('fight-enemy-avatar').innerText = enemy.avatar;
+
+        const header = document.getElementById('fight-result-header');
+        const rewardBanner = document.getElementById('fight-reward-banner');
+        const logContent = document.getElementById('fight-log-content');
+
+        if (data.win) {
+            header.innerText = "Ты победил";
+            header.className = "fight-result-header win";
+            rewardBanner.innerText = data.text;
+            player.winStreak++;
+            player.teeth++;
+            player.authority++;
+
+            logContent.innerHTML = `
+                <div><b>${player.name}</b>, зажав барсетку под мышкой, правой рукой ударил <b>${enemy.name}</b> в нос (-13.5 ❤️).</div>
+                <div style="margin-top:4px;"><b>${enemy.name}</b> попытался ответит, но <b>${player.name}</b> проведение применил сельский прием!</div>
+                <div style="margin-top:4px;"><b>${player.name}</b> одержал чистую победу над <b>${enemy.name}</b>!</div>
+            `;
+        } else {
+            header.innerText = "Ты проиграл";
+            header.className = "fight-result-header";
+            rewardBanner.innerText = data.text;
+            player.winStreak = 0;
+
+            logContent.innerHTML = `
+                <div><b>${enemy.name}</b> совершил обманный манёвр и потянул <b>${player.name}</b> за ухо (-15.0 ❤️).</div>
+                <div style="margin-top:4px;"><b>${player.name}</b> споткнулся и отступил с поля боя...</div>
+            `;
         }
-        if (data.level !== undefined) {
-            player.level = data.level;
-            document.getElementById('user-level').innerText = data.level;
+
+        // Обновляем данные персонажа
+        if (data.money !== undefined) player.money = data.money;
+        if (data.level !== undefined) player.level = data.level;
+        if (data.hp !== undefined) player.hp = data.hp;
+        if (data.max_hp !== undefined) player.maxHp = data.max_hp;
+        if (data.xp !== undefined) player.xp = data.xp;
+
+        updateUI();
+
+        if (data.level_up) {
+            tg.showAlert('🎉 НОВЫЙ УРОВЕНЬ!');
         }
-        if (data.hp !== undefined) {
-            player.hp = data.hp;
-            const maxHp = data.max_hp || 100;
-            document.getElementById('hp-text').innerText = Math.floor(data.hp) + ' / ' + maxHp;
-            document.getElementById('hp-bar').style.width = ((data.hp / maxHp) * 100) + '%';
-        }
-        if (data.xp !== undefined && data.max_xp !== undefined) {
-            player.xp = data.xp;
-            document.getElementById('xp-text').innerText = data.xp + ' / ' + data.max_xp;
-            document.getElementById('xp-bar').style.width = ((data.xp / data.max_xp) * 100) + '%';
-        }
-        if (data.teeth !== undefined) {
-            player.teeth = data.teeth;
-            document.getElementById('user-teeth').innerText = data.teeth;
-            document.getElementById('street-teeth').innerText = data.teeth;
-        }
-        if (data.win_streak !== undefined) {
-            player.winStreak = data.win_streak;
-            document.getElementById('user-win-streak').innerText = data.win_streak;
-        }
-        if (data.authority !== undefined) {
-            player.authority = data.authority;
-            document.getElementById('user-authority').innerText = data.authority;
-        }
+
     } catch (error) {
         console.error('Ошибка боя:', error);
         tg.showAlert('⚠️ Ошибка сервера!');
     }
 }
 
-// ===== РАБОТА =====
+// ===== РАБОТА В КОЛХОЗЕ =====
 async function doWork(workType) {
     const tg_id = getUserId();
     try {
-        const response = await fetch(`${API_URL}/api/work`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ tg_id: tg_id, work_type: workType })
+        const response = await fetch(`${API_URL}/api/work?tg_id=${tg_id}&work_type=${workType}`, {
+            method: 'POST'
         });
         const data = await response.json();
         if (data.error) { tg.showAlert(data.error); return; }
+        
         tg.showAlert(data.text);
         if (data.money !== undefined) {
             player.money = data.money;
-            document.getElementById('user-money').innerText = data.money;
+            updateUI();
         }
     } catch (error) {
         console.error('Ошибка работы:', error);
@@ -478,7 +574,7 @@ async function doWork(workType) {
     }
 }
 
-// ===== ЕДА =====
+// ===== ЕДА И ЛАРЕК =====
 function eatStreetFood(id, hpBonus, priceGrn, cooldownSec) {
     const now = Date.now();
     if (foodCooldowns[id] && now < foodCooldowns[id]) {
@@ -528,7 +624,8 @@ window.onload = function() {
         document.getElementById('custom-name-input').value = tg.initDataUnsafe.user.first_name;
     }
     renderCharCreation();
-    
-    // ГЛАВНОЕ: проверяем, зарегистрирован ли пользователь
     loadUserProfile();
 };
+</script>
+</body>
+</html>
