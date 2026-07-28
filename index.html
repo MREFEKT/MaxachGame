@@ -15,7 +15,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Шапка Профиля */
         .banner {
             width: 100%; height: 120px;
             background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop');
@@ -42,7 +41,6 @@
 
         .content { padding: 10px; }
 
-        /* Компактные прогресс-бары */
         .bar-container { margin-bottom: 4px; }
         .bar-label { font-size: 10px; margin-bottom: 1px; display: flex; justify-content: space-between; color: #ccc; }
         
@@ -57,7 +55,6 @@
         .fatigue-bar { background: linear-gradient(to right, #f57c00, #ffb74d); width: 0%; }
         .xp-bar { background: linear-gradient(to right, #afb42b, #d4e157); width: 0%; }
 
-        /* Кнопки Нашего Главного Меню */
         .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
 
         .menu-btn {
@@ -71,7 +68,6 @@
         .full-btn { grid-column: span 2; }
         .danger-btn { background: linear-gradient(to bottom, #8b2d2d, #5c1d1d); border-color: #a33e3e; }
 
-        /* Экран и Навигация */
         .page { display: none; }
         .active-page { display: block; }
 
@@ -81,7 +77,6 @@
             margin-bottom: 10px; cursor: pointer; display: inline-block;
         }
 
-        /* Вкладки */
         .tabs { display: flex; gap: 4px; margin-bottom: 10px; }
         .tab-btn {
             flex: 1; background: #222; border: 1px solid #444; color: #aaa;
@@ -90,7 +85,6 @@
         }
         .tab-btn.active { background: #4a633d; color: white; border-color: #628252; }
 
-        /* Карточки элементов */
         .item-card {
             background: #1c241a; border: 1px solid #33442d; border-radius: 8px;
             padding: 10px; margin-bottom: 8px; display: flex;
@@ -104,7 +98,6 @@
             padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
         }
 
-        /* Выбор персонажа на старте */
         .char-choice-card {
             background: #1c241a; border: 2px solid #435a3a; border-radius: 8px;
             padding: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; cursor: pointer;
@@ -112,7 +105,6 @@
         .char-choice-card.selected { border-color: #81d4fa; background: #1a2a2e; }
         .char-avatar-big { font-size: 32px; width: 50px; text-align: center; }
 
-        /* ЭКРАН УЛИЦЫ (СТИЛЬ ХУЛИГАНЫ) */
         .street-header-info {
             background: linear-gradient(to bottom, #d89635, #b0721c);
             border: 1px solid #e0a346; border-radius: 6px;
@@ -170,8 +162,8 @@
 </head>
 <body>
 
-    <!-- ================= ЭКРАН СОЗДАНИЯ ПЕРСОНАЖА (СТАРТ) ================= -->
-    <div id="create-char-page" class="page" style="padding: 16px;">
+    <!-- ЭКРАН СОЗДАНИЯ ПЕРСОНАЖА -->
+    <div id="create-char-page" class="page" style="padding: 16px; display: block;">
         <h2 style="color: #7cb342; text-align: center; margin-top: 10px;">👤 Создание Персонажа</h2>
         <p style="font-size: 12px; color: #aaa; text-align: center; margin-bottom: 15px;">Выбери своего бойца и родное село.</p>
 
@@ -213,7 +205,6 @@
         </div>
 
         <div class="content">
-            <!-- Компактные прогресс-бары -->
             <div class="bar-container">
                 <div class="bar-label"><span>⭐ Опыт</span><span id="xp-text">0 / 3</span></div>
                 <div class="bar-bg"><div class="bar-fill xp-bar" id="xp-bar"></div></div>
@@ -229,7 +220,6 @@
                 <div class="bar-bg"><div class="bar-fill fatigue-bar" id="fatigue-bar"></div></div>
             </div>
 
-            <!-- ================= 1. НАШЕ РОДНОЕ ГЛАВНОЕ МЕНЮ ================= -->
             <div id="main-page" class="page active-page">
                 <div class="grid-menu">
                     <button class="menu-btn full-btn" onclick="showPage('street-page')">🥊 УЛИЦА (Поиск Махача)</button>
@@ -240,7 +230,6 @@
                 </div>
             </div>
 
-            <!-- ================= 2. ЭКРАН СМЕНЫ СЕЛА ================= -->
             <div id="change-village-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
                 <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #81d4fa;">🗺️ Переезд в другое Село:</h3>
@@ -248,7 +237,6 @@
                 <div id="change-village-list"></div>
             </div>
 
-            <!-- ================= 3. ЭКРАН УЛИЦЫ ================= -->
             <div id="street-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
@@ -269,7 +257,6 @@
                 </div>
             </div>
 
-            <!-- ================= 4. ЭКРАН БАЗАРА ================= -->
             <div id="bazar-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
@@ -280,7 +267,6 @@
                     <div class="tab-btn" onclick="switchBazarTab('larec', event)">🏪 Ларек</div>
                 </div>
 
-                <!-- СТОЛОВКА -->
                 <div id="tab-stolovka" class="tab-content">
                     <div class="item-card">
                         <div class="item-info"><div>🥟 Чебурек с мясом</div><span>+30 ХП (Съедается сразу) | ⏳ КД: 30 мин</span></div>
@@ -300,17 +286,14 @@
                     </div>
                 </div>
 
-                <!-- СЕКОНД -->
                 <div id="tab-second" class="tab-content" style="display:none;">
                     <div id="second-items-list"></div>
                 </div>
 
-                <!-- ЦЫГАНКА -->
                 <div id="tab-gypsy" class="tab-content" style="display:none;">
                     <div id="gypsy-items-list"></div>
                 </div>
 
-                <!-- ЛАРЕК -->
                 <div id="tab-larec" class="tab-content" style="display:none;">
                     <div class="item-card">
                         <div class="item-info"><div>🪵 Дубовая Доска</div><span>💥 +80% урона в Махаче Сёла на Село</span></div>
@@ -323,7 +306,6 @@
                 </div>
             </div>
 
-            <!-- ================= 5. ЭКРАН ДОМА ================= -->
             <div id="home-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
@@ -349,7 +331,6 @@
                 </div>
             </div>
 
-            <!-- ================= 6. ЭКРАН КОЛХОЗА ================= -->
             <div id="kolhoz-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
                 <h3 style="margin: 0 0 10px 0; font-size: 14px; color: #7cb342;">🌾 Работа в Колхозе «Заря»:</h3>
@@ -361,15 +342,15 @@
     </div>
 
     <script>
+        // ====== НАСТРОЙКА ПОДКЛЮЧЕНИЯ К СЕРВЕРУ ======
+        const API_URL = "https://maxachgame.onrender.com";  // ← ВАШ СЕРВЕР
+        
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.ready();
         tg.setHeaderColor('#121711');
 
-        // ============== НАСТРОЙКА ПОДКЛЮЧЕНИЯ К СЕРВЕРУ ==============
-        const API_URL = "http://localhost:8000";  // Если сервер локальный
-        // const API_URL = "https://ваш-сервер.onrender.com"; // Для интернета
-
+        // ====== ОСТАЛЬНАЯ ЛОГИКА ======
         const xpRequirements = { 1: 3, 2: 8, 3: 24, 4: 50, 5: 85, 6: 150, 7: 200, 8: 230, 9: 270 };
 
         const villagesCatalog = [
@@ -428,71 +409,54 @@
 
         let foodCooldowns = { cheburek: 0, borsch: 0 };
 
-        // ============== ЗАГРУЗКА ПРОФИЛЯ С СЕРВЕРА ==============
+        function getUserId() {
+            try {
+                return tg.initDataUnsafe?.user?.id || 123456;
+            } catch (e) {
+                return 123456;
+            }
+        }
+
+        // ====== ЗАГРУЗКА ПРОФИЛЯ С СЕРВЕРА ======
         async function loadUserProfile() {
-            const tg_id = tg.initDataUnsafe?.user?.id || 123456;
+            const tg_id = getUserId();
             
             try {
                 const response = await fetch(`${API_URL}/api/user/${tg_id}`);
                 const data = await response.json();
                 
                 if (data.error) {
-                    console.log('Пользователь не зарегистрирован в БД');
+                    console.log('Пользователь не найден в БД');
                     return;
                 }
                 
                 // Обновляем локальные данные
                 player.name = data.nickname;
                 player.level = data.level;
-                player.xp = data.xp || 0;
+                player.xp = data.xp;
                 player.money = data.money;
                 player.hp = data.hp;
                 player.maxHp = data.max_hp || 100;
                 player.village = data.village || 'vediltsi';
-                player.baseStr = data.strength || 10;
                 
                 // Обновляем интерфейс
-                document.getElementById('username').innerText = data.nickname;
-                document.getElementById('user-level').innerText = data.level;
-                document.getElementById('user-money').innerText = data.money;
-                document.getElementById('user-samogon').innerText = player.samogon || 350;
-                document.getElementById('user-teeth').innerText = player.teeth || 0;
-                document.getElementById('user-authority').innerText = player.authority || 0;
-                document.getElementById('user-win-streak').innerText = player.winStreak || 0;
-                
-                document.getElementById('hp-text').innerText = `${data.hp} / ${data.max_hp || 100}`;
-                document.getElementById('hp-bar').style.width = ((data.hp / (data.max_hp || 100)) * 100) + '%';
-                
-                document.getElementById('xp-text').innerText = `${data.xp || 0} / ${xpRequirements[data.level] || 30}`;
-                document.getElementById('xp-bar').style.width = ((data.xp || 0) / (xpRequirements[data.level] || 30) * 100) + '%';
-                
-                document.getElementById('fatigue-text').innerText = `0 / 100`;
-                document.getElementById('fatigue-bar').style.width = '0%';
-                
-                // Обновляем село
-                const currentVil = villagesCatalog.find(v => v.id === player.village);
-                document.getElementById('user-village-display').innerText = `🏡 Село: ${currentVil ? currentVil.name : 'Ведильцы'} (Сменить за 300 🍾)`;
+                updateUI();
                 
             } catch (error) {
-                console.log('Сервер не доступен:', error);
+                console.log('Сервер недоступен:', error);
             }
         }
 
-        // ============== ФУНКЦИЯ БОЯ НА УЛИЦЕ (РАБОТАЕТ С СЕРВЕРОМ) ==============
+        // ====== БОЙ (ОТПРАВКА НА СЕРВЕР) ======
         async function attackEnemy(index) {
-            const tg_id = tg.initDataUnsafe?.user?.id || 123456;
-            
-            // Блокируем кнопку, чтобы не нажимали дважды
-            const btns = document.querySelectorAll('.action-fist-btn');
-            btns.forEach(btn => btn.disabled = true);
+            const tg_id = getUserId();
             
             try {
-                const response = await fetch(`${API_URL}/api/fight/${tg_id}`);
+                const response = await fetch(`${API_URL}/api/fight/${tg_id}?enemy_index=${index}`);
                 const data = await response.json();
                 
                 if (data.error) {
                     tg.showAlert(data.error);
-                    btns.forEach(btn => btn.disabled = false);
                     return;
                 }
                 
@@ -502,29 +466,101 @@
                     tg.showAlert('🎉 НОВЫЙ УРОВЕНЬ!');
                 }
                 
-                // Обновляем интерфейс
-                document.getElementById('user-money').innerText = data.money;
-                document.getElementById('user-level').innerText = data.level;
-                document.getElementById('hp-text').innerText = `${data.hp} / ${data.max_hp || 100}`;
-                document.getElementById('hp-bar').style.width = ((data.hp / (data.max_hp || 100)) * 100) + '%';
-                
-                // Обновляем XP
-                const xpData = await fetch(`${API_URL}/api/user/${tg_id}`);
-                const userData = await xpData.json();
-                if (!userData.error) {
-                    const xpNeeded = xpRequirements[userData.level] || 30;
-                    document.getElementById('xp-text').innerText = `${userData.xp || 0} / ${xpNeeded}`;
-                    document.getElementById('xp-bar').style.width = ((userData.xp || 0) / xpNeeded * 100) + '%';
+                // Обновляем данные из ответа
+                if (data.money !== undefined) {
+                    player.money = data.money;
+                    document.getElementById('user-money').innerText = data.money;
                 }
                 
-                // Обновляем зубы
-                if (data.win) {
-                    const teethEl = document.getElementById('user-teeth');
-                    const currentTeeth = parseInt(teethEl.innerText) || 0;
-                    teethEl.innerText = currentTeeth + 1;
-                    document.getElementById('street-teeth').innerText = currentTeeth + 1;
+                if (data.level !== undefined) {
+                    player.level = data.level;
+                    document.getElementById('user-level').innerText = data.level;
+                }
+                
+                if (data.hp !== undefined) {
+                    player.hp = data.hp;
+                    const maxHp = data.max_hp || 100;
+                    document.getElementById('hp-text').innerText = `${data.hp} / ${maxHp}`;
+                    document.getElementById('hp-bar').style.width = ((data.hp / maxHp) * 100) + '%';
+                }
+                
+                // Обновляем зубы, авторитет и другие статы (если пришли)
+                if (data.teeth !== undefined) {
+                    document.getElementById('user-teeth').innerText = data.teeth;
+                }
+                
+                if (data.win_streak !== undefined) {
+                    document.getElementById('user-win-streak').innerText = data.win_streak;
+                }
+                
+                // Обновляем XP бар
+                if (data.xp !== undefined && data.max_xp !== undefined) {
+                    document.getElementById('xp-text').innerText = `${data.xp} / ${data.max_xp}`;
+                    document.getElementById('xp-bar').style.width = ((data.xp / data.max_xp) * 100) + '%';
                 }
                 
             } catch (error) {
                 console.error('Ошибка боя:', error);
-                tg.showAlert('⚠️ Ошибка сервера! Убедитесь, что server.py
+                tg.showAlert('⚠️ Ошибка сервера! Проверьте подключение.');
+            }
+        }
+
+        // ====== ОСТАЛЬНЫЕ ФУНКЦИИ ======
+        function renderCharCreation() {
+            const container = document.getElementById('char-variants-list');
+            container.innerHTML = '';
+            charPrototypes.forEach(c => {
+                const isSelected = selectedAvatar === c.avatar;
+                container.innerHTML += `
+                    <div class="char-choice-card ${isSelected ? 'selected' : ''}" onclick="selectCharAvatar('${c.avatar}')">
+                        <div class="char-avatar-big">${c.avatar}</div>
+                        <div>
+                            <div style="font-weight:bold; font-size:14px; color:#fff;">${c.title}</div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function selectCharAvatar(av) { selectedAvatar = av; renderCharCreation(); }
+
+        function finishCharacterCreation() {
+            const nameInput = document.getElementById('custom-name-input').value.trim();
+            if (!nameInput) { tg.showAlert('⚠️ Введите имя персонажа!'); return; }
+
+            player.name = nameInput;
+            player.avatar = selectedAvatar;
+            player.village = document.getElementById('start-village-select').value;
+
+            document.getElementById('create-char-page').style.display = 'none';
+            document.getElementById('game-main-wrap').style.display = 'block';
+            
+            // Загружаем профиль
+            loadUserProfile();
+        }
+
+        function getStats() {
+            let bonusStr = 0, bonusAgi = 0;
+            player.inventory.forEach(item => {
+                if (item.equipped) {
+                    const starBonus = Math.floor(item.baseValue * 0.30 * (item.stars || 0));
+                    const totalVal = item.baseValue + starBonus;
+                    if (item.type === 'str') { bonusStr += totalVal; }
+                    if (item.type === 'agi') { bonusAgi += totalVal; }
+                }
+            });
+            return { totalStr: player.baseStr + bonusStr, totalAgi: player.baseAgi + bonusAgi, bonusStr, bonusAgi };
+        }
+
+        function updateUI() {
+            document.getElementById('username').innerText = player.name;
+            document.getElementById('char-avatar-icon').innerText = player.avatar;
+            document.getElementById('user-level').innerText = player.level;
+            document.getElementById('user-money').innerText = player.money;
+            document.getElementById('user-samogon').innerText = player.samogon;
+            document.getElementById('user-teeth').innerText = player.teeth;
+            document.getElementById('user-authority').innerText = player.authority;
+            document.getElementById('user-win-streak').innerText = player.winStreak;
+
+            const currentVil = villagesCatalog.find(v => v.id === player.village);
+            document.getElementById('user-village-display').innerText = `🏡 Село
