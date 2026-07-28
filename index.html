@@ -10,159 +10,359 @@
             background-color: #121711;
             color: #e0e0e0;
             font-family: Arial, sans-serif;
-            margin: 0; padding: 0;
+            margin: 0;
+            padding: 0;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
-
         .banner {
-            width: 100%; height: 120px;
+            width: 100%;
+            height: 120px;
             background-image: url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?q=80&w=1000&auto=format&fit=crop');
-            background-size: cover; background-position: center;
-            border-bottom: 2px solid #3e5035; position: relative;
+            background-size: cover;
+            background-position: center;
+            border-bottom: 2px solid #3e5035;
+            position: relative;
         }
-
         .profile-header {
-            position: absolute; bottom: 0; left: 0; right: 0;
-            background: linear-gradient(to top, rgba(0,0,0,0.95), transparent);
-            padding: 6px 10px; display: flex;
-            justify-content: space-between; align-items: flex-end;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.95), transparent);
+            padding: 6px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
         }
-
-        .user-info h2 { margin: 0; font-size: 15px; color: #fff; text-shadow: 1px 1px 2px black; }
-        .user-info span { font-size: 10px; color: #7cb342; font-weight: bold; cursor: pointer; }
-
-        .main-stats { text-align: right; font-size: 10px; text-shadow: 1px 1px 2px black; line-height: 1.2; }
-        .money { color: #ffd700; font-weight: bold; }
-        .samogon { color: #81d4fa; font-weight: bold; }
-        .authority { color: #ffb74d; font-weight: bold; }
-        .teeth-stat { color: #e0e0e0; font-weight: bold; }
-        .streak-stat { color: #ff7043; font-weight: bold; }
-
-        .content { padding: 10px; }
-
-        .bar-container { margin-bottom: 4px; }
-        .bar-label { font-size: 10px; margin-bottom: 1px; display: flex; justify-content: space-between; color: #ccc; }
-        
+        .user-info h2 {
+            margin: 0;
+            font-size: 15px;
+            color: #fff;
+            text-shadow: 1px 1px 2px black;
+        }
+        .user-info span {
+            font-size: 10px;
+            color: #7cb342;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .main-stats {
+            text-align: right;
+            font-size: 10px;
+            text-shadow: 1px 1px 2px black;
+            line-height: 1.2;
+        }
+        .money {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        .samogon {
+            color: #81d4fa;
+            font-weight: bold;
+        }
+        .authority {
+            color: #ffb74d;
+            font-weight: bold;
+        }
+        .teeth-stat {
+            color: #e0e0e0;
+            font-weight: bold;
+        }
+        .streak-stat {
+            color: #ff7043;
+            font-weight: bold;
+        }
+        .content {
+            padding: 10px;
+        }
+        .bar-container {
+            margin-bottom: 4px;
+        }
+        .bar-label {
+            font-size: 10px;
+            margin-bottom: 1px;
+            display: flex;
+            justify-content: space-between;
+            color: #ccc;
+        }
         .bar-bg {
-            width: 100%; height: 6px;
-            background-color: #222; border-radius: 3px; overflow: hidden;
+            width: 100%;
+            height: 6px;
+            background-color: #222;
+            border-radius: 3px;
+            overflow: hidden;
             border: 1px solid #333;
         }
-
-        .bar-fill { height: 100%; border-radius: 2px; transition: width 0.3s ease; }
-        .hp-bar { background: linear-gradient(to right, #8b3a3a, #ff4d4d); width: 100%; }
-        .fatigue-bar { background: linear-gradient(to right, #f57c00, #ffb74d); width: 0%; }
-        .xp-bar { background: linear-gradient(to right, #afb42b, #d4e157); width: 0%; }
-
-        .grid-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px; }
-
+        .bar-fill {
+            height: 100%;
+            border-radius: 2px;
+            transition: width 0.3s ease;
+        }
+        .hp-bar {
+            background: linear-gradient(to right, #8b3a3a, #ff4d4d);
+            width: 100%;
+        }
+        .fatigue-bar {
+            background: linear-gradient(to right, #f57c00, #ffb74d);
+            width: 0%;
+        }
+        .xp-bar {
+            background: linear-gradient(to right, #afb42b, #d4e157);
+            width: 0%;
+        }
+        .grid-menu {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 8px;
+        }
         .menu-btn {
             background: linear-gradient(to bottom, #2e3d28, #222e1e);
-            border: 1px solid #435a3a; border-radius: 8px; color: white;
-            padding: 12px 8px; text-align: center; font-size: 13px;
-            font-weight: bold; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            border: 1px solid #435a3a;
+            border-radius: 8px;
+            color: white;
+            padding: 12px 8px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
         }
-
-        .menu-btn:active { background: #1a2417; transform: translateY(1px); }
-        .full-btn { grid-column: span 2; }
-        .danger-btn { background: linear-gradient(to bottom, #8b2d2d, #5c1d1d); border-color: #a33e3e; }
-
-        .page { display: none; }
-        .active-page { display: block; }
-
+        .menu-btn:active {
+            background: #1a2417;
+            transform: translateY(1px);
+        }
+        .full-btn {
+            grid-column: span 2;
+        }
+        .danger-btn {
+            background: linear-gradient(to bottom, #8b2d2d, #5c1d1d);
+            border-color: #a33e3e;
+        }
+        .page {
+            display: none;
+        }
+        .active-page {
+            display: block;
+        }
         .back-btn {
-            background: #2a3327; border: 1px solid #435a3a; color: white;
-            padding: 8px 14px; border-radius: 6px; font-weight: bold; font-size: 12px;
-            margin-bottom: 10px; cursor: pointer; display: inline-block;
+            background: #2a3327;
+            border: 1px solid #435a3a;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: bold;
+            font-size: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            display: inline-block;
         }
-
-        .tabs { display: flex; gap: 4px; margin-bottom: 10px; }
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin-bottom: 10px;
+        }
         .tab-btn {
-            flex: 1; background: #222; border: 1px solid #444; color: #aaa;
-            padding: 8px 2px; font-size: 11px; font-weight: bold;
-            border-radius: 5px; cursor: pointer; text-align: center;
+            flex: 1;
+            background: #222;
+            border: 1px solid #444;
+            color: #aaa;
+            padding: 8px 2px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            text-align: center;
         }
-        .tab-btn.active { background: #4a633d; color: white; border-color: #628252; }
-
+        .tab-btn.active {
+            background: #4a633d;
+            color: white;
+            border-color: #628252;
+        }
         .item-card {
-            background: #1c241a; border: 1px solid #33442d; border-radius: 8px;
-            padding: 10px; margin-bottom: 8px; display: flex;
-            justify-content: space-between; align-items: center;
+            background: #1c241a;
+            border: 1px solid #33442d;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
-        .item-info div { font-weight: bold; font-size: 14px; }
-        .item-info span { font-size: 11px; color: #aaa; }
-        
-        .buy-btn, .equip-btn, .work-btn, .select-village-btn {
-            background: #4a633d; border: 1px solid #5a7a4a; color: white;
-            padding: 8px 12px; border-radius: 5px; font-weight: bold; font-size: 12px; cursor: pointer;
+        .item-info div {
+            font-weight: bold;
+            font-size: 14px;
         }
-
+        .item-info span {
+            font-size: 11px;
+            color: #aaa;
+        }
+        .buy-btn,
+        .equip-btn,
+        .work-btn,
+        .select-village-btn {
+            background: #4a633d;
+            border: 1px solid #5a7a4a;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 12px;
+            cursor: pointer;
+        }
         .char-choice-card {
-            background: #1c241a; border: 2px solid #435a3a; border-radius: 8px;
-            padding: 12px; margin-bottom: 10px; display: flex; align-items: center; gap: 12px; cursor: pointer;
+            background: #1c241a;
+            border: 2px solid #435a3a;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            cursor: pointer;
         }
-        .char-choice-card.selected { border-color: #81d4fa; background: #1a2a2e; }
-        .char-avatar-big { font-size: 32px; width: 50px; text-align: center; }
-
+        .char-choice-card.selected {
+            border-color: #81d4fa;
+            background: #1a2a2e;
+        }
+        .char-avatar-big {
+            font-size: 32px;
+            width: 50px;
+            text-align: center;
+        }
         .street-header-info {
             background: linear-gradient(to bottom, #d89635, #b0721c);
-            border: 1px solid #e0a346; border-radius: 6px;
-            padding: 8px 10px; margin-bottom: 8px; color: #111;
-            font-size: 11px; font-weight: bold; text-align: center; line-height: 1.4;
+            border: 1px solid #e0a346;
+            border-radius: 6px;
+            padding: 8px 10px;
+            margin-bottom: 8px;
+            color: #111;
+            font-size: 11px;
+            font-weight: bold;
+            text-align: center;
+            line-height: 1.4;
         }
-
         .street-sub-btn {
-            background: #3e5233; border: 1px solid #577348; color: #fff;
-            padding: 8px 12px; border-radius: 6px; font-size: 12px; font-weight: bold;
-            margin-bottom: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px;
+            background: #3e5233;
+            border: 1px solid #577348;
+            color: #fff;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
-
         .street-enemy-card {
-            background: #9ab382; border: 1px solid #b2c99b; border-radius: 6px;
-            padding: 8px; margin-bottom: 8px; display: flex; gap: 10px; align-items: center;
+            background: #9ab382;
+            border: 1px solid #b2c99b;
+            border-radius: 6px;
+            padding: 8px;
+            margin-bottom: 8px;
+            display: flex;
+            gap: 10px;
+            align-items: center;
             color: #121711;
         }
-
         .street-enemy-avatar {
-            width: 50px; height: 50px; background: #cfdcb6; border-radius: 6px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 26px; border: 1px solid #a3b88c; flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            background: #cfdcb6;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            border: 1px solid #a3b88c;
+            flex-shrink: 0;
         }
-
-        .street-enemy-info { flex-grow: 1; }
-        .street-enemy-info h4 { margin: 0; font-size: 13px; color: #7a221e; font-weight: bold; }
-        .street-enemy-info .type-tag { font-size: 10px; color: #333; }
-        .street-enemy-info .phrase { font-size: 11px; color: #2b3d22; font-style: italic; margin: 2px 0 4px 0; }
-        
+        .street-enemy-info {
+            flex-grow: 1;
+        }
+        .street-enemy-info h4 {
+            margin: 0;
+            font-size: 13px;
+            color: #7a221e;
+            font-weight: bold;
+        }
+        .street-enemy-info .type-tag {
+            font-size: 10px;
+            color: #333;
+        }
+        .street-enemy-info .phrase {
+            font-size: 11px;
+            color: #2b3d22;
+            font-style: italic;
+            margin: 2px 0 4px 0;
+        }
         .enemy-hp-mini {
-            font-size: 10px; font-weight: bold; color: #8b0000; display: flex; align-items: center; gap: 4px;
+            font-size: 10px;
+            font-weight: bold;
+            color: #8b0000;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
-
-        .hit-actions { display: flex; gap: 6px; flex-shrink: 0; }
+        .hit-actions {
+            display: flex;
+            gap: 6px;
+            flex-shrink: 0;
+        }
         .action-fist-btn {
-            background: #628252; border: 1px solid #7ea869; border-radius: 6px;
-            padding: 6px 10px; font-size: 16px; cursor: pointer; box-shadow: 0 2px 3px rgba(0,0,0,0.2);
+            background: #628252;
+            border: 1px solid #7ea869;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
         }
-        .action-fist-btn:active { background: #4a633d; }
-
+        .action-fist-btn:active {
+            background: #4a633d;
+        }
         .search-more-btn {
-            background: #3e5233; border: 1px solid #5a784b; color: #a4d984;
-            padding: 12px; border-radius: 6px; font-size: 14px; font-weight: bold;
-            text-align: center; cursor: pointer; margin-top: 6px; display: flex;
-            align-items: center; justify-content: center; gap: 8px;
+            background: #3e5233;
+            border: 1px solid #5a784b;
+            color: #a4d984;
+            padding: 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            text-align: center;
+            cursor: pointer;
+            margin-top: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
-
         .stats-panel {
-            background: #182216; border: 1px solid #33442d; border-radius: 8px;
-            padding: 10px; margin-bottom: 12px; font-size: 13px;
+            background: #182216;
+            border: 1px solid #33442d;
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 12px;
+            font-size: 13px;
         }
-        .stats-panel h3 { margin: 0 0 8px 0; color: #7cb342; font-size: 15px; }
+        .stats-panel h3 {
+            margin: 0 0 8px 0;
+            color: #7cb342;
+            font-size: 15px;
+        }
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #aaa;
+        }
     </style>
 </head>
 <body>
 
-    <!-- ЭКРАН СОЗДАНИЯ ПЕРСОНАЖА -->
+    <!-- ================= ЭКРАН СОЗДАНИЯ ПЕРСОНАЖА ================= -->
     <div id="create-char-page" class="page" style="padding: 16px; display: block;">
         <h2 style="color: #7cb342; text-align: center; margin-top: 10px;">👤 Создание Персонажа</h2>
         <p style="font-size: 12px; color: #aaa; text-align: center; margin-bottom: 15px;">Выбери своего бойца и родное село.</p>
@@ -184,9 +384,10 @@
         </select>
 
         <button class="menu-btn full-btn" style="background: linear-gradient(to bottom, #4a633d, #2e3d28); padding: 14px; font-size: 15px;" onclick="finishCharacterCreation()">🚀 ВОРВАТЬСЯ В РАЙОН</button>
+        <div id="register-status" style="text-align:center; margin-top:10px; font-size:12px; color:#ffd700;"></div>
     </div>
 
-    <!-- Шапка Профиля (Основная игра) -->
+    <!-- ================= ОСНОВНАЯ ИГРА ================= -->
     <div id="game-main-wrap" style="display: none;">
         <div class="banner">
             <div class="profile-header">
@@ -205,8 +406,9 @@
         </div>
 
         <div class="content">
+            <!-- Бары -->
             <div class="bar-container">
-                <div class="bar-label"><span>⭐ Опыт</span><span id="xp-text">0 / 3</span></div>
+                <div class="bar-label"><span>⭐ Опыт</span><span id="xp-text">0 / 30</span></div>
                 <div class="bar-bg"><div class="bar-fill xp-bar" id="xp-bar"></div></div>
             </div>
 
@@ -214,12 +416,13 @@
                 <div class="bar-label"><span>❤️ Здоровье</span><span id="hp-text">100 / 100</span></div>
                 <div class="bar-bg"><div class="bar-fill hp-bar" id="hp-bar"></div></div>
             </div>
-            
+
             <div class="bar-container" style="margin-bottom: 8px;">
                 <div class="bar-label"><span>💤 Усталость</span><span id="fatigue-text">0 / 100</span></div>
                 <div class="bar-bg"><div class="bar-fill fatigue-bar" id="fatigue-bar"></div></div>
             </div>
 
+            <!-- ГЛАВНОЕ МЕНЮ -->
             <div id="main-page" class="page active-page">
                 <div class="grid-menu">
                     <button class="menu-btn full-btn" onclick="showPage('street-page')">🥊 УЛИЦА (Поиск Махача)</button>
@@ -230,6 +433,7 @@
                 </div>
             </div>
 
+            <!-- СМЕНА СЕЛА -->
             <div id="change-village-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
                 <h3 style="margin: 0 0 5px 0; font-size: 14px; color: #81d4fa;">🗺️ Переезд в другое Село:</h3>
@@ -237,6 +441,7 @@
                 <div id="change-village-list"></div>
             </div>
 
+            <!-- УЛИЦА -->
             <div id="street-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
@@ -257,6 +462,7 @@
                 </div>
             </div>
 
+            <!-- БАЗАР -->
             <div id="bazar-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
@@ -306,6 +512,7 @@
                 </div>
             </div>
 
+            <!-- ДОМ -->
             <div id="home-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
 
@@ -331,6 +538,7 @@
                 </div>
             </div>
 
+            <!-- КОЛХОЗ -->
             <div id="kolhoz-page" class="page">
                 <div class="back-btn" onclick="showPage('main-page')">⬅️ Вернуться в Село</div>
                 <h3 style="margin: 0 0 10px 0; font-size: 14px; color: #7cb342;">🌾 Работа в Колхозе «Заря»:</h3>
@@ -342,16 +550,34 @@
     </div>
 
     <script>
-        // ====== НАСТРОЙКА ПОДКЛЮЧЕНИЯ К СЕРВЕРУ ======
-        const API_URL = "https://maxachgame.onrender.com";  // ← ВАШ СЕРВЕР
-        
+        // ============================================================
+        // 1. ПОДКЛЮЧЕНИЕ К СЕРВЕРУ
+        // ============================================================
+        const API_URL = "https://maxachgame.onrender.com";
+
+        // ============================================================
+        // 2. НАСТРОЙКА TELEGRAM
+        // ============================================================
         const tg = window.Telegram.WebApp;
         tg.expand();
         tg.ready();
         tg.setHeaderColor('#121711');
 
-        // ====== ОСТАЛЬНАЯ ЛОГИКА ======
-        const xpRequirements = { 1: 3, 2: 8, 3: 24, 4: 50, 5: 85, 6: 150, 7: 200, 8: 230, 9: 270 };
+        // ============================================================
+        // 3. ПОЛУЧЕНИЕ ID ПОЛЬЗОВАТЕЛЯ
+        // ============================================================
+        function getUserId() {
+            try {
+                return tg.initDataUnsafe?.user?.id || 123456;
+            } catch (e) {
+                return 123456;
+            }
+        }
+
+        // ============================================================
+        // 4. ДАННЫЕ
+        // ============================================================
+        const xpRequirements = { 1: 30, 2: 60, 3: 100, 4: 150, 5: 210, 6: 280, 7: 360, 8: 450, 9: 550 };
 
         const villagesCatalog = [
             { id: 'vediltsi', name: '🌾 Ведильцы', desc: 'Центральное село. Шумный базар и большой колхоз.' },
@@ -367,8 +593,26 @@
             { avatar: '🥷', title: 'Ночной хулиган' }
         ];
 
-        let selectedAvatar = '🧢';
+        const secondCatalog = [
+            { id: 'mayka', name: '🎽 Майка «BMW»', reqLevel: 1, baseValue: 4, price: 80 },
+            { id: 'shorty', name: '🩳 Шорты с начесом', reqLevel: 2, baseValue: 7, price: 140 },
+            { id: 'olimp', name: '🧥 Олимпийка Abibas', reqLevel: 3, baseValue: 11, price: 230 },
+            { id: 'kepka', name: '🧢 Кепка «Eighteen»', reqLevel: 4, baseValue: 16, price: 350 },
+            { id: 'crossy', name: '👟 Кроссы со светодиодами', reqLevel: 5, baseValue: 22, price: 500 }
+        ];
 
+        const gypsyCatalog = [
+            { id: 'gvozd', name: '📍 Гвоздь-сотка', reqLevel: 1, baseValue: 3, price: 50 },
+            { id: 'kastet', name: '🥊 Самодельный Кастет', reqLevel: 2, baseValue: 7, price: 120 },
+            { id: 'rozochka', name: '🍾 Розочка из бутылки', reqLevel: 3, baseValue: 12, price: 210 },
+            { id: 'nunchak', name: '🪵 Нунчаки из дуба', reqLevel: 4, baseValue: 18, price: 330 },
+            { id: 'cep', name: '⛓️ Тяжелая цепь', reqLevel: 5, baseValue: 25, price: 480 }
+        ];
+
+        let selectedAvatar = '🧢';
+        let foodCooldowns = { cheburek: 0, borsch: 0 };
+
+        // Локальные данные игрока (синхронизируются с сервером)
         let player = {
             name: '',
             avatar: '🧢',
@@ -391,176 +635,118 @@
             consumables: []
         };
 
-        const secondCatalog = [
-            { id: 'mayka', name: '🎽 Майка «BMW»', reqLevel: 1, baseValue: 4, price: 80 },
-            { id: 'shorty', name: '🩳 Шорты с начесом', reqLevel: 2, baseValue: 7, price: 140 },
-            { id: 'olimp', name: '🧥 Олимпийка Abibas', reqLevel: 3, baseValue: 11, price: 230 },
-            { id: 'kepka', name: '🧢 Кепка «Eighteen»', reqLevel: 4, baseValue: 16, price: 350 },
-            { id: 'crossy', name: '👟 Кроссы со светодиодами', reqLevel: 5, baseValue: 22, price: 500 }
-        ];
+        // ============================================================
+        // 5. РЕГИСТРАЦИЯ
+        // ============================================================
+        async function finishCharacterCreation() {
+            const nameInput = document.getElementById('custom-name-input').value.trim();
+            if (!nameInput) {
+                tg.showAlert('⚠️ Введите имя персонажа!');
+                return;
+            }
 
-        const gypsyCatalog = [
-            { id: 'gvozd', name: '📍 Гвоздь-сотка', reqLevel: 1, baseValue: 3, price: 50 },
-            { id: 'kastet', name: '🥊 Самодельный Кастет', reqLevel: 2, baseValue: 7, price: 120 },
-            { id: 'rozochka', name: '🍾 Розочка из бутылки', reqLevel: 3, baseValue: 12, price: 210 },
-            { id: 'nunchak', name: '🪵 Нунчаки из дуба', reqLevel: 4, baseValue: 18, price: 330 },
-            { id: 'cep', name: '⛓️ Тяжелая цепь', reqLevel: 5, baseValue: 25, price: 480 }
-        ];
+            const tg_id = getUserId();
+            const village = document.getElementById('start-village-select').value;
+            const statusEl = document.getElementById('register-status');
 
-        let foodCooldowns = { cheburek: 0, borsch: 0 };
+            statusEl.textContent = '⏳ Регистрация...';
 
-        function getUserId() {
             try {
-                return tg.initDataUnsafe?.user?.id || 123456;
-            } catch (e) {
-                return 123456;
+                const response = await fetch(`${API_URL}/api/register/${tg_id}/${encodeURIComponent(nameInput)}?village=${village}`);
+                const data = await response.json();
+
+                if (data.success) {
+                    statusEl.textContent = '✅ Успешно!';
+                    document.getElementById('create-char-page').style.display = 'none';
+                    document.getElementById('game-main-wrap').style.display = 'block';
+
+                    // Загружаем профиль
+                    await loadUserProfile();
+                } else {
+                    statusEl.textContent = '❌ ' + (data.message || 'Ошибка регистрации');
+                    tg.showAlert('⚠️ Ошибка регистрации!');
+                }
+            } catch (error) {
+                console.error('Ошибка:', error);
+                statusEl.textContent = '❌ Сервер недоступен!';
+                tg.showAlert('⚠️ Сервер недоступен! Проверьте интернет.');
             }
         }
 
-        // ====== ЗАГРУЗКА ПРОФИЛЯ С СЕРВЕРА ======
+        // ============================================================
+        // 6. ЗАГРУЗКА ПРОФИЛЯ
+        // ============================================================
         async function loadUserProfile() {
             const tg_id = getUserId();
-            
+
             try {
                 const response = await fetch(`${API_URL}/api/user/${tg_id}`);
                 const data = await response.json();
-                
+
                 if (data.error) {
-                    console.log('Пользователь не найден в БД');
+                    console.log('Пользователь не найден');
                     return;
                 }
-                
+
                 // Обновляем локальные данные
-                player.name = data.nickname;
-                player.level = data.level;
-                player.xp = data.xp;
-                player.money = data.money;
-                player.hp = data.hp;
+                player.name = data.nickname || 'Миша';
+                player.level = data.level || 1;
+                player.xp = data.xp || 0;
+                player.money = data.money || 100;
+                player.hp = data.hp || 100;
                 player.maxHp = data.max_hp || 100;
                 player.village = data.village || 'vediltsi';
-                
+                player.teeth = data.teeth || 0;
+                player.authority = data.authority || 0;
+                player.winStreak = data.win_streak || 0;
+                player.samogon = data.samogon || 350;
+
                 // Обновляем интерфейс
                 updateUI();
-                
+
             } catch (error) {
                 console.log('Сервер недоступен:', error);
             }
         }
 
-        // ====== БОЙ (ОТПРАВКА НА СЕРВЕР) ======
+        // ============================================================
+        // 7. БОЙ
+        // ============================================================
         async function attackEnemy(index) {
             const tg_id = getUserId();
-            
+
             try {
                 const response = await fetch(`${API_URL}/api/fight/${tg_id}?enemy_index=${index}`);
                 const data = await response.json();
-                
+
                 if (data.error) {
                     tg.showAlert(data.error);
                     return;
                 }
-                
+
                 tg.showAlert(data.text);
-                
+
                 if (data.level_up) {
                     tg.showAlert('🎉 НОВЫЙ УРОВЕНЬ!');
                 }
-                
-                // Обновляем данные из ответа
+
+                // Обновляем данные
                 if (data.money !== undefined) {
                     player.money = data.money;
                     document.getElementById('user-money').innerText = data.money;
                 }
-                
+
                 if (data.level !== undefined) {
                     player.level = data.level;
                     document.getElementById('user-level').innerText = data.level;
                 }
-                
+
                 if (data.hp !== undefined) {
                     player.hp = data.hp;
                     const maxHp = data.max_hp || 100;
-                    document.getElementById('hp-text').innerText = `${data.hp} / ${maxHp}`;
+                    document.getElementById('hp-text').innerText = `${Math.floor(data.hp)} / ${maxHp}`;
                     document.getElementById('hp-bar').style.width = ((data.hp / maxHp) * 100) + '%';
                 }
-                
-                // Обновляем зубы, авторитет и другие статы (если пришли)
-                if (data.teeth !== undefined) {
-                    document.getElementById('user-teeth').innerText = data.teeth;
-                }
-                
-                if (data.win_streak !== undefined) {
-                    document.getElementById('user-win-streak').innerText = data.win_streak;
-                }
-                
-                // Обновляем XP бар
+
                 if (data.xp !== undefined && data.max_xp !== undefined) {
-                    document.getElementById('xp-text').innerText = `${data.xp} / ${data.max_xp}`;
-                    document.getElementById('xp-bar').style.width = ((data.xp / data.max_xp) * 100) + '%';
-                }
-                
-            } catch (error) {
-                console.error('Ошибка боя:', error);
-                tg.showAlert('⚠️ Ошибка сервера! Проверьте подключение.');
-            }
-        }
-
-        // ====== ОСТАЛЬНЫЕ ФУНКЦИИ ======
-        function renderCharCreation() {
-            const container = document.getElementById('char-variants-list');
-            container.innerHTML = '';
-            charPrototypes.forEach(c => {
-                const isSelected = selectedAvatar === c.avatar;
-                container.innerHTML += `
-                    <div class="char-choice-card ${isSelected ? 'selected' : ''}" onclick="selectCharAvatar('${c.avatar}')">
-                        <div class="char-avatar-big">${c.avatar}</div>
-                        <div>
-                            <div style="font-weight:bold; font-size:14px; color:#fff;">${c.title}</div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function selectCharAvatar(av) { selectedAvatar = av; renderCharCreation(); }
-
-        function finishCharacterCreation() {
-            const nameInput = document.getElementById('custom-name-input').value.trim();
-            if (!nameInput) { tg.showAlert('⚠️ Введите имя персонажа!'); return; }
-
-            player.name = nameInput;
-            player.avatar = selectedAvatar;
-            player.village = document.getElementById('start-village-select').value;
-
-            document.getElementById('create-char-page').style.display = 'none';
-            document.getElementById('game-main-wrap').style.display = 'block';
-            
-            // Загружаем профиль
-            loadUserProfile();
-        }
-
-        function getStats() {
-            let bonusStr = 0, bonusAgi = 0;
-            player.inventory.forEach(item => {
-                if (item.equipped) {
-                    const starBonus = Math.floor(item.baseValue * 0.30 * (item.stars || 0));
-                    const totalVal = item.baseValue + starBonus;
-                    if (item.type === 'str') { bonusStr += totalVal; }
-                    if (item.type === 'agi') { bonusAgi += totalVal; }
-                }
-            });
-            return { totalStr: player.baseStr + bonusStr, totalAgi: player.baseAgi + bonusAgi, bonusStr, bonusAgi };
-        }
-
-        function updateUI() {
-            document.getElementById('username').innerText = player.name;
-            document.getElementById('char-avatar-icon').innerText = player.avatar;
-            document.getElementById('user-level').innerText = player.level;
-            document.getElementById('user-money').innerText = player.money;
-            document.getElementById('user-samogon').innerText = player.samogon;
-            document.getElementById('user-teeth').innerText = player.teeth;
-            document.getElementById('user-authority').innerText = player.authority;
-            document.getElementById('user-win-streak').innerText = player.winStreak;
-
-            const currentVil = villagesCatalog.find(v => v.id === player.village);
-            document.getElementById('user-village-display').innerText = `🏡 Село
+                    player.xp = data.x
