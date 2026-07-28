@@ -366,6 +366,10 @@
         tg.ready();
         tg.setHeaderColor('#121711');
 
+        // ============== НАСТРОЙКА ПОДКЛЮЧЕНИЯ К СЕРВЕРУ ==============
+        const API_URL = "http://localhost:8000";  // Если сервер локальный
+        // const API_URL = "https://ваш-сервер.onrender.com"; // Для интернета
+
         const xpRequirements = { 1: 3, 2: 8, 3: 24, 4: 50, 5: 85, 6: 150, 7: 200, 8: 230, 9: 270 };
 
         const villagesCatalog = [
@@ -424,273 +428,103 @@
 
         let foodCooldowns = { cheburek: 0, borsch: 0 };
 
-        window.onload = function() {
-            if (tg.initDataUnsafe && tg.initDataUnsafe.user && tg.initDataUnsafe.user.first_name) {
-                document.getElementById('custom-name-input').value = tg.initDataUnsafe.user.first_name;
-            }
-            renderCharCreation();
-            document.getElementById('create-char-page').style.display = 'block';
-        };
-
-        function renderCharCreation() {
-            const container = document.getElementById('char-variants-list');
-            container.innerHTML = '';
-            charPrototypes.forEach(c => {
-                const isSelected = selectedAvatar === c.avatar;
-                container.innerHTML += `
-                    <div class="char-choice-card ${isSelected ? 'selected' : ''}" onclick="selectCharAvatar('${c.avatar}')">
-                        <div class="char-avatar-big">${c.avatar}</div>
-                        <div>
-                            <div style="font-weight:bold; font-size:14px; color:#fff;">${c.title}</div>
-                        </div>
-                    </div>
-                `;
-            });
-        }
-
-        function selectCharAvatar(av) { selectedAvatar = av; renderCharCreation(); }
-
-        function finishCharacterCreation() {
-            const nameInput = document.getElementById('custom-name-input').value.trim();
-            if (!nameInput) { tg.showAlert('⚠️ Введите имя персонажа!'); return; }
-
-            player.name = nameInput;
-            player.avatar = selectedAvatar;
-            player.village = document.getElementById('start-village-select').value;
-
-            document.getElementById('create-char-page').style.display = 'none';
-            document.getElementById('game-main-wrap').style.display = 'block';
-            updateUI();
-        }
-
-        setInterval(() => {
-            if (player.hp < player.maxHp) player.hp += 0.027;
-            if (player.fatigue > 0) player.fatigue -= 0.027;
-            updateBars();
-        }, 1000);
-
-        function getStats() {
-            let bonusStr = 0, bonusAgi = 0;
-            let hasEquippedWeapon = false, hasEquippedArmor = false;
-
-            player.inventory.forEach(item => {
-                if (item.equipped) {
-                    const starBonus = Math.floor(item.baseValue * 0.30 * (item.stars || 0));
-                    const totalVal = item.baseValue + starBonus;
-                    if (item.type === 'str') { bonusStr += totalVal; hasEquippedWeapon = true; }
-                    if (item.type === 'agi') { bonusAgi += totalVal; hasEquippedArmor = true; }
-                }
-            });
-            return { totalStr: player.baseStr + bonusStr, totalAgi: player.baseAgi + bonusAgi, bonusStr, bonusAgi, hasEquippedWeapon, hasEquippedArmor };
-        }
-
-        function updateUI() {
-            document.getElementById('username').innerText = player.name;
-            document.getElementById('char-avatar-icon').innerText = player.avatar;
-            document.getElementById('user-level').innerText = player.level;
-            document.getElementById('user-money').innerText = player.money;
-            document.getElementById('user-samogon').innerText = player.samogon;
-            document.getElementById('user-teeth').innerText = player.teeth;
-            document.getElementById('user-authority').innerText = player.authority;
-            document.getElementById('user-win-streak').innerText = player.winStreak;
-
-            const currentVil = villagesCatalog.find(v => v.id === player.village);
-            document.getElementById('user-village-display').innerText = `🏡 Село: ${currentVil ? currentVil.name : 'Ведильцы'} (Сменить за 300 🍾)`;
-
-            const stats = getStats();
-            document.getElementById('stat-str').innerText = stats.totalStr;
-            document.getElementById('stat-agi').innerText = stats.totalAgi;
-            document.getElementById('bonus-str').innerText = `(+${stats.bonusStr} от снаряжения)`;
-            document.getElementById('bonus-agi').innerText = `(+${stats.bonusAgi} от снаряжения)`;
-
-            if (document.getElementById('street-teeth')) {
-                document.getElementById('street-teeth').innerText = player.teeth;
-            }
-
-            updateBars();
-            renderCatalogs();
-            renderInventory();
-            renderChangeVillageList();
-        }
-
-        function updateBars() {
-            document.getElementById('xp-text').innerText = `${player.xp} / ${player.maxXp}`;
-            document.getElementById('xp-bar').style.width = Math.min(100, ((player.xp / player.maxXp) * 100)) + '%';
-
-            document.getElementById('hp-text').innerText = `${Math.floor(player.hp)} / ${player.maxHp}`;
-            document.getElementById('hp-bar').style.width = ((player.hp / player.maxHp) * 100) + '%';
-
-            document.getElementById('fatigue-text').innerText = `${Math.floor(player.fatigue)} / ${player.maxFatigue}`;
-            document.getElementById('fatigue-bar').style.width = ((player.fatigue / player.maxFatigue) * 100) + '%';
-        }
-
-        function showPage(pageId) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('active-page'));
-            document.getElementById(pageId).classList.add('active-page');
-            if (pageId === 'street-page') generateEnemies();
-            updateUI();
-        }
-
-        function switchBazarTab(tabName, event) {
-            document.querySelectorAll('#bazar-page .tab-content').forEach(tc => tc.style.display = 'none');
-            document.querySelectorAll('#bazar-page .tab-btn').forEach(tb => tb.classList.remove('active'));
-            document.getElementById('tab-' + tabName).style.display = 'block';
-            event.target.classList.add('active');
-        }
-
-        function switchHomeTab(tabName, event) {
-            document.querySelectorAll('#home-page .home-tab-content').forEach(tc => tc.style.display = 'none');
-            document.querySelectorAll('#home-page .tab-btn').forEach(tb => tb.classList.remove('active'));
-            document.getElementById('home-' + tabName).style.display = 'block';
-            event.target.classList.add('active');
-        }
-
-        function renderChangeVillageList() {
-            const container = document.getElementById('change-village-list');
-            container.innerHTML = '';
-            villagesCatalog.forEach(v => {
-                const isCurrent = player.village === v.id;
-                container.innerHTML += `
-                    <div class="item-card" style="${isCurrent ? 'border-color:#81c784; background:#223322;' : ''}">
-                        <div class="item-info"><div>${v.name}</div><span>${v.desc}</span></div>
-                        ${isCurrent ? '<span style="color:#81c784; font-weight:bold;">Текущее ✅</span>' : `<button class="select-village-btn" onclick="changeVillage('${v.id}')">300 🍾</button>`}
-                    </div>
-                `;
-            });
-        }
-
-        function changeVillage(vId) {
-            if (player.samogon < 300) { tg.showAlert('⚠️ Недостаточно Самогона!'); return; }
-            player.samogon -= 300; player.village = vId; updateUI(); showPage('main-page');
-        }
-
-        function eatStreetFood(id, hpBonus, priceGrn, cooldownSec) {
-            const now = Date.now();
-            if (foodCooldowns[id] && now < foodCooldowns[id]) { tg.showAlert('⏳ Блюдо еще готовится!'); return; }
-            if (player.money < priceGrn) { tg.showAlert('⚠️ Недостаточно денег!'); return; }
-            if (player.hp >= player.maxHp) { tg.showAlert('Ты полностью здоров!'); return; }
-
-            player.money -= priceGrn;
-            player.hp = Math.min(player.maxHp, player.hp + hpBonus);
-            foodCooldowns[id] = now + (cooldownSec * 1000);
-            updateUI();
-            tg.showAlert(`😋 Восстановлено +${hpBonus} ХП!`);
-        }
-
-        function buyFightFood(id, name, hpBonus, priceSamogon) {
-            if (player.samogon < priceSamogon) { tg.showAlert('⚠️ Недостаточно Самогона!'); return; }
-            player.samogon -= priceSamogon;
-            player.consumables.push({ id, name, hpBonus, isFood: true });
-            updateUI();
-            tg.showAlert(`📦 "${name}" в инвентаре! Можно съесть ТОЛЬКО во время Махача Сёл.`);
-        }
-
-        function renderCatalogs() {
-            const render = (catalog, containerId, type) => {
-                const c = document.getElementById(containerId);
-                c.innerHTML = '';
-                catalog.forEach(item => {
-                    const bought = player.inventory.find(i => i.id === item.id);
-                    c.innerHTML += `
-                        <div class="item-card">
-                            <div class="item-info"><div>${item.name}</div><span>+${item.baseValue} ${type === 'str' ? 'Силы' : 'Ловкости'}</span></div>
-                            ${bought ? '<span>Куплено ✅</span>' : `<button class="buy-btn" onclick="buyCatalogItem('${item.id}', '${type}')">${item.price} грн</button>`}
-                        </div>
-                    `;
-                });
-            };
-            render(secondCatalog, 'second-items-list', 'agi');
-            render(gypsyCatalog, 'gypsy-items-list', 'str');
-        }
-
-        function buyCatalogItem(id, type) {
-            const item = (type === 'agi' ? secondCatalog : gypsyCatalog).find(i => i.id === id);
-            if (player.money < item.price) { tg.showAlert('⚠️ Недостаточно денег!'); return; }
-            player.money -= item.price;
-            player.inventory.push({ ...item, type, stars: 0, equipped: false });
-            updateUI();
-        }
-
-        function buyConsumable(id, name, bonusPercent, priceSamogon) {
-            if (player.samogon < priceSamogon) { tg.showAlert('⚠️ Недостаточно Самогона!'); return; }
-            player.samogon -= priceSamogon;
-            player.consumables.push({ id, name, bonusPercent, isFood: false });
-            updateUI();
-        }
-
-        function renderInventory() {
-            const container = document.getElementById('inventory-list');
-            let html = '';
-            player.inventory.forEach((item, index) => {
-                html += `
-                    <div class="item-card">
-                        <div class="item-info"><div>${item.name}</div><span>+${item.baseValue}</span></div>
-                        <button class="${item.equipped ? 'unequip-btn' : 'equip-btn'}" onclick="toggleEquip(${index})">
-                            ${item.equipped ? 'Снять' : 'Надеть'}
-                        </button>
-                    </div>
-                `;
-            });
-            player.consumables.forEach((c) => {
-                html += `
-                    <div class="item-card" style="background:#242014;">
-                        <div class="item-info"><div>${c.name}</div><span>${c.isFood ? '+' + c.hpBonus + ' ХП в Махаче' : '+' + (c.bonusPercent * 100) + '% урона'}</span></div>
-                        <span style="font-size:10px; color:#aaa;">Для Махача Сёл</span>
-                    </div>
-                `;
-            });
-            container.innerHTML = html || '<div style="color:#666;">Инвентарь пуст</div>';
-        }
-
-        function toggleEquip(index) {
-            player.inventory[index].equipped = !player.inventory[index].equipped;
-            updateUI();
-        }
-
-        function doWork(workType) {
-            if (workType === 'barn') { player.fatigue += 30; player.money += 15; }
-            if (workType === 'potatoes') { player.fatigue += 50; player.money += 35; }
-            if (workType === 'tractor') { player.fatigue += 100; player.money += 70; }
-            updateUI();
-        }
-
-        const streetBots = [
-            { name: "Копченый", type: "бот", lvl: 1, phrase: "Чё нна?! Иди сюда нна!", avatar: "🧢" },
-            { name: "Егор", type: "бот", lvl: 1, phrase: "Давай решим вопрос мирно.", avatar: "🧔‍♂️" },
-            { name: "Васька", type: "игрок", lvl: 2, phrase: "Чужак на районе. Проучи!", avatar: "😎" }
-        ];
-
-        function generateEnemies() {
-            const container = document.getElementById('enemies-list');
-            container.innerHTML = '';
+        // ============== ЗАГРУЗКА ПРОФИЛЯ С СЕРВЕРА ==============
+        async function loadUserProfile() {
+            const tg_id = tg.initDataUnsafe?.user?.id || 123456;
             
-            streetBots.forEach((enemy, i) => {
-                container.innerHTML += `
-                    <div class="street-enemy-card">
-                        <div class="street-enemy-avatar">${enemy.avatar}</div>
-                        <div class="street-enemy-info">
-                            <h4>${enemy.name} <span class="type-tag">• ${enemy.type} (ур.${enemy.lvl})</span></h4>
-                            <div class="phrase">${enemy.phrase}</div>
-                            <div class="enemy-hp-mini">❤️ 100</div>
-                        </div>
-                        <div class="hit-actions">
-                            <button class="action-fist-btn" onclick="attackEnemy(${i})">🥊</button>
-                            <button class="action-fist-btn" onclick="attackEnemy(${i})">👊</button>
-                        </div>
-                    </div>
-                `;
-            });
+            try {
+                const response = await fetch(`${API_URL}/api/user/${tg_id}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    console.log('Пользователь не зарегистрирован в БД');
+                    return;
+                }
+                
+                // Обновляем локальные данные
+                player.name = data.nickname;
+                player.level = data.level;
+                player.xp = data.xp || 0;
+                player.money = data.money;
+                player.hp = data.hp;
+                player.maxHp = data.max_hp || 100;
+                player.village = data.village || 'vediltsi';
+                player.baseStr = data.strength || 10;
+                
+                // Обновляем интерфейс
+                document.getElementById('username').innerText = data.nickname;
+                document.getElementById('user-level').innerText = data.level;
+                document.getElementById('user-money').innerText = data.money;
+                document.getElementById('user-samogon').innerText = player.samogon || 350;
+                document.getElementById('user-teeth').innerText = player.teeth || 0;
+                document.getElementById('user-authority').innerText = player.authority || 0;
+                document.getElementById('user-win-streak').innerText = player.winStreak || 0;
+                
+                document.getElementById('hp-text').innerText = `${data.hp} / ${data.max_hp || 100}`;
+                document.getElementById('hp-bar').style.width = ((data.hp / (data.max_hp || 100)) * 100) + '%';
+                
+                document.getElementById('xp-text').innerText = `${data.xp || 0} / ${xpRequirements[data.level] || 30}`;
+                document.getElementById('xp-bar').style.width = ((data.xp || 0) / (xpRequirements[data.level] || 30) * 100) + '%';
+                
+                document.getElementById('fatigue-text').innerText = `0 / 100`;
+                document.getElementById('fatigue-bar').style.width = '0%';
+                
+                // Обновляем село
+                const currentVil = villagesCatalog.find(v => v.id === player.village);
+                document.getElementById('user-village-display').innerText = `🏡 Село: ${currentVil ? currentVil.name : 'Ведильцы'} (Сменить за 300 🍾)`;
+                
+            } catch (error) {
+                console.log('Сервер не доступен:', error);
+            }
         }
 
-        function attackEnemy(index) {
-            const stats = getStats();
-            if (!stats.hasEquippedWeapon || !stats.hasEquippedArmor) {
-                tg.showAlert('⚠️ Разденься догола и иди без оружия — тебя сразу вырубят! Надень Одежду и Оружие!');
-                return;
-            }
-            player.teeth++; player.winStreak++; player.money += 15; updateUI();
-            tg.showAlert('🏆 Победа над противником на улице!');
-        }
-    </script>
-</body>
-</html>
+        // ============== ФУНКЦИЯ БОЯ НА УЛИЦЕ (РАБОТАЕТ С СЕРВЕРОМ) ==============
+        async function attackEnemy(index) {
+            const tg_id = tg.initDataUnsafe?.user?.id || 123456;
+            
+            // Блокируем кнопку, чтобы не нажимали дважды
+            const btns = document.querySelectorAll('.action-fist-btn');
+            btns.forEach(btn => btn.disabled = true);
+            
+            try {
+                const response = await fetch(`${API_URL}/api/fight/${tg_id}`);
+                const data = await response.json();
+                
+                if (data.error) {
+                    tg.showAlert(data.error);
+                    btns.forEach(btn => btn.disabled = false);
+                    return;
+                }
+                
+                tg.showAlert(data.text);
+                
+                if (data.level_up) {
+                    tg.showAlert('🎉 НОВЫЙ УРОВЕНЬ!');
+                }
+                
+                // Обновляем интерфейс
+                document.getElementById('user-money').innerText = data.money;
+                document.getElementById('user-level').innerText = data.level;
+                document.getElementById('hp-text').innerText = `${data.hp} / ${data.max_hp || 100}`;
+                document.getElementById('hp-bar').style.width = ((data.hp / (data.max_hp || 100)) * 100) + '%';
+                
+                // Обновляем XP
+                const xpData = await fetch(`${API_URL}/api/user/${tg_id}`);
+                const userData = await xpData.json();
+                if (!userData.error) {
+                    const xpNeeded = xpRequirements[userData.level] || 30;
+                    document.getElementById('xp-text').innerText = `${userData.xp || 0} / ${xpNeeded}`;
+                    document.getElementById('xp-bar').style.width = ((userData.xp || 0) / xpNeeded * 100) + '%';
+                }
+                
+                // Обновляем зубы
+                if (data.win) {
+                    const teethEl = document.getElementById('user-teeth');
+                    const currentTeeth = parseInt(teethEl.innerText) || 0;
+                    teethEl.innerText = currentTeeth + 1;
+                    document.getElementById('street-teeth').innerText = currentTeeth + 1;
+                }
+                
+            } catch (error) {
+                console.error('Ошибка боя:', error);
+                tg.showAlert('⚠️ Ошибка сервера! Убедитесь, что server.py
