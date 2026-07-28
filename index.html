@@ -239,22 +239,6 @@ const charPrototypes = [
     { avatar: '🥷', title: 'Ночной хулиган' }
 ];
 
-const secondCatalog = [
-    { id: 'mayka', name: '🎽 Майка BMW', reqLevel: 1, baseValue: 4, price: 80 },
-    { id: 'shorty', name: '🩳 Шорты с начесом', reqLevel: 2, baseValue: 7, price: 140 },
-    { id: 'olimp', name: '🧥 Олимпийка Abibas', reqLevel: 3, baseValue: 11, price: 230 },
-    { id: 'kepka', name: '🧢 Кепка Eighteen', reqLevel: 4, baseValue: 16, price: 350 },
-    { id: 'crossy', name: '👟 Кроссы со светодиодами', reqLevel: 5, baseValue: 22, price: 500 }
-];
-
-const gypsyCatalog = [
-    { id: 'gvozd', name: '📍 Гвоздь-сотка', reqLevel: 1, baseValue: 3, price: 50 },
-    { id: 'kastet', name: '🥊 Самодельный Кастет', reqLevel: 2, baseValue: 7, price: 120 },
-    { id: 'rozochka', name: '🍾 Розочка из бутылки', reqLevel: 3, baseValue: 12, price: 210 },
-    { id: 'nunchak', name: '🪵 Нунчаки из дуба', reqLevel: 4, baseValue: 18, price: 330 },
-    { id: 'cep', name: '⛓️ Тяжелая цепь', reqLevel: 5, baseValue: 25, price: 480 }
-];
-
 let selectedAvatar = '🧢';
 let foodCooldowns = { cheburek: 0, borsch: 0 };
 let player = {
@@ -369,10 +353,8 @@ async function finishCharacterCreation() {
         if (data.success) {
             statusEl.className = 'status-msg ok';
             statusEl.textContent = '✅ Успешно!';
-            document.getElementById('create-char-page').style.display = 'none';
-            document.getElementById('game-main-wrap').style.display = 'block';
+            // Загружаем профиль (она сама покажет игру)
             await loadUserProfile();
-            generateEnemies();
         } else {
             statusEl.className = 'status-msg err';
             statusEl.textContent = '❌ ' + (data.message || 'Ошибка');
@@ -385,14 +367,21 @@ async function finishCharacterCreation() {
     }
 }
 
-// ===== ЗАГРУЗКА ПРОФИЛЯ =====
+// ===== ЗАГРУЗКА ПРОФИЛЯ (ОСНОВНАЯ ФУНКЦИЯ!) =====
 async function loadUserProfile() {
     const tg_id = getUserId();
     try {
         const response = await fetch(`${API_URL}/api/user/${tg_id}`);
         const data = await response.json();
-        if (data.error) return;
         
+        if (data.error) {
+            // Пользователь НЕ зарегистрирован — показываем экран создания
+            document.getElementById('create-char-page').style.display = 'block';
+            document.getElementById('game-main-wrap').style.display = 'none';
+            return;
+        }
+        
+        // Пользователь есть — показываем игру
         player.name = data.nickname || 'Миша';
         player.level = data.level || 1;
         player.xp = data.xp || 0;
@@ -405,9 +394,16 @@ async function loadUserProfile() {
         player.winStreak = data.win_streak || 0;
         player.samogon = data.samogon || 350;
         player.maxXp = xpRequirements[player.level] || 30;
+        
+        document.getElementById('create-char-page').style.display = 'none';
+        document.getElementById('game-main-wrap').style.display = 'block';
         updateUI();
+        generateEnemies();
+        
     } catch (error) {
         console.log('Сервер недоступен');
+        document.getElementById('create-char-page').style.display = 'block';
+        document.getElementById('game-main-wrap').style.display = 'none';
     }
 }
 
@@ -532,8 +528,7 @@ window.onload = function() {
         document.getElementById('custom-name-input').value = tg.initDataUnsafe.user.first_name;
     }
     renderCharCreation();
-    document.getElementById('create-char-page').style.display = 'block';
+    
+    // ГЛАВНОЕ: проверяем, зарегистрирован ли пользователь
+    loadUserProfile();
 };
-</script>
-</body>
-</html>
