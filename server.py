@@ -1,4 +1,4 @@
-# server.py - ПОЛНАЯ ВЕРСИЯ С РЕГИСТРАЦИЕЙ
+# server.py - ПОЛНАЯ ВЕРСИЯ С БОЕМ И РЕГИСТРАЦИЕЙ
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import sqlite3
@@ -28,12 +28,10 @@ def init_user(tg_id, nickname, village="vediltsi"):
     conn = get_db()
     cursor = conn.cursor()
     
-    # Проверяем есть ли пользователь
     cursor.execute("SELECT * FROM users WHERE telegram_id = ?", (tg_id,))
     user = cursor.fetchone()
     
     if not user:
-        # Создаем нового
         cursor.execute("""
             INSERT INTO users (telegram_id, nickname, village, level, xp, money, strength, agility, stamina, hp)
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
@@ -100,14 +98,12 @@ def fight(tg_id: int, enemy_index: int = 0):
     if not user:
         return {"error": "Игрок не найден. Нажмите 'ВОРВАТЬСЯ В РАЙОН' сначала."}
     
-    # Данные игрока
     player_hp = user["hp"]
     player_strength = user["strength"]
     player_money = user["money"]
     player_xp = user["xp"]
     player_level = user["level"]
     
-    # Список врагов
     enemies = [
         {"name": "Копченый", "hp": 30, "damage": 5, "level": 1},
         {"name": "Егор", "hp": 25, "damage": 4, "level": 1},
@@ -118,32 +114,26 @@ def fight(tg_id: int, enemy_index: int = 0):
     enemy_hp = enemy["hp"]
     enemy_damage = enemy["damage"]
     
-    # Симуляция боя
     rounds = 0
     while player_hp > 0 and enemy_hp > 0 and rounds < 20:
-        # Игрок бьет
         player_damage = random.randint(5, 12) + player_strength // 3
         enemy_hp -= player_damage
         
         if enemy_hp <= 0:
             break
         
-        # Враг бьет
         player_hp -= enemy_damage
         rounds += 1
     
-    # Результат
     max_hp = 100 + (player_level - 1) * 10
     
     if player_hp > 0:
-        # ПОБЕДА
         reward_money = random.randint(15, 35)
         reward_xp = random.randint(5, 15)
         
         player_money += reward_money
         player_xp += reward_xp
         
-        # Проверка уровня
         xp_needed = player_level * 30
         level_up = False
         if player_xp >= xp_needed:
@@ -167,7 +157,6 @@ def fight(tg_id: int, enemy_index: int = 0):
             "level_up": level_up
         }
     else:
-        # ПОРАЖЕНИЕ
         player_money = max(0, player_money - 10)
         player_hp = 10
         
@@ -213,5 +202,5 @@ def do_work(tg_id: int, work_type: str):
 
 # --- ЗАПУСК ---
 if __name__ == "__main__":
-    print("🚀 Сервер запущен на http://localhost:8000")
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    print("🚀 Сервер запущен на http://0.0.0.0:10000")
+    uvicorn.run(app, host="0.0.0.0", port=10000)
